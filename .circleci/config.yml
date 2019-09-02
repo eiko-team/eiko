@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: debug
-          command: echo $PWD
+          command: echo $PWD && ls
       - run:
           name: make all
           command: make all
