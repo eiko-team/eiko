@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: eikoapp/test-docker:1.1
+    working_directory: /go/src/eiko/
     steps:
       - checkout
       - run:
