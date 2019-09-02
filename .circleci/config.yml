@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: eikoapp/test-docker:1.0
+    steps:
+      - checkout
+      - run:
+          name: make all
+          command: make all
+      - run:
+          name: make binary
+          command: make build-go
+      - run:
+          name: make results
+          command: make test-report
+      - store_test_results:
+          path: report.xml
+      - store_artifacts:
+          path: app
+          destination: app
