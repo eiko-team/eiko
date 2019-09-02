@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: debug
+          command: echo $PWD
+      - run:
           name: make all
           command: make all
       - run:
