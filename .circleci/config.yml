@@ -3,12 +3,9 @@ jobs:
   build:
     docker:
       - image: eikoapp/test-docker:1.1
-    working_directory: /go/src/eiko
+    working_directory: /root/go/src/eiko
     steps:
       - checkout
-      - run:
-          name: debug
-          command: echo $PWD && ls
       - run:
           name: make all
           command: make all
