@@ -1,0 +1,9 @@
+# vim
+*.swp
+
+# test results
+*.xml
+*.out
+
+# binary
+app
