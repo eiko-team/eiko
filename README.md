@@ -1,2 +1,2 @@
 # eiko
-eiko webb app
+eiko web app
