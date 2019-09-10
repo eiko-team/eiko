@@ -3,7 +3,13 @@ version: '2'
 services:
   app:
     build: .
+    environment:
+      - 'PROJECT_ID=${PROJECT_ID}'
+      - 'PORT=80'
+      - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
+      - 'GRPC_GO_LOG_SEVERITY_LEVEL=INFO'
     ports:
       - '80:80'
     volumes:
       - './:/srv'
+      - '/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt'
