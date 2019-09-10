@@ -1,3 +1,4 @@
 FROM ubuntu:19.04
-
-CMD ["/srv/app"]
+WORKDIR "/srv"
+COPY . /srv
+CMD ["./app"]
