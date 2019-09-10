@@ -5,10 +5,15 @@ GO = go
 CPROFILE = count.out
 REPORT = report.xml
 DKNAME = eikoapp/eiko
+DKTAG = latest-prod
 
 all: build-go-light
+all: lint
 all: test
 all: clean
+
+lint:
+	golint
 
 build-go-light:
 	$(GO) build -o $(BIN)
@@ -23,7 +28,19 @@ build: build-go
 build:
 	$(DK) build -t "$(DKNAME):$(shell git rev-parse --short HEAD)" .
 
-up: build-go
+tag:
+	$(DK) tag "$(DKNAME):$(shell git rev-parse --short HEAD)" "$(DKNAME):$(DKTAG)"
+
+push:
+	$(DK) push "$(DKNAME):$(shell git rev-parse --short HEAD)"
+
+push-tag:
+	$(DK) push "$(DKNAME):$(DKTAG)"
+
+push-all: push
+push-all: push-tag
+
+up: build-go-light
 up:
 	$(DC) up
 
@@ -35,6 +52,9 @@ test-report:
 
 cover:
 	$(GO) tool cover -html=$(CPROFILE) -o test.html
+
+vet:
+	$(GO) vet $(ARGS) ./...
 
 clean:
 	$(RM) $(BIN) $(CPROFILE) $(REPORT)
