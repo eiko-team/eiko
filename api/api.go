@@ -73,6 +73,6 @@ func ExecuteAPI(r *httprouter.Router) {
 	}
 
 	for _, tt := range Functions {
-		r.POST(tt.Path, tt.WrapperFunction)
+		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
 	}
 }
