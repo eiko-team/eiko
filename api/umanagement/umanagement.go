@@ -29,6 +29,8 @@ var (
 	Users = "Users"
 )
 
+// ParseJSON generic function to parse request body, extract it's content and
+// fill the struct
 func ParseJSON(r *http.Request, v interface{}) error {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
@@ -39,7 +41,9 @@ func ParseJSON(r *http.Request, v interface{}) error {
 	return err
 }
 
-func Login(r *http.Request, ctx context.Context,
+// Login get the Login informations and return the token to the user if the
+// credentials are valid
+func Login(ctx context.Context, r *http.Request,
 	client *datastore.Client) (string, error) {
 	var i structures.Login
 	err := ParseJSON(r, &i)
@@ -66,7 +70,8 @@ func Login(r *http.Request, ctx context.Context,
 	return fmt.Sprintf("{\"token\":\"%s\"}", misc.UserToToken(User)), nil
 }
 
-func Register(r *http.Request, ctx context.Context,
+// Register adds a new user to the datastore if the credentials are valid
+func Register(ctx context.Context, r *http.Request,
 	client *datastore.Client) (string, error) {
 	var i structures.Login
 	err := ParseJSON(r, &i)
@@ -74,7 +79,7 @@ func Register(r *http.Request, ctx context.Context,
 		return "", errors.New("1.1.0")
 	}
 
-	if err = misc.UniqEmail(Users, i.UserMail, ctx, client); err != nil {
+	if err = misc.UniqEmail(ctx, Users, i.UserMail, client); err != nil {
 		return "", errors.New("1.1.1\", \"message\":\"not a unique email")
 	}
 
