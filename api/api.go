@@ -18,13 +18,14 @@ import (
 // Func is used to call the Function with the wrapper
 type Func struct {
 	// Function is the function wrapped
-	Function func(*http.Request, context.Context,
+	Function func(context.Context, *http.Request,
 		*datastore.Client) (string, error)
 
 	// Path is the path on with you want to call the function from the api
 	Path string
 }
 
+// File is used to link the special file path with the URL to serve
 type File struct {
 	// Path of the file to serve
 	Path string
@@ -52,7 +53,7 @@ var (
 		{Function: umanagement.Register, Path: "/register"},
 	}
 
-	// SFiles
+	// SFiles is stored informations on special files
 	SFiles = []File{
 		{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
 		{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
@@ -70,22 +71,8 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	misc.LogRequest(r)
 }
 
-// WrapperFunction allows us to call the functions with rights args.
-// Db must be set already.
-func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
-	_ httprouter.Params) {
-	misc.LogRequest(r)
-	w.Header().Set("Content-Type", "application/json")
-	data, err := fun.Function(r, Context, Datastore)
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-	} else {
-		w.WriteHeader(200)
-		fmt.Fprintln(w, data)
-	}
-}
-
+// ServeFiles adds to a Router special files URLs to be served. It also adds all
+// static files to the Router
 func ServeFiles(r *httprouter.Router) {
 	for _, file := range SFiles {
 		for _, URL := range file.URL {
@@ -97,16 +84,32 @@ func ServeFiles(r *httprouter.Router) {
 	}
 }
 
+// WrapperFunction allows us to call the functions with rights args.
+// Db must be set already.
+func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+	misc.LogRequest(r)
+	w.Header().Set("Content-Type", "application/json")
+	data, err := fun.Function(Context, r, Datastore)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+	} else {
+		w.WriteHeader(200)
+		fmt.Fprintln(w, data)
+	}
+}
+
 // ExecuteAPI Execute the api and return the bdd configured.
 func ExecuteAPI() *httprouter.Router {
 	r := httprouter.New()
 
 	Context = context.Background()
 
-	projID_str := "PROJECT_ID"
-	projID := os.Getenv(projID_str)
+	projIDStr := "PROJECT_ID"
+	projID := os.Getenv(projIDStr)
 	if projID == "" {
-		Logger.Fatal(fmt.Sprintf("please set: '%s'", projID_str))
+		Logger.Fatal(fmt.Sprintf("please set: '%s'", projIDStr))
 	}
 
 	var err error
