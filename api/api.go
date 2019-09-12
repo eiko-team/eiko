@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -24,6 +25,17 @@ type Func struct {
 	Path string
 }
 
+type File struct {
+	// Path of the file to serve
+	Path string
+
+	// Type MIME type for the file
+	Type string
+
+	// URLs of the served file
+	URL []string
+}
+
 var (
 	// Datastore is used to take advantage of the datastore api
 	Datastore *datastore.Client
@@ -39,7 +51,24 @@ var (
 		Func{Function: user_managment.Login, Path: "/login"},
 		Func{Function: user_managment.Register, Path: "/register"},
 	}
+
+	// SFiles
+	SFiles = []File{
+		File{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
+		File{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
+		File{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}},
+		File{"./static/json/manifest.json", "application/json", []string{"/manifest.json"}},
+	}
 )
+
+// SpecialFiles simple html file server
+func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+	b, _ := ioutil.ReadFile(file.Path)
+	w.Header().Set("Content-Type", file.Type)
+	fmt.Fprint(w, string(b))
+	misc.LogRequest(r)
+}
 
 // WrapperFunction allows us to call the functions with rights args.
 // Db must be set already.
@@ -57,13 +86,27 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+func ServeFiles(r *httprouter.Router) {
+	for _, file := range SFiles {
+		for _, URL := range file.URL {
+			r.GET(URL, file.SpecialFiles)
+		}
+	}
+	for _, tt := range []string{"img", "js", "css"} {
+		r.ServeFiles("/"+tt+"/*filepath", http.Dir("./static/"+tt))
+	}
+}
+
 // ExecuteAPI Execute the api and return the bdd configured.
-func ExecuteAPI(r *httprouter.Router) {
+func ExecuteAPI() *httprouter.Router {
+	r := httprouter.New()
+
 	Context = context.Background()
 
-	projID := os.Getenv("PROJECT_ID")
+	projID_str := "PROJECT_ID"
+	projID := os.Getenv(projID_str)
 	if projID == "" {
-		Logger.Fatal("please set: 'DATASTORE_PROJECT_ID'")
+		Logger.Fatal(fmt.Sprintf("please set: '%s'", projID_str))
 	}
 
 	var err error
@@ -75,4 +118,5 @@ func ExecuteAPI(r *httprouter.Router) {
 	for _, tt := range Functions {
 		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
 	}
+	return r
 }
