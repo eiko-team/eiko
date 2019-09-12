@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// User struct used to store information in the datastore
 type User struct {
 	Email     string    `firestore:"email"`
 	Pass      string    `firestore:"Hashed_password"`
@@ -12,6 +13,7 @@ type User struct {
 	id        int64     // The integer ID used in the firestore.
 }
 
+// Login struct used to parse /login information
 type Login struct {
 	UserMail string `json:"user_email"`
 	UserPass string `json:"user_password"`
