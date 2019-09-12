@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: eikoapp/test-docker:1.1
+      - image: eikoapp/test-docker:latest
     working_directory: /root/go/src/eiko
     steps:
       - checkout
