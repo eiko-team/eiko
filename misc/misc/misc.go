@@ -19,7 +19,7 @@ var (
 )
 
 // UniqEmail is used to find if a email is already used in the datastore
-func UniqEmail(Users, UserMail string, ctx context.Context,
+func UniqEmail(ctx context.Context, Users, UserMail string,
 	client *datastore.Client) error {
 	// Finding if the email is unique
 	var users []structures.User
@@ -32,6 +32,8 @@ func UniqEmail(Users, UserMail string, ctx context.Context,
 	}
 	return nil
 }
+
+// LogRequest logs a *http.Request using the Logger
 func LogRequest(r *http.Request) {
 	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
@@ -40,6 +42,7 @@ func LogRequest(r *http.Request) {
 	Logger.Println(fmt.Sprintf("%q", requestDump))
 }
 
+// UserToToken convert the user information to a valid token
 func UserToToken(u structures.User) string {
 	// TODO
 	return "token"
