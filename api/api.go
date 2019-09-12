@@ -48,16 +48,16 @@ var (
 
 	// Functions List all api functions
 	Functions = []Func{
-		Func{Function: user_managment.Login, Path: "/login"},
-		Func{Function: user_managment.Register, Path: "/register"},
+		{Function: user_managment.Login, Path: "/login"},
+		{Function: user_managment.Register, Path: "/register"},
 	}
 
 	// SFiles
 	SFiles = []File{
-		File{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
-		File{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
-		File{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}},
-		File{"./static/json/manifest.json", "application/json", []string{"/manifest.json"}},
+		{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
+		{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
+		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}},
+		{"./static/json/manifest.json", "application/json", []string{"/manifest.json"}},
 	}
 )
 
