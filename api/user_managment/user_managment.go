@@ -39,7 +39,7 @@ func ParseJSON(r *http.Request, v interface{}) error {
 	return err
 }
 
-func Login(w http.ResponseWriter, r *http.Request, ctx context.Context,
+func Login(r *http.Request, ctx context.Context,
 	client *datastore.Client) (string, error) {
 	var i structures.Login
 	err := ParseJSON(r, &i)
@@ -66,7 +66,7 @@ func Login(w http.ResponseWriter, r *http.Request, ctx context.Context,
 	return fmt.Sprintf("{\"token\":\"%s\"}", misc.UserToToken(User)), nil
 }
 
-func Register(w http.ResponseWriter, r *http.Request, ctx context.Context,
+func Register(r *http.Request, ctx context.Context,
 	client *datastore.Client) (string, error) {
 	var i structures.Login
 	err := ParseJSON(r, &i)

@@ -17,7 +17,7 @@ import (
 // Func is used to call the Function with the wrapper
 type Func struct {
 	// Function is the function wrapped
-	Function func(http.ResponseWriter, *http.Request, context.Context,
+	Function func(*http.Request, context.Context,
 		*datastore.Client) (string, error)
 
 	// Path is the path on with you want to call the function from the api
@@ -47,7 +47,7 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 	misc.LogRequest(r)
 	w.Header().Set("Content-Type", "application/json")
-	data, err := fun.Function(w, r, Context, Datastore)
+	data, err := fun.Function(r, Context, Datastore)
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
