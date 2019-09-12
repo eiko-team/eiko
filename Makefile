@@ -45,10 +45,10 @@ up:
 	$(DC) up
 
 test:
-	$(GO) test -covermode=count -cover -coverprofile=$(CPROFILE) ./src
+	$(GO) test -covermode=count -cover -coverprofile=$(CPROFILE) ./...
 
 test-report:
-	$(GO) test -covermode=count -cover -coverprofile=$(CPROFILE) ./src -v 2>&1 | go-junit-report > $(REPORT)
+	$(GO) test -covermode=count -cover -coverprofile=$(CPROFILE) ./... -v 2>&1 | go-junit-report > $(REPORT)
 
 cover:
 	$(GO) tool cover -html=$(CPROFILE) -o test.html
