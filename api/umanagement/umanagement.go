@@ -1,4 +1,4 @@
-package user_managment
+package umanagement
 
 import (
 	"context"
@@ -19,7 +19,7 @@ import (
 
 var (
 	// Logger used to log output
-	Logger = log.New(os.Stdout, "user_managment: ",
+	Logger = log.New(os.Stdout, "umanagement: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 
 	// Salt salt for the passwrd hashing

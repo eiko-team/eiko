@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"eiko/api/user_managment"
+	"eiko/api/umanagement"
 	"eiko/misc/misc"
 
 	"cloud.google.com/go/datastore"
@@ -48,8 +48,8 @@ var (
 
 	// Functions List all api functions
 	Functions = []Func{
-		{Function: user_managment.Login, Path: "/login"},
-		{Function: user_managment.Register, Path: "/register"},
+		{Function: umanagement.Login, Path: "/login"},
+		{Function: umanagement.Register, Path: "/register"},
 	}
 
 	// SFiles
