@@ -1,0 +1,21 @@
+{"dir" : "ltr",
+    "lang" : "French",
+    "name" : "Eiko",
+    "scope" : "/",
+    "display" : "fullscreen",
+    "start_url" : "http://eiko-app.com/",
+    "short_name" : "Eiko",
+    "theme_color" : "transparent",
+    "description" : "",
+    "orientation" : "any",
+    "background_color" : "transparent",
+    "related_applications" : "",
+    "prefer_related_applications" : "false",
+    "generated" : "true",
+    "icons" : [
+        {
+            "src": "/img/EIKO.ico",
+            "sizes": "256x256"
+        }
+    ]
+}
