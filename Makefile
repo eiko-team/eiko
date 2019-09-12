@@ -13,7 +13,7 @@ all: test
 all: clean
 
 lint:
-	golint
+	golint ./...
 
 build-go-light:
 	$(GO) build -o $(BIN)
