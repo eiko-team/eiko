@@ -23,3 +23,8 @@ type Login struct {
 type Token struct {
 	Token string `json:"token"`
 }
+
+// Email struct used to parse /verify/email
+type Email struct {
+	UserMail string `json:"user_email"`
+}
