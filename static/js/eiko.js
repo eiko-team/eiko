@@ -27,8 +27,8 @@ window.onclick = function(event) {
 window.addEventListener("keydown", function(e) {
     if ((e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
             && (e.target.nodeName == "BODY")) {
-        setStyleByID("login", "display: none;")
-        setStyleByID("register", "display: none;")
+        setStyleByID("login", "display: none;");
+        setStyleByID("register", "display: none;");
         closeNav();
         e.preventDefault();
         return false;
@@ -49,7 +49,7 @@ password.addEventListener("input", function() {
         2: "yellow",
         3: "orange",
         4: "green",
-    } [result.score] + ";"
+    } [result.score] + ";";
 
     // Update the text indicator
     if (val !== "") {
@@ -76,41 +76,42 @@ function closeNav() {
 function login(email, password, remember = true) {
     return POST("/login", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
-            setStyleByID("error-email", "style: ;")
-            return false
+            setStyleByID("error-email", "style: ;");
+            return false;
         }
-        user_token = e.token
-        createCookie("token", user_token, remember ? 7 : null)
-        log("login")
+        user_token = e.token;
+        createCookie("token", user_token, remember ? 7 : null);
+        log("login");
         window.location.reload(false);
-        return true
-    })
+        return true;
+    });
 }
 
 function register(email, password, remember = true) {
     POST("/register", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
-            setStyleByID("error-email-register", "style: ;")
-            return false
+            setStyleByID("error-email-register", "style: ;");
+            return false;
         }
-        user_token = e.token
-        createCookie("token", user_token, remember ? 7 : null)
-        log("register")
+        user_token = e.token;
+        createCookie("token", user_token, remember ? 7 : null);
+        log("register");
         window.location.reload(false);
-    })
+    });
 }
 
 function logout() {
-    log("logout")
-    deleteCookie("token")
+    log("logout");
+    deleteCookie("token");
     window.location.reload(false);
 }
 
 function loginForm(email, password, remember) {
-    login(email, password, remember === "on")
+    login(email, password, remember === "on");
 }
 
 function registerForm(email, password1, password2, remember) {
-    if (password1 === password2)
-        register(email, password1, remember === "on")
+    if (password1 === password2) {
+        register(email, password1, remember === "on");
+    }
 }
