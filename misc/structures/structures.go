@@ -18,3 +18,8 @@ type Login struct {
 	UserMail string `json:"user_email"`
 	UserPass string `json:"user_password"`
 }
+
+// Token struct used to parse token information
+type Token struct {
+	Token string `json:"token"`
+}
