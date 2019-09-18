@@ -1,4 +1,9 @@
-FROM ubuntu:19.04
+FROM scratch
 WORKDIR /srv
-COPY . /srv
+
+# Static files
+COPY static /srv/static
+
+# Binary
+COPY app /srv/app
 CMD ["./app"]
