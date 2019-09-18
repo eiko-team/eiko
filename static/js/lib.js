@@ -22,7 +22,7 @@ function POST(url, body, successCallback = (e) => {},
             headers: { "Content-Type": "application/json" }
         })
         .then((e) => { e.json().then(successCallback) })
-        .catch(failCallback)
+        .catch(failCallback);
 }
 
 /**
@@ -55,11 +55,11 @@ function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
  * @param {number} days number of days of validity of the cookie
  */
 function createCookie(name, value, days) {
-    var expire = ""
+    var expire = "";
     if (days) {
         var d = new Date();
-        d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000)
-        expire = `; expires=${d.toGMTString()}`
+        d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+        expire = `; expires=${d.toGMTString()}`;
     }
     document.cookie = `${name}=${value}${expire}; path=/`;
 }
@@ -87,7 +87,7 @@ function getCookie(name) {
  * @param {object} msg Data to send
  */
 function log(msg) {
-    POST("/log", { user_token: getCookie("token"), message: msg })
+    POST("/log", { user_token: getCookie("token"), message: msg });
 }
 
 
@@ -105,8 +105,9 @@ function isTokenValid() {
  */
 function setStyleByClass(className, style) {
     var elt = document.getElementsByClassName(className);
-    for (var i = 0; i < elt.length; i++)
+    for (var i = 0; i < elt.length; i++) {
         elt[i].style = style
+    }
 }
 
 function setStyleByID(id, style) {
