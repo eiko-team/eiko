@@ -1,21 +1,20 @@
-{"dir" : "ltr",
-    "lang" : "French",
-    "name" : "Eiko",
-    "scope" : "/",
-    "display" : "fullscreen",
-    "start_url" : "http://eiko-app.com/",
-    "short_name" : "Eiko",
-    "theme_color" : "transparent",
-    "description" : "",
-    "orientation" : "any",
-    "background_color" : "transparent",
-    "related_applications" : "",
-    "prefer_related_applications" : "false",
-    "generated" : "true",
-    "icons" : [
+{
+    "background_color": "transparent",
+    "description": "",
+    "dir": "ltr",
+    "display": "standalone",
+    "icons": [
         {
-            "src": "/img/EIKO.ico",
-            "sizes": "256x256"
+            "sizes": "500x500",
+            "src": "/img/EIKO.png"
         }
-    ]
+    ],
+    "lang": "French",
+    "name": "Eiko",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "scope": "/",
+    "short_name": "Eiko",
+    "start_url": "/",
+    "theme_color": "transparent"
 }
