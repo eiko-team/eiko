@@ -78,10 +78,10 @@ self.addEventListener("fetch", function(event) {
 // for a 'add to home screen'
 self.addEventListener('beforeinstallprompt', (e) => {
     // showInstallPromotion();
-    POST("/api/log", { user_token: usertoken, message: "beforeinstallprompt" })
+    log("beforeinstallprompt");
 });
 
 // log is the user has installed the app
 self.addEventListener('appinstalled', (e) => {
-    POST("/api/log", { user_token: usertoken, message: "appinstalled" })
+    log("appinstalled");
 });
