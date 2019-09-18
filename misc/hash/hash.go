@@ -7,14 +7,14 @@ import (
 )
 
 var (
-	KeyPossibilities = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&(-_)=+$*!:;,?./<>[]{}%@`^\\~")
+	keyPossibilities = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&(-_)=+$*!:;,?./<>[]{}%@`^\\~")
 )
 
 // GenerateKey generate a n th long key
 func GenerateKey(n int) string {
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = KeyPossibilities[rand.Intn(len(KeyPossibilities))]
+		b[i] = keyPossibilities[rand.Intn(len(keyPossibilities))]
 	}
 	return string(b)
 }
