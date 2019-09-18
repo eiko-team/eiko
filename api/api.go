@@ -58,6 +58,7 @@ var (
 		{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
 		{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
 		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}},
+		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}},
 		{"./static/json/manifest.json", "application/json", []string{"/manifest.json"}},
 	}
 )
@@ -74,6 +75,7 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 // ServeFiles adds to a Router special files URLs to be served. It also adds all
 // static files to the Router
 func ServeFiles(r *httprouter.Router) {
+	Logger.Println("Adding static files")
 	for _, file := range SFiles {
 		for _, URL := range file.URL {
 			r.GET(URL, file.SpecialFiles)
@@ -103,7 +105,7 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 // ExecuteAPI Execute the api and return the bdd configured.
 func ExecuteAPI() *httprouter.Router {
 	r := httprouter.New()
-
+	ServeFiles(r)
 	Context = context.Background()
 
 	projIDStr := "PROJECT_ID"
