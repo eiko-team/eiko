@@ -81,6 +81,7 @@ function login(email, password, remember = true) {
         console.log("login worked", e)
         user_token = e.token
         createCookie("token", user_token, remember ? 7 : null)
+        log("login")
         window.location.reload(false);
         return true
     })
@@ -94,7 +95,7 @@ function register(email, password, remember = true) {
         }
         user_token = e.token
         createCookie("token", user_token, remember ? 7 : null)
-        createCookie("token", user_token)
+        log("register")
         window.location.reload(false);
     })
 }

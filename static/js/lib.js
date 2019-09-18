@@ -26,14 +26,6 @@ function POST(url, body, successCallback = (e) => {},
 }
 
 /**
- * Send logs to backend
- * @param {object} msg Data to send
- */
-function log(msg) {
-    POST("/log", { user_token: user_token, message: msg })
-}
-
-/**
  * Send a notification to the user if the user has granted permissions
  * It might be usefull to use Server-sent events
  * https://en.wikipedia.org/wiki/Server-sent_events
@@ -89,6 +81,15 @@ function getCookie(name) {
     var value = re.exec(document.cookie);
     return (value != null) ? unescape(value[1]) : null;
 }
+
+/**
+ * Send logs to backend
+ * @param {object} msg Data to send
+ */
+function log(msg) {
+    POST("/log", { user_token: getCookie("token"), message: msg })
+}
+
 
 /**
  * check is the token is valid
