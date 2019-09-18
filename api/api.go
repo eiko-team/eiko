@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,17 +8,17 @@ import (
 	"os"
 
 	"eiko/api/umanagement"
+	"eiko/api/verify"
+	"eiko/misc/data"
 	"eiko/misc/misc"
 
-	"cloud.google.com/go/datastore"
 	"github.com/julienschmidt/httprouter"
 )
 
 // Func is used to call the Function with the wrapper
 type Func struct {
 	// Function is the function wrapped
-	Function func(context.Context, *http.Request,
-		*datastore.Client) (string, error)
+	Function func(data.Data, *http.Request) (string, error)
 
 	// Path is the path on with you want to call the function from the api
 	Path string
@@ -38,11 +37,8 @@ type File struct {
 }
 
 var (
-	// Datastore is used to take advantage of the datastore api
-	Datastore *datastore.Client
-
-	// Context is the context of the Datastore
-	Context context.Context
+	// D api to communicate with datasctore
+	D data.Data
 
 	// Logger used to log output
 	Logger = log.New(os.Stdout, "Api: ", log.Ldate|log.Ltime|log.Lshortfile)
@@ -51,6 +47,11 @@ var (
 	Functions = []Func{
 		{Function: umanagement.Login, Path: "/login"},
 		{Function: umanagement.Register, Path: "/register"},
+		{Function: umanagement.Delete, Path: "/delete"},
+		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
+		{Function: verify.Email, Path: "/verify/email"},
+		// {Function: verify.Password, Path: "/verify/password"},
+		// {Function: verify.Token, Path: "/verify/token"},
 	}
 
 	// SFiles is stored informations on special files
@@ -92,7 +93,7 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 	misc.LogRequest(r)
 	w.Header().Set("Content-Type", "application/json")
-	data, err := fun.Function(Context, r, Datastore)
+	data, err := fun.Function(D, r)
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -106,7 +107,6 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 func ExecuteAPI() *httprouter.Router {
 	r := httprouter.New()
 	ServeFiles(r)
-	Context = context.Background()
 
 	projIDStr := "PROJECT_ID"
 	projID := os.Getenv(projIDStr)
@@ -114,11 +114,7 @@ func ExecuteAPI() *httprouter.Router {
 		Logger.Fatal(fmt.Sprintf("please set: '%s'", projIDStr))
 	}
 
-	var err error
-	Datastore, err = datastore.NewClient(Context, projID)
-	if err != nil {
-		Logger.Fatalf("Could not create datastore client: %v", err)
-	}
+	D = data.InitData(projID)
 
 	for _, tt := range Functions {
 		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
