@@ -1,8 +1,7 @@
 package misc
 
 import (
-	"context"
-	"errors"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,7 +9,6 @@ import (
 	"os"
 	"time"
 
-	"cloud.google.com/go/datastore"
 	jwt "github.com/dgrijalva/jwt-go"
 
 	"eiko/misc/hash"
@@ -29,19 +27,16 @@ var (
 	Logger = log.New(os.Stdout, "Misc: ", log.Ldate|log.Ltime|log.Lshortfile)
 )
 
-// UniqEmail is used to find if a email is already used in the datastore
-func UniqEmail(ctx context.Context, Users, UserMail string,
-	client *datastore.Client) error {
-	// Finding if the email is unique
-	var users []structures.User
-	q := datastore.NewQuery(Users).Filter("Email =", UserMail).Limit(1)
-	if _, err := client.GetAll(ctx, q, &users); err != nil {
-		return err
+// ParseJSON generic function to parse request body, extract it's content and
+// fill the struct
+func ParseJSON(r *http.Request, v interface{}) error {
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	err := decoder.Decode(v)
+	if err != nil {
+		Logger.Printf("\033[31mError\033[0m: '%s'\n", err.Error())
 	}
-	if len(users) != 0 {
-		return errors.New("user found")
-	}
-	return nil
+	return err
 }
 
 // LogRequest logs a *http.Request using the Logger
