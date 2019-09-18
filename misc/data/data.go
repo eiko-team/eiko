@@ -26,12 +26,15 @@ type Data struct {
 	Ctx context.Context
 	// Users users name inside the datastore
 	Users string
+	// Logs log name inside the datastore
+	Logs string
 }
 
 // InitData return an initialised Data struct
 func InitData(projID string) Data {
 	var d Data
 	d.Users = "Users"
+	d.Logs = "Logs"
 	d.Ctx = context.Background()
 
 	var err error
@@ -60,5 +63,12 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 func (d Data) StoreUser(user structures.User) error {
 	key := datastore.IncompleteKey(d.Users, nil)
 	_, err := d.Client.Put(d.Ctx, key, &user)
+	return err
+}
+
+// Log is used to store a log in the datastore
+func (d Data) Log(log structures.Log) error {
+	key := datastore.IncompleteKey(d.Logs, nil)
+	_, err := d.Client.Put(d.Ctx, key, &log)
 	return err
 }
