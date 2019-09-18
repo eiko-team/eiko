@@ -58,3 +58,24 @@ func TestHash(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateKey(t *testing.T) {
+	tests := []struct {
+		name string
+		n    int
+	}{
+		// TODO: Add test cases.
+		{"simple", 42},
+		{"medium", 21},
+		{"short", 1},
+		{"empty", 0},
+		{"long", 9999},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := len(GenerateKey(tt.n)); got != tt.n {
+				t.Errorf("len(GenerateKey()) = %v, want %v", got, tt.n)
+			}
+		})
+	}
+}

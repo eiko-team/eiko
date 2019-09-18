@@ -1,8 +1,23 @@
 package hash
 
 import (
+	"math/rand"
+
 	"golang.org/x/crypto/bcrypt"
 )
+
+var (
+	KeyPossibilities = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&(-_)=+$*!:;,?./<>[]{}%@`^\\~")
+)
+
+// GenerateKey generate a n th long key
+func GenerateKey(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = KeyPossibilities[rand.Intn(len(KeyPossibilities))]
+	}
+	return string(b)
+}
 
 // saltPassword is to generate to byte array to use as the password to hash.
 // In there, pass, salt, and some otherthings are shuffled.
