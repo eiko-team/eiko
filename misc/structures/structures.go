@@ -13,6 +13,20 @@ type User struct {
 	id        int64     // The integer ID used in the firestore.
 }
 
+// Log struct used to store Logs in the datastore
+type Log struct {
+	Email   string    `firestore:"email"`
+	Log     string    `firestore:"log"`
+	Created time.Time `firestore:"created"`
+	id      int64     // The integer ID used in the firestore.
+}
+
+// Logging struct used to parse /log information
+type Logging struct {
+	Token string `json:"user_token"`
+	Log   string `json:"message"`
+}
+
 // Login struct used to parse /login information
 type Login struct {
 	UserMail string `json:"user_email"`
