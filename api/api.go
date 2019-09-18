@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"eiko/api/global"
 	"eiko/api/umanagement"
 	"eiko/api/verify"
 	"eiko/misc/data"
@@ -52,6 +53,7 @@ var (
 		{Function: verify.Email, Path: "/verify/email"},
 		// {Function: verify.Password, Path: "/verify/password"},
 		// {Function: verify.Token, Path: "/verify/token"},
+		{Function: global.Log, Path: "/log"},
 	}
 
 	// SFiles is stored informations on special files
