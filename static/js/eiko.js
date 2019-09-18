@@ -78,7 +78,6 @@ function login(email, password, remember = true) {
             setStyleByID("error-email", "style: ;")
             return false
         }
-        console.log("login worked", e)
         user_token = e.token
         createCookie("token", user_token, remember ? 7 : null)
         log("login")
@@ -107,12 +106,10 @@ function logout() {
 }
 
 function loginForm(email, password, remember) {
-    console.log(email, password, remember)
     login(email, password, remember === 'on')
 }
 
 function registerForm(email, password1, password2, remember) {
-    console.log(email, password1, password2, remember)
     if (password1 === password2)
         register(email, password1, remember === 'on')
 }
