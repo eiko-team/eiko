@@ -19,7 +19,7 @@ function POST(url, body, successCallback = (e) => {},
     fetch("/api" + url, {
             method: "POST",
             body: JSON.stringify(body),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { "Content-Type": "application/json" }
         })
         .then((e) => { e.json().then(successCallback) })
         .catch(failCallback)
@@ -35,7 +35,7 @@ function POST(url, body, successCallback = (e) => {},
  * @param {string} icon icon to display in the notification
  */
 function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
-    if (Notification.permission !== 'granted')
+    if (Notification.permission !== "granted")
         Notification.requestPermission();
     else {
         var notification = new Notification(title, {

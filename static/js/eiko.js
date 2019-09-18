@@ -24,8 +24,9 @@ window.onclick = function(event) {
     }
 }
 
-window.addEventListener('keydown', function(e) {
-    if ((e.key == 'Escape' || e.key == 'Esc' || e.keyCode == 27) && (e.target.nodeName == 'BODY')) {
+window.addEventListener("keydown", function(e) {
+    if ((e.key == "Escape" || e.key == "Esc" || e.keyCode == 27)
+            && (e.target.nodeName == "BODY")) {
         setStyleByID("login", "display: none;")
         setStyleByID("register", "display: none;")
         closeNav();
@@ -34,12 +35,12 @@ window.addEventListener('keydown', function(e) {
     }
 }, true);
 
-var password = document.getElementById('password1');
-password.addEventListener('input', function() {
-    var text = document.getElementById('password-strength-text');
+var password = document.getElementById("password1");
+password.addEventListener("input", function() {
+    var text = document.getElementById("password-strength-text");
     var val = password.value;
     var result = checkPassword(val);
-    var meter = document.getElementById('password-strength-meter');
+    var meter = document.getElementById("password-strength-meter");
 
     // Update the password strength meter
     meter.value = result.score;
@@ -106,10 +107,10 @@ function logout() {
 }
 
 function loginForm(email, password, remember) {
-    login(email, password, remember === 'on')
+    login(email, password, remember === "on")
 }
 
 function registerForm(email, password1, password2, remember) {
     if (password1 === password2)
-        register(email, password1, remember === 'on')
+        register(email, password1, remember === "on")
 }

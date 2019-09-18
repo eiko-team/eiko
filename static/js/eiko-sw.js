@@ -76,12 +76,12 @@ self.addEventListener("fetch", function(event) {
 });
 
 // for a 'add to home screen'
-self.addEventListener('beforeinstallprompt', (e) => {
+self.addEventListener("beforeinstallprompt", (e) => {
     // showInstallPromotion();
     log("beforeinstallprompt");
 });
 
 // log is the user has installed the app
-self.addEventListener('appinstalled', (e) => {
+self.addEventListener("appinstalled", (e) => {
     log("appinstalled");
 });
