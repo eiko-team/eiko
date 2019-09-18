@@ -67,7 +67,13 @@ func Login(ctx context.Context, r *http.Request,
 	if err != nil {
 		return "", errors.New("1.0.3")
 	}
-	return fmt.Sprintf("{\"token\":\"%s\"}", misc.UserToToken(User)), nil
+
+	token, err := misc.UserToToken(User)
+	if err != nil {
+		return "", errors.New("1.0.4")
+	}
+
+	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
 }
 
 // Register adds a new user to the datastore if the credentials are valid
@@ -100,5 +106,29 @@ func Register(ctx context.Context, r *http.Request,
 		Logger.Println(err)
 		return "", errors.New("1.1.3")
 	}
-	return fmt.Sprintf("{\"token\":\"%s\"}", misc.UserToToken(User)), nil
+
+	token, err := misc.UserToToken(User)
+	if err != nil {
+		return "", errors.New("1.1.4")
+	}
+
+	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
+}
+
+// Delete delete an account
+func Delete(ctx context.Context, r *http.Request,
+	client *datastore.Client) (string, error) {
+	var i structures.Token
+	err := ParseJSON(r, &i)
+	if err != nil {
+		return "", errors.New("1.2.0")
+	}
+
+	if !misc.ValidateToken(i.Token) {
+		return "", errors.New("1.2.1")
+	}
+
+	// TODO: acctually delete user
+
+	return "{\"done\":\"true\"}", nil
 }
