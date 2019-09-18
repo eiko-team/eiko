@@ -132,3 +132,28 @@ func Delete(ctx context.Context, r *http.Request,
 
 	return "{\"done\":\"true\"}", nil
 }
+
+// UpdateToken delete an account
+func UpdateToken(ctx context.Context, r *http.Request,
+	client *datastore.Client) (string, error) {
+	var i structures.Token
+	err := ParseJSON(r, &i)
+	if err != nil {
+		return "", errors.New("1.3.0")
+	}
+
+	if !misc.ValidateToken(i.Token) {
+		return "", errors.New("1.3.1")
+	}
+
+	user, err := misc.TokenToUser(i.Token)
+	if err != nil {
+		return "", errors.New("1.3.2")
+	}
+
+	token, err := misc.UserToToken(user)
+	if err != nil {
+		return "", errors.New("1.3.3")
+	}
+	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
+}
