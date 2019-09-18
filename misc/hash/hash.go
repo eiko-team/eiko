@@ -40,6 +40,5 @@ func Hash(pass, salt string) (string, error) {
 // CompareHash compares a password and the salt with the hash.
 // return an error if the password/salt is not correct
 func CompareHash(h1, pass, salt string) error {
-	h := saltPassword(pass, salt)
-	return bcrypt.CompareHashAndPassword([]byte(h1), h)
+	return bcrypt.CompareHashAndPassword([]byte(h1), saltPassword(pass, salt))
 }
