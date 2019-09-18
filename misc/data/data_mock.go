@@ -35,3 +35,8 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 func (d Data) StoreUser(user structures.User) error {
 	return nil
 }
+
+// Log is used to store a log in the datastore
+func (d Data) Log(user structures.User, log string) error {
+	return nil
+}
