@@ -3,6 +3,7 @@ DK = docker
 BIN = app
 GO = go
 CPROFILE = count.out
+COVFILE = coverage.txt
 REPORT = report.xml
 DKNAME = eikoapp/eiko
 DKTAG = latest-prod
@@ -47,16 +48,29 @@ up:
 test:
 	$(GO) test -tags mock -covermode=count -cover -coverprofile=$(CPROFILE) ./...
 
+test-simple:
+	$(GO) test -tags mock ./...
+
 test-report:
 	$(GO) test -tags mock -covermode=count -cover -coverprofile=$(CPROFILE) ./... -v 2>&1 | go-junit-report > $(REPORT)
 
+test-full: test
+test-full: test-simple
+
 cover:
-	$(GO) tool cover -html=$(CPROFILE) -o test.html && $(shell $(BROWSER) test.html)
+	$(GO) tool cover -html=$(CPROFILE) -o test.html
+
+cover-race:
+	$(GO) test -tags mock -race -coverprofile=$(COVFILE) -covermode=atomic ./...
 
 vet:
 	$(GO) vet $(ARGS) ./...
 
+codecov: cover-race
+codecov:
+	$(shell curl -s https://codecov.io/bash | bash)
+
 clean:
-	$(RM) $(BIN) $(CPROFILE) $(REPORT)
+	$(RM) $(BIN) $(CPROFILE) $(REPORT) $(COVFILE)
 
 .PHONY: clean all build cover test

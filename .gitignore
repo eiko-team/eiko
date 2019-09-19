@@ -12,3 +12,4 @@ app
 CREDENTIALS.json
 .env
 test.html
+coverage.txt

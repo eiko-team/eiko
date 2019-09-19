@@ -16,6 +16,12 @@ jobs:
           name: make results
           command: make test-report
       - run:
+          name: make test
+          command: make test-full
+      - run:
+          name: codecov
+          command: make codecov
+      - run:
           name: exporting test results
           command: mkdir -p test-results/gotest && mv report.xml test-results/gotest/report.xml
       - store_test_results:
