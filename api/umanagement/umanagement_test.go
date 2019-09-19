@@ -34,6 +34,10 @@ func TestManagment(t *testing.T) {
 				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+			if !data.UserStored {
+				t.Errorf("Data was no stored")
+			}
+			data.UserStored = false
 			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
 			if len(matchs) == 0 {
 				t.Errorf("Login() = %v, want %v", got, tt.want)
