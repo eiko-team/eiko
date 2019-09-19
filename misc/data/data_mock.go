@@ -19,7 +19,7 @@ var (
 	User       = structures.User{}
 	TestUser   = structures.User{
 		Email:     "test@test.ts",
-		Pass:      "$2a$10$OXJQl253CXXw.G/DADW3MO/bFhkuttZp5m4iwed83dDN4cZSD.hqe", // hashed password
+		Pass:      "$2a$10$EVCZ/75E1TCgpOZFypJC4ejYDDTPk9lAGwLKGhp6jESMWfl/4Bl/e", // hashed password 'pass'
 		Created:   time.Now(),
 		Validated: false,
 	}
