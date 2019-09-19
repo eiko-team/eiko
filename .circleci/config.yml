@@ -20,7 +20,7 @@ jobs:
           command: make test-full
       - run:
           name: codecov
-          command: make codecov; exit 0
+          command: make cover-race && bash <(curl -s https://codecov.io/bash)
       - run:
           name: exporting test results
           command: mkdir -p test-results/gotest && mv report.xml test-results/gotest/report.xml

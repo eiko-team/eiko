@@ -66,10 +66,6 @@ cover-race:
 vet:
 	$(GO) vet $(ARGS) ./...
 
-codecov: cover-race
-codecov:
-	$(shell curl -s https://codecov.io/bash | bash)
-
 clean:
 	$(RM) $(BIN) $(CPROFILE) $(REPORT) $(COVFILE)
 
