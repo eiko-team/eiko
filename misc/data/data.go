@@ -20,25 +20,25 @@ var (
 )
 
 type Data struct {
-	// Client is used to take advantage of the datastore api
-	Client *datastore.Client
-	// Ctx is the context of the Datastore
-	Ctx context.Context
-	// Users users name inside the datastore
-	Users string
-	// Logs log name inside the datastore
-	Logs string
+	// client is used to take advantage of the datastore api
+	client *datastore.Client
+	// ctx is the context of the Datastore
+	ctx context.Context
+	// users users name inside the datastore
+	users string
+	// logs log name inside the datastore
+	logs string
 }
 
 // InitData return an initialised Data struct
 func InitData(projID string) Data {
 	var d Data
-	d.Users = "Users"
-	d.Logs = "Logs"
-	d.Ctx = context.Background()
+	d.users = "Users"
+	d.logs = "Logs"
+	d.ctx = context.Background()
 
 	var err error
-	d.Client, err = datastore.NewClient(d.Ctx, projID)
+	d.client, err = datastore.NewClient(d.ctx, projID)
 	if err != nil {
 		Logger.Fatalf("Could not create datastore client: %v", err)
 	}
@@ -49,8 +49,8 @@ func InitData(projID string) Data {
 // GetUser is used to find if a email is already used in the datastore
 func (d Data) GetUser(UserMail string) (structures.User, error) {
 	var users []structures.User
-	q := datastore.NewQuery(d.Users).Filter("Email =", UserMail).Limit(1)
-	if _, err := d.Client.GetAll(d.Ctx, q, &users); err != nil {
+	q := datastore.NewQuery(d.users).Filter("Email =", UserMail).Limit(1)
+	if _, err := d.client.GetAll(d.ctx, q, &users); err != nil {
 		return structures.User{}, errors.New("Could no fetch users")
 	}
 	if len(users) == 0 {
@@ -61,14 +61,14 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 
 // StoreUser is used to store a user in the datastore
 func (d Data) StoreUser(user structures.User) error {
-	key := datastore.IncompleteKey(d.Users, nil)
-	_, err := d.Client.Put(d.Ctx, key, &user)
+	key := datastore.IncompleteKey(d.users, nil)
+	_, err := d.client.Put(d.ctx, key, &user)
 	return err
 }
 
 // Log is used to store a log in the datastore
 func (d Data) Log(log structures.Log) error {
-	key := datastore.IncompleteKey(d.Logs, nil)
-	_, err := d.Client.Put(d.Ctx, key, &log)
+	key := datastore.IncompleteKey(d.logs, nil)
+	_, err := d.client.Put(d.ctx, key, &log)
 	return err
 }
