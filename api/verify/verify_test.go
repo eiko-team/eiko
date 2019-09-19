@@ -6,22 +6,15 @@ import (
 	"regexp"
 	"strings"
 	"testing"
-	"time"
 
 	"eiko/api/verify"
 	"eiko/misc/data"
 	"eiko/misc/misc"
-	"eiko/misc/structures"
 )
 
 var (
 	d        data.Data
-	token, _ = misc.UserToToken(structures.User{
-		Email:     "test@test.ts",
-		Pass:      "pass",
-		Created:   time.Now(),
-		Validated: false,
-	})
+	token, _ = misc.UserToToken(data.TestUser)
 )
 
 func TestEmail(t *testing.T) {
