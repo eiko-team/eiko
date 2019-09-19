@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ TITLE }}</title>
+    <title>Bienvenu - Eiko</title>
     <meta name="author" content="Eiko's Team">
     <meta name="description" content="Eiko, une plateforme qui centralise les alternatives de consommation pour trouver moins cher, plus sain ou plus écolo. Transforme ta consomation en vote !">
     <meta name="keywords" content="Eiko, independance, collaboratif, consommation, alternatives, santé, économique, écologique, vote, transformation, plateforme, PWA, particulier, recommendation, astuces, gratuit, freemium, confiance, communauté, collaboration, alimentaire, course">
@@ -46,19 +46,10 @@
 
 <body>
     <ul class="navbar">
-        <li><a href="/" class="nav-login" style="display: none;"><i class="material-icons">pets</i>Eiko</a></li>
-        <li><a onclick="setStyleByID('login', 'display: block;')" class="nav-login" style="display: none;"><i class="material-icons">person</i>login</a></li>
-        <li><a onclick="setStyleByID('register', 'display: block;')" class="nav-login" style="display: none;"><i class="material-icons">person_add</i>register</a></li>
-        <li><a onclick="openNav()" class="nav-menu"><i class="material-icons">menu</i></a></li>
-        <li><a href="#" class="nav-menu" id="nav-name">Name of the list - Eiko</a></li>
-        <li style="float:right"><a href="#" class="nav-menu"><i class="material-icons">search</i></a></li>
+        <li><a href="/" class="nav-login"><i class="material-icons">pets</i>Eiko</a></li>
+        <li><a onclick="setStyleByID('login', 'display: block;')" class="nav-login"><i class="material-icons">person</i>login</a></li>
+        <li><a onclick="setStyleByID('register', 'display: block;')" class="nav-login"><i class="material-icons">person_add</i>register</a></li>
     </ul>
-    <div id="mySidenav" class="sidenav">
-        <a id="nav-closebtn" onclick="closeNav()" class="nav-nav"><i class="material-icons">close</i></a>
-        <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
-        <a href="#" class="nav-nav"><i class="material-icons">list</i>Lists</a>
-        <a href="#" class="nav-nav" onclick="logout()"><i class="material-icons">exit_to_app</i>Logout</a>
-    </div>
     <h1>Eiko</h1>
     Welcome to the eiko main landing page<i class="material-icons">face</i>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -101,6 +92,15 @@
                 <input type="password" placeholder="Entrez votre mot de passe" name="password" id="password1" required>
                 <meter id="password-strength-meter" max="4" value="4"></meter>
                 <p id="password-strength-text"></p>
+                <p>
+                    Indications: pour un mot de passe sécurisé, il faut:
+                    <ul>
+                        <li>Une longueur de mot de passe supérieur à 9</li>
+                        <li>Des majuscules et des nombres</li>
+                        <li>Des caractères spéciaux (!.?@ ...)</li>
+                        <li>Bonus: Encore plus de caractères spéciaux ([]~ ...)</li>
+                    </ul>
+                </p>
                 <input type="password" placeholder="Confirmez votre mot de passe" name="password" id="password2" required>
                 <a class="error-email" id="error-email" style="display: none;">Les deux Mots De Passe sont différents<br /></a>
                 <button type="submit" name="submit">Inscription</button>
@@ -119,6 +119,6 @@
     </noscript>
 </body>
 <script type="text/javascript" src="/js/lib.js"></script>
-<script type="text/javascript" src="/js/eiko.js"></script>
+<script type="text/javascript" src="/js/login.js"></script>
 
 </html>

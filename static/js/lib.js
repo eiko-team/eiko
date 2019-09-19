@@ -7,21 +7,12 @@
  */
 function POST(url, body, successCallback = (e) => {},
     failCallback = (e) => {}) {
-    // if (typeof(failCallback) === typeof(async)) {
-    //     async = failCallback
-    //     failCallback = (e) => {}
-    // }
-    // var req = new XMLHttpRequest();
-    // req.open("POST", "/api/"+url, async);
-    // req.addEventListener("load", wrap(successCallback, req));
-    // req.addEventListener("error", wrap(failCallback, req));
-    // req.send(JSON.stringify(body));
-    fetch("/api" + url, {
+    return fetch("/api" + url, {
             method: "POST",
             body: JSON.stringify(body),
             headers: { "Content-Type": "application/json" }
         })
-        .then((e) => { e.json().then(successCallback) })
+        .then((e) => { return e.json().then(successCallback); })
         .catch(failCallback);
 }
 
@@ -35,16 +26,11 @@ function POST(url, body, successCallback = (e) => {},
  * @param {string} icon icon to display in the notification
  */
 function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
-    if (Notification.permission !== "granted")
+    if (Notification.permission !== "granted") {
         Notification.requestPermission();
-    else {
-        var notification = new Notification(title, {
-            icon: icon,
-            body: body,
-        });
-        notification.onclick = function() {
-            self.open(onClickURL);
-        };
+    } else {
+        var notification = new Notification(title, { icon, body });
+        notification.onclick = (e) => { self.open(onClickURL); };
     }
 }
 
@@ -95,7 +81,7 @@ function log(msg) {
  * check is the token is valid
  */
 function isTokenValid() {
-    return getCookie("token") !== null
+    return getCookie("token") !== null;
 }
 
 /**
@@ -106,17 +92,33 @@ function isTokenValid() {
 function setStyleByClass(className, style) {
     var elt = document.getElementsByClassName(className);
     for (var i = 0; i < elt.length; i++) {
-        elt[i].style = style
+        elt[i].style = style;
     }
 }
 
 function setStyleByID(id, style) {
-    document.getElementById(id).style = style
+    document.getElementById(id).style = style;
 }
 
 function checkPassword(password) {
-    return {score: Math.floor((Math.random() * 5) + 1) - 1};
-    return POST("/verify", {password: password}, (e) => {
-        return e
-    })
+    return POST("/verify/password", { password: password }, (e) => {
+        createCookie("pass_score", e.strength);
+    });
+}
+
+function openNav() {
+    setStyleByID("mySidenav", "width:250px;");
+}
+
+function closeNav() {
+    setStyleByID("mySidenav", "width:0;");
+}
+
+function closeLogin() {
+    setStyleByID("login", "display: none;");
+}
+
+function closeRegister() {
+    deleteCookie("pass_score");
+    setStyleByID("register", "display: none;");
 }
