@@ -35,6 +35,7 @@ func TestEmail(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			data.Error = data.TestError
 			body := fmt.Sprintf("{\"user_email\":\"%s\"}", tt.email)
 			req, _ := http.NewRequest("POST", "/verify/email",
 				strings.NewReader(body))

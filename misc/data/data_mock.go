@@ -10,7 +10,19 @@ import (
 )
 
 var (
-	UserStored, Logged, GetUser, Inited bool
+	UserStored bool
+	Logged     bool
+	GetUser    bool
+	Inited     bool
+	TestError  = fmt.Errorf("Test %s", "error")
+	Error      error
+	User       = structures.User{}
+	TestUser   = structures.User{
+		Email:     "test@test.ts",
+		Pass:      "$2a$10$OXJQl253CXXw.G/DADW3MO/bFhkuttZp5m4iwed83dDN4cZSD.hqe", // hashed password
+		Created:   time.Now(),
+		Validated: false,
+	}
 )
 
 type Data struct {
@@ -29,12 +41,7 @@ func InitData(projID string) Data {
 // GetUser is used to find if a email is already used in the datastore
 func (d Data) GetUser(UserMail string) (structures.User, error) {
 	GetUser = true
-	return structures.User{
-		Email:     UserMail,
-		Pass:      "$2a$10$OXJQl253CXXw.G/DADW3MO/bFhkuttZp5m4iwed83dDN4cZSD.hqe", // hashed password
-		Created:   time.Now(),
-		Validated: false,
-	}, fmt.Errorf("test")
+	return User, Error
 }
 
 // StoreUser is used to store a user in the datastore

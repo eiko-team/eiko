@@ -26,6 +26,7 @@ func TestManagment(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			data.Error = data.TestError
 			body := fmt.Sprintf("{\"user_email\":\"%s\", \"user_password\":\"%s\"}",
 				tt.user.UserMail, tt.user.UserPass)
 			req, _ := http.NewRequest("POST", "/register", strings.NewReader(body))
