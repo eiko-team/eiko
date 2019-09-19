@@ -51,8 +51,8 @@ var (
 		{Function: umanagement.Delete, Path: "/delete"},
 		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
 		{Function: verify.Email, Path: "/verify/email"},
-		// {Function: verify.Password, Path: "/verify/password"},
-		// {Function: verify.Token, Path: "/verify/token"},
+		{Function: verify.Password, Path: "/verify/password"},
+		{Function: verify.Token, Path: "/verify/token"},
 		{Function: global.Log, Path: "/log"},
 	}
 
