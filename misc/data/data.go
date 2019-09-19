@@ -19,6 +19,8 @@ var (
 		log.Ldate|log.Ltime|log.Lshortfile)
 )
 
+// Data container for all data relative variables
+// initiated inside InitData(...)
 type Data struct {
 	// client is used to take advantage of the datastore api
 	client *datastore.Client

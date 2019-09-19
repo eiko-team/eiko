@@ -14,7 +14,7 @@ import (
 
 var (
 	d        data.Data
-	token, _ = misc.UserToToken(data.TestUser)
+	token, _ = misc.UserToToken(data.UserTest)
 )
 
 func TestEmail(t *testing.T) {
@@ -28,7 +28,7 @@ func TestEmail(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data.Error = data.TestError
+			data.Error = data.ErrTest
 			body := fmt.Sprintf("{\"user_email\":\"%s\"}", tt.email)
 			req, _ := http.NewRequest("POST", "/verify/email",
 				strings.NewReader(body))

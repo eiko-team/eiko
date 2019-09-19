@@ -16,7 +16,7 @@ import (
 var (
 	d data.Data
 
-	token, _ = misc.UserToToken(data.TestUser)
+	token, _ = misc.UserToToken(data.UserTest)
 )
 
 func TestLogin(t *testing.T) {
@@ -32,7 +32,7 @@ func TestLogin(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data.User = data.TestUser
+			data.User = data.UserTest
 			body := fmt.Sprintf("{\"user_email\":\"%s\",\"user_password\":\"%s\"}",
 				tt.user.UserMail, tt.user.UserPass)
 			req, _ := http.NewRequest("POST", "/login", strings.NewReader(body))
@@ -67,7 +67,7 @@ func TestManagment(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data.Error = data.TestError
+			data.Error = data.ErrTest
 			body := fmt.Sprintf("{\"user_email\":\"%s\",\"user_password\":\"%s\"}",
 				tt.user.UserMail, tt.user.UserPass)
 			req, _ := http.NewRequest("POST", "/register", strings.NewReader(body))

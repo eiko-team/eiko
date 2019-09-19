@@ -50,7 +50,7 @@ func Password(d data.Data, r *http.Request) (string, error) {
 
 	res := 0
 	if len(i.Password) > 9 {
-		res += 1
+		res++
 	}
 	var patterns = []struct {
 		pattern string
@@ -62,7 +62,7 @@ func Password(d data.Data, r *http.Request) (string, error) {
 	}
 	for _, tt := range patterns {
 		if regexp.MustCompile(tt.pattern).MatchString(i.Password) {
-			res += 1
+			res++
 		}
 	}
 	return fmt.Sprintf("{\"strength\":%d}", res-1), nil

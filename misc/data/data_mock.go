@@ -14,10 +14,10 @@ var (
 	Logged     bool
 	GetUser    bool
 	Inited     bool
-	TestError  = fmt.Errorf("Test %s", "error")
+	ErrTest    = fmt.Errorf("Test %s", "error")
 	Error      error
 	User       = structures.User{}
-	TestUser   = structures.User{
+	UserTest   = structures.User{
 		Email:     "test@test.ts",
 		Pass:      "$2a$10$EVCZ/75E1TCgpOZFypJC4ejYDDTPk9lAGwLKGhp6jESMWfl/4Bl/e", // hashed password 'pass'
 		Created:   time.Now(),
@@ -25,6 +25,7 @@ var (
 	}
 )
 
+// Data container for all data relative variables
 type Data struct {
 	// Users users name inside the datastore
 	Users string
