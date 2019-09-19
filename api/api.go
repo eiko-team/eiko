@@ -58,7 +58,8 @@ var (
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
-		{"./static/html/index.html", "text/html", []string{"/", "/index.html"}},
+		{"./static/html/eiko.html", "text/html", []string{"/", "/index.html", "/eiko.html"}},
+		{"./static/html/login.html", "text/html", []string{"/login.html"}},
 		{"./static/js/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}},
 		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}},
 		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}},

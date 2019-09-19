@@ -38,6 +38,8 @@ func TestGet400(t *testing.T) {
 	}{
 		{"root", "GET", "/", http.StatusOK},
 		{"index", "GET", "/index.html", http.StatusOK},
+		{"index", "GET", "/login.html", http.StatusOK},
+		{"app", "GET", "/eiko.html", http.StatusOK},
 		{"service_worker", "GET", "/eiko-sw.js", http.StatusOK},
 		{"favicon_Eiko", "GET", "/EIKO.ico", http.StatusOK},
 		{"favicon", "GET", "/favicon.ico", http.StatusOK},
