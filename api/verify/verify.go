@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 
 	"eiko/misc/data"
 	"eiko/misc/misc"
@@ -43,9 +44,28 @@ func Password(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("2.1.0")
 	}
 
-	// TODO
+	if len(i.Password) == 0 {
+		return "{\"strength\":0}", nil
+	}
 
-	return fmt.Sprintf("{\"strength\":%d}", 4), nil
+	res := 0
+	if len(i.Password) > 9 {
+		res += 1
+	}
+	var patterns = []struct {
+		pattern string
+	}{
+		{`[a-z]`},                     // abc..
+		{`([A-Z]|[0-9])`},             // ABC..., 0123...
+		{`([\x21-\x2F]|[\x3A-\x40])`}, // !"#$%&'()*+,-./ || :;<=>?@
+		{`([\x5B-\x60]|[\x7B-\x7E])`}, // [\]^_` || {|}~
+	}
+	for _, tt := range patterns {
+		if regexp.MustCompile(tt.pattern).MatchString(i.Password) {
+			res += 1
+		}
+	}
+	return fmt.Sprintf("{\"strength\":%d}", res-1), nil
 }
 
 // Token Checks if the token is valid
