@@ -30,6 +30,15 @@ type Data struct {
 	users string
 	// logs log name inside the datastore
 	logs string
+	// stores stores name inside the datastore
+	stores string
+	// consumables log name inside the datastore
+	consumables string
+	// stocks log name inside the datastore
+	stocks string
+
+	// User the user making the request. Got from the cookie in the header
+	User structures.User
 }
 
 // InitData return an initialised Data struct
@@ -37,6 +46,9 @@ func InitData(projID string) Data {
 	var d Data
 	d.users = "Users"
 	d.logs = "Logs"
+	d.stores = "Stores"
+	d.consumables = "Consumables"
+	d.stocks = "Stocks"
 	d.ctx = context.Background()
 
 	var err error
@@ -72,5 +84,38 @@ func (d Data) StoreUser(user structures.User) error {
 func (d Data) Log(log structures.Log) error {
 	key := datastore.IncompleteKey(d.logs, nil)
 	_, err := d.client.Put(d.ctx, key, &log)
+	return err
+}
+
+// GetStore is used to find if a store is already in the datastore using
+// it's name and location
+func (d Data) GetStore(store structures.Store) (structures.Store, error) {
+	var stores []structures.Store
+	q := datastore.NewQuery(d.stores).
+		Filter("Name =", store.Name).
+		Filter("Address =", store.Address).
+		Filter("Country =", store.Country).
+		Filter("Zip =", store.Zip).
+		Limit(1)
+	if _, err := d.client.GetAll(d.ctx, q, &stores); err != nil {
+		return structures.Store{}, errors.New("Could no fetch stores")
+	}
+	if len(stores) == 0 {
+		return structures.Store{}, errors.New("no store found")
+	}
+	return stores[0], nil
+}
+
+// StoreStore is used to store a log in the datastore
+func (d Data) StoreStore(store structures.Store) error {
+	key := datastore.IncompleteKey(d.stores, nil)
+	_, err := d.client.Put(d.ctx, key, &store)
+	return err
+}
+
+// StoreConsumable is used to store a log in the datastore
+func (d Data) StoreConsumable(consumable structures.Consumable) error {
+	key := datastore.IncompleteKey(d.consumables, nil)
+	_, err := d.client.Put(d.ctx, key, &consumable)
 	return err
 }
