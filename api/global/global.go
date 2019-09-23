@@ -14,7 +14,7 @@ import (
 
 var (
 	// Logger used to log output
-	Logger = log.New(os.Stdout, "verify: ",
+	Logger = log.New(os.Stdout, "global: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 )
 
@@ -25,9 +25,9 @@ func Log(d data.Data, r *http.Request) (string, error) {
 	if err != nil {
 		return "", errors.New("3.0.0")
 	}
-	user, _ := misc.TokenToUser(i.Token)
+
 	err = d.Log(structures.Log{
-		Email:   user.Email,
+		Email:   d.User.Email,
 		Log:     i.Log,
 		Created: time.Now(),
 	})
