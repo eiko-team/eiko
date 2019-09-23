@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"eiko/api/global"
+	"eiko/api/store"
 	"eiko/api/umanagement"
 	"eiko/api/verify"
 	"eiko/misc/data"
@@ -44,16 +45,21 @@ var (
 	// Logger used to log output
 	Logger = log.New(os.Stdout, "Api: ", log.Ldate|log.Ltime|log.Lshortfile)
 
-	// Functions List all api functions
+	// FunctionsWithToken List all api functions that does require a token
+	FunctionsWithToken = []Func{
+		{Function: umanagement.Delete, Path: "/delete"},
+		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
+		// {Function: verify.Token, Path: "/verify/token"},
+		{Function: global.Log, Path: "/log"},
+		{Function: store.AddStore, Path: "/store/add"},
+		{Function: store.GetStore, Path: "/store/get"},
+	}
+	// Functions List all api functions that does not require a token
 	Functions = []Func{
 		{Function: umanagement.Login, Path: "/login"},
 		{Function: umanagement.Register, Path: "/register"},
-		{Function: umanagement.Delete, Path: "/delete"},
-		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
 		{Function: verify.Email, Path: "/verify/email"},
 		{Function: verify.Password, Path: "/verify/password"},
-		{Function: verify.Token, Path: "/verify/token"},
-		{Function: global.Log, Path: "/log"},
 	}
 
 	// SFiles is stored informations on special files
@@ -106,6 +112,32 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// WrapperFunction_cookie allows us to call the functions with rights args.
+// Db must be set already.
+// Read Token cookie and set the User value of D
+func (fun Func) WrapperFunction_cookie(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+	misc.LogRequest(r)
+	w.Header().Set("Content-Type", "application/json")
+	token, err := r.Cookie("token")
+	if err != nil {
+		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
+	}
+	Logger.Printf("token: %v", token.Value)
+	D.User, err = misc.TokenToUser(token.Value)
+	if err != nil {
+		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
+	}
+	data, err := fun.Function(D, r)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+	} else {
+		w.WriteHeader(200)
+		fmt.Fprintln(w, data)
+	}
+}
+
 // ExecuteAPI Execute the api and return the bdd configured.
 func ExecuteAPI() *httprouter.Router {
 	r := httprouter.New()
@@ -121,6 +153,9 @@ func ExecuteAPI() *httprouter.Router {
 
 	for _, tt := range Functions {
 		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
+	}
+	for _, tt := range FunctionsWithToken {
+		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction_cookie)
 	}
 	return r
 }
