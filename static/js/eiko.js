@@ -1,6 +1,6 @@
 if ("serviceWorker" in navigator) {
     if (!navigator.serviceWorker.controller) {
-        navigator.serviceWorker.register("/eiko-sw.js", { scope: "./" });
+        navigator.serviceWorker.register("/eiko-sw.js");
     }
 }
 
