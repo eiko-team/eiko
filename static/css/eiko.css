@@ -1,13 +1,18 @@
 :root {
-    --main: #38B5FF;
-    --light: #2987d9;
-    --dark: #3853FF;
+    --main: #40C4FF;
+    --light: #82F7FF;
+    --dark: #0094CC;
     --complementary: #FF8138;
     --grey-light: #424242;
     --grey-dark: #212121;
     --white: white;
     --red: #f44336;
     --black: black;
+    --text-color: black;       /* Text color on main background*/
+    --text-color-dark: white;  /* Text color on dark background*/
+    --text-color-light: white; /* Text color on light background*/
+    --text-color-white: black; /* Text color on white background*/
+    --text-color-black: white; /* Text color on black background*/
 }
 
 body {
@@ -31,7 +36,7 @@ body {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: var(--light);
+    background-color: var(--main);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -41,7 +46,7 @@ body {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: var(--white);
+    color: var(--text-color);
     display: block;
     transition: 0.3s;
 }
@@ -65,23 +70,23 @@ body {
     }
 }
 
-ul {
+.navbar {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: var(--light);
+    background-color: var(--main);
     width: 100%
 }
 
-li {
+.navbar li {
     float: left;
 }
 
-li a {
+.navbar li a {
     display: block;
     cursor: pointer;
-    color: var(--white);
+    color: var(--text-color);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -111,7 +116,7 @@ input[type=current-password] {
 
 button {
     background-color: var(--dark);
-    color: white;
+    color: var(--text-color-dark);
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -180,7 +185,7 @@ span.password {
 
 .close:hover,
 .close:focus {
-    color: red;
+    color: var(--red);
     cursor: pointer;
 }
 
