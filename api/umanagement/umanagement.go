@@ -88,15 +88,6 @@ func Register(d data.Data, r *http.Request) (string, error) {
 
 // Delete delete an account
 func Delete(d data.Data, r *http.Request) (string, error) {
-	var i structures.Token
-	err := misc.ParseJSON(r, &i)
-	if err != nil {
-		return "", errors.New("1.2.0")
-	}
-
-	if !misc.ValidateToken(i.Token) {
-		return "", errors.New("1.2.1")
-	}
 
 	// TODO: acctually delete user
 
@@ -105,22 +96,7 @@ func Delete(d data.Data, r *http.Request) (string, error) {
 
 // UpdateToken delete an account
 func UpdateToken(d data.Data, r *http.Request) (string, error) {
-	var i structures.Token
-	err := misc.ParseJSON(r, &i)
-	if err != nil {
-		return "", errors.New("1.3.0")
-	}
-
-	if !misc.ValidateToken(i.Token) {
-		return "", errors.New("1.3.1")
-	}
-
-	user, err := misc.TokenToUser(i.Token)
-	if err != nil {
-		return "", errors.New("1.3.2")
-	}
-
-	token, err := misc.UserToToken(user)
+	token, err := misc.UserToToken(d.User)
 	if err != nil {
 		return "", errors.New("1.3.3")
 	}

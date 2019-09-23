@@ -109,13 +109,13 @@ func TestDelete(t *testing.T) {
 		wantErr bool
 	}{
 		{"sanity", `{"done":"true"}`, token, false},
-		{"fake token", `1.2.1`, "token.token.token", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			body := fmt.Sprintf("{\"token\":\"%s\"}", tt.token)
 			req, _ := http.NewRequest("POST", "/delete",
 				strings.NewReader(body))
+			req.Header.Set("Cookie", fmt.Sprintf("token=%s", tt.token))
 
 			got, err := umanagement.Delete(d, req)
 			if (err != nil) != tt.wantErr {
