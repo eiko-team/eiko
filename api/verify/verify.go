@@ -68,13 +68,3 @@ func Password(d data.Data, r *http.Request) (string, error) {
 	return fmt.Sprintf("{\"strength\":%d}", res-1), nil
 }
 
-// Token Checks if the token is valid
-func Token(d data.Data, r *http.Request) (string, error) {
-	var i structures.Token
-	err := misc.ParseJSON(r, &i)
-	if err != nil {
-		return "", errors.New("2.2.0")
-	}
-
-	return fmt.Sprintf("{\"valid\":\"%v\"}", misc.ValidateToken(i.Token)), nil
-}

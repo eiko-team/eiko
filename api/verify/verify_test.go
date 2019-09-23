@@ -81,31 +81,3 @@ func TestPassword(t *testing.T) {
 	}
 }
 
-func TestToken(t *testing.T) {
-	tests := []struct {
-		name    string
-		token   string
-		want    bool
-		wantErr bool
-	}{
-		{"Good Token", token, false, false},
-		{"Fake Token", "Fake token", false, false},
-		{"Invalid Token", "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.VFb0qJ1LRg_4ujbZoRMXnVkUgiuKq5KxWqNdbKq_G9Vvz-S1zZa9LPxtHWKa64zDl2ofkT8F6jBt_K4riU-fPg", false, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			body := fmt.Sprintf("{\"token\":\"%s\"}", tt.token)
-			req, _ := http.NewRequest("POST", "/verify/token",
-				strings.NewReader(body))
-			got, err := verify.Token(d, req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			matchs := regexp.MustCompile(`{"valid":"(.*)"}`).FindAllStringSubmatch(got, -1)
-			if (len(matchs) == 0) != tt.want {
-				t.Errorf("Login() = %v(%v), want %v", got, matchs, tt.want)
-			}
-		})
-	}
-}
