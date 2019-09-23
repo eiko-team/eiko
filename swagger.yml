@@ -1,0 +1,338 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Eiko's API
+  description: Aiko's API
+security:
+  - accessCode:
+      - read
+      - write
+servers:
+  - url: 'https://virtserver.swaggerhub.com/tomMoulard/Eiko/1.0.0'
+components:
+  responses:
+    Error: # $ref: '#/components/responses/Error'
+      description: An error occured, please check response body's code
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Token: # $ref: '#/components/schemas/Token'
+      type: object
+      properties:
+        token:
+          type: string
+    Error: # $ref: '#/components/schemas/Error'
+      type: object
+      properties:
+        error:
+          type: string
+
+paths:
+  /register:
+    post:
+      summary: User registration
+      description: Provide a token and create a user with the given credentials
+      responses:
+        '200':
+          description: Here is your token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+                user_password:
+                  type: string
+  /login:
+    post:
+      summary: User login
+      description: Provide a token with the given credentials
+      responses:
+        '200':
+          description: Here is your token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+                user_password:
+                  type: string
+  /delete:
+    post:
+      summary: User detetion
+      description: Completely removes a user
+      responses:
+        '200':
+          description: OK
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - user
+      parameters:
+        - in: cookie
+          name: token
+          schema:
+            type: string
+  /updatetoken:
+    post:
+      summary: Update a token
+      description: Update a token
+      responses:
+        '200':
+          description: Token updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - user
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /verify/email:
+    post:
+      summary: Checks if the email is available
+      description: >
+        Checks if the email is available to use as a email for the
+        account to be created
+      responses:
+        '200':
+          description: Available
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: string
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - verify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+  /verify/password:
+    post:
+      summary: Checks the password strength
+      description: >
+        Return the strength of the provided password, from 0 to 4.
+        Checks the length of the password, and it's content:
+        if it contains [a-z], it is a start.
+        if it contains [A-Z], it is a greater start.
+        if it contains ([\x21-\x2F]|[\x3A-\x40]) (!"#$%&'()*+,-./ || :;<=>?@), it is a good.
+        if it contains ([\x5B-\x60]|[\x7B-\x7E]) ([\]^_` || {|}~), it is a strong password.
+      responses:
+        '200':
+          description: Available
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  strength:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - verify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+  /verify/token:
+    post:
+      summary: Checks if the token is valid
+      description: >
+        Checks if the token is valid and usable.
+      responses:
+        '200':
+          description: Is the token valid ?
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: string
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - verify
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /log:
+    post:
+      summary: Do some logs
+      description: >
+        Add a new log if the storage solution
+      responses:
+        '200':
+          description: The logging was successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: string
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - global
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      parameters:
+        - in: cookie
+          required: false
+          name: token
+          schema:
+            type: string
+  /store/add:
+    post:
+      summary: Create a new store
+      description: >
+        Create a new store on call
+      responses:
+        '200':
+          description: The creation was successfull
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: string
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+                country:
+                  type: string
+                zip:
+                  type: string
+                user_rating:
+                  type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /store/get:
+    post:
+      summary: Get a store
+      description: >
+        Get a store informations with given informations
+      responses:
+        '200':
+          description: Informations on the store
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  address:
+                    type: string
+                  country:
+                    type: string
+                  zip:
+                    type: string
+                  user_rating:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+                country:
+                  type: string
+                zip:
+                  type: string
+                user_rating:
+                  type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
