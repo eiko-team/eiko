@@ -29,10 +29,20 @@ func TestLogin(t *testing.T) {
 		{"sanity", `{"token":"(.*)"}`,
 			structures.Login{UserMail: "test@test.ts", UserPass: "pass"},
 			false},
+		{"wrong password", ``,
+			structures.Login{UserMail: "test@test.ts", UserPass: "fake pass"},
+			true},
+		{"user not found", ``,
+			structures.Login{UserMail: "not@used.email", UserPass: "pass"},
+			true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data.User = data.UserTest
+			if tt.name == "sanity" {
+				data.User = data.UserTest
+			} else {
+				data.Error = data.ErrTest
+			}
 			body := fmt.Sprintf("{\"user_email\":\"%s\",\"user_password\":\"%s\"}",
 				tt.user.UserMail, tt.user.UserPass)
 			req, _ := http.NewRequest("POST", "/login", strings.NewReader(body))

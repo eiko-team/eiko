@@ -37,8 +37,7 @@ func Login(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("1.0.1")
 	}
 
-	err = hash.CompareHash(user.Pass, i.UserPass, Salt)
-	if err != nil {
+	if !hash.CompareHash(user.Pass, i.UserPass, Salt) {
 		return "", errors.New("1.0.2")
 	}
 
