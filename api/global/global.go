@@ -28,7 +28,7 @@ func Log(d data.Data, r *http.Request) (string, error) {
 
 	user, _ := misc.TokenToUser(i.Token)
 
-	Logger.Println("%v", i)
+	Logger.Printf("%v", i)
 
 	err = d.Log(structures.Log{
 		Email:   user.Email,
