@@ -50,7 +50,6 @@ var (
 		{Function: umanagement.Delete, Path: "/delete"},
 		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
 		// {Function: verify.Token, Path: "/verify/token"},
-		{Function: global.Log, Path: "/log"},
 		{Function: store.AddStore, Path: "/store/add"},
 		{Function: store.GetStore, Path: "/store/get"},
 	}
@@ -60,6 +59,7 @@ var (
 		{Function: umanagement.Register, Path: "/register"},
 		{Function: verify.Email, Path: "/verify/email"},
 		{Function: verify.Password, Path: "/verify/password"},
+		{Function: global.Log, Path: "/log"},
 	}
 
 	// SFiles is stored informations on special files
@@ -123,7 +123,6 @@ func (fun Func) WrapperFunction_cookie(w http.ResponseWriter, r *http.Request,
 	if err != nil {
 		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
 	}
-	Logger.Printf("token: %v", token.Value)
 	D.User, err = misc.TokenToUser(token.Value)
 	if err != nil {
 		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
