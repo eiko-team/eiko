@@ -1,7 +1,6 @@
 package hash
 
 import (
-	"log"
 	"math/rand"
 	"os"
 
@@ -43,10 +42,6 @@ func Hash(pass string) (string, error) {
 // CompareHash compares a password and the salt with the hash.
 // return if the password is a match for the hash
 func CompareHash(hash, pass string) bool {
-	log.Println(Hash(pass))
-	log.Println(salt)
-	log.Printf("CompareHash(%s, %s) = %+v", hash, pass,
-		bcrypt.CompareHashAndPassword([]byte(hash), saltPassword(pass)))
 	return nil == bcrypt.CompareHashAndPassword([]byte(hash),
 		saltPassword(pass))
 }
