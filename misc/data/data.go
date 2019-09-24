@@ -124,8 +124,8 @@ func (d Data) StoreConsumable(consumable structures.Consumable) error {
 func (d Data) GetConsumable(query structures.Query) ([]structures.Consumables, error) {
 	var res []structures.Consumables
 	q := datastore.NewQuery(d.consumables) // TODO
-	if _, err := d.client.GetAll(d.ctx, q, &stores); err != nil {
+	if _, err := d.client.GetAll(d.ctx, q, &res); err != nil {
 		return res, errors.New("Could no fetch stores")
 	}
-	return stores[0], nil
+	return res, nil
 }
