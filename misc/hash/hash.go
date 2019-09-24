@@ -1,13 +1,19 @@
 package hash
 
 import (
+	"log"
 	"math/rand"
+	"os"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 var (
 	keyPossibilities = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&(-_)=+$*!:;,?./<>[]{}%@`^\\~")
+
+	// salt salt for the passwrd hashing
+	// salt = GenerateKey(666)
+	salt = os.Getenv("SALT")
 )
 
 // GenerateKey generate a n th long key
@@ -21,22 +27,26 @@ func GenerateKey(n int) string {
 
 // saltPassword is to generate to byte array to use as the password to hash.
 // In there, pass, salt, and some otherthings are shuffled.
-func saltPassword(pass, salt string) []byte {
-	return []byte(salt + pass + salt + pass)
+func saltPassword(pass string) []byte {
+	return []byte(pass + salt + pass + salt + pass)
 }
 
 // Hash hashes the password with the salt and return the hash as a string by
 // using the bcrypt algorithm.
-func Hash(pass, salt string) (string, error) {
+func Hash(pass string) (string, error) {
 	// https://crackstation.net/hashing-security.htm
-	h := saltPassword(pass, salt)
+	h := saltPassword(pass)
 	res, err := bcrypt.GenerateFromPassword(h, bcrypt.DefaultCost)
 	return string(res), err
 }
 
 // CompareHash compares a password and the salt with the hash.
-// return an error if the password/salt is not correct
-func CompareHash(hash, pass, salt string) bool {
+// return if the password is a match for the hash
+func CompareHash(hash, pass string) bool {
+	log.Println(Hash(pass))
+	log.Println(salt)
+	log.Printf("CompareHash(%s, %s) = %+v", hash, pass,
+		bcrypt.CompareHashAndPassword([]byte(hash), saltPassword(pass)))
 	return nil == bcrypt.CompareHashAndPassword([]byte(hash),
-		saltPassword(pass, salt))
+		saltPassword(pass))
 }
