@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"eiko/api/consumables"
 	"eiko/api/global"
 	"eiko/api/store"
 	"eiko/api/umanagement"
@@ -49,9 +50,9 @@ var (
 	FunctionsWithToken = []Func{
 		{Function: umanagement.Delete, Path: "/delete"},
 		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
-		// {Function: verify.Token, Path: "/verify/token"},
 		{Function: store.AddStore, Path: "/store/add"},
 		{Function: store.GetStore, Path: "/store/get"},
+		{Function: consumables.Store, Path: "/consumable/add"},
 	}
 	// Functions List all api functions that does not require a token
 	Functions = []Func{
