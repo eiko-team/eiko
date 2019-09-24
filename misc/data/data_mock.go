@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"eiko/misc/hash"
 	"eiko/misc/structures"
 )
 
@@ -18,11 +19,12 @@ var (
 	StoreStore      bool
 	StoreConsumable bool
 	Error           error
+	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
 	User            = structures.User{}
 	UserTest        = structures.User{
 		Email:     "test@test.ts",
-		Pass:      "$2a$10$EVCZ/75E1TCgpOZFypJC4ejYDDTPk9lAGwLKGhp6jESMWfl/4Bl/e", // hashed password 'pass'
+		Pass:      pass, // hashed password 'pass'
 		Created:   time.Now(),
 		Validated: false,
 	}
