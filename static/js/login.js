@@ -65,7 +65,6 @@ password.addEventListener("input", function() {
 });
 
 function displayLoadingGif(display = false, id = 'login') {
-    console.log(`displayLoadingGif(${display}, ${id})`)
     if (display) {
         document.getElementById(id + "-button").disabled = true;
         document.getElementById(id + "-loading-gif").style.display = "";
@@ -78,7 +77,6 @@ function displayLoadingGif(display = false, id = 'login') {
 }
 
 function login(email, password, remember = true) {
-    console.log(`login(${email}, ${password}, ${remember})`)
     displayLoadingGif(true, "login")
     POST("/login", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
@@ -95,7 +93,6 @@ function login(email, password, remember = true) {
 }
 
 function register(email, password, remember = true) {
-    console.log(`register(${email}, ${password}, ${remember})`)
     displayLoadingGif(true, "register")
     POST("/register", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
