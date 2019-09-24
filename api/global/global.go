@@ -26,12 +26,16 @@ func Log(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.0.0")
 	}
 
+	user, _ := misc.TokenToUser(i.Token)
+
+	Logger.Println("%v", i)
+
 	err = d.Log(structures.Log{
-		Email:   d.User.Email,
+		Email:   user.Email,
 		Log:     i.Log,
 		Created: time.Now(),
 	})
-	if err == nil {
+	if err != nil {
 		return "", errors.New("3.0.1")
 	}
 
