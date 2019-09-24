@@ -100,8 +100,10 @@ func TestCompareHash(t *testing.T) {
 		want bool
 	}{
 		{"sanity", args{hash, pass, salt}, true},
-		{"wrong password", args{hash, pass + "wrong", salt}, false},
-		// Wierd
+		{"wrong password back", args{hash, pass + "wrong", salt}, false},
+		{"wrong password front", args{hash, "wrong" + pass, salt}, false},
+		{"wrong password both", args{hash, "wrong" + pass + "wrong", salt}, false},
+		// Weird
 		// {"wrong hash back", args{hash + "wronghash", pass, salt}, false},
 		{"wrong hash front", args{"test" + hash, pass, salt}, false},
 		{"wrong hash both", args{"test" + hash + "wrong", pass, salt}, false},
