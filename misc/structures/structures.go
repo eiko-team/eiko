@@ -53,51 +53,87 @@ type Store struct {
 	id         int64  // The integer ID used in the firestore.
 }
 
+// GlobalInterest is the global interest of a consumable
+type GlobalInterest struct {
+	Boycott          bool   `json:"boycott"`
+	EcologicalImpact string `json:"ecological_impact"`
+	SocialImpact     string `json:"social_impact"`
+}
+
+// Nutrition Nutrition facts on the consumable
+type Nutrition struct {
+	Energie       float64 `json:"energie"`
+	Fat           float64 `json:"fat"`
+	Fibres        float64 `json:"fibres"`
+	Glucides      float64 `json:"glucides"`
+	Lipides       float64 `json:"lipides"`
+	Proteins      float64 `json:"proteins"`
+	Salt          float64 `json:"salt"`
+	SaturatedFat  float64 `json:"saturated_fat"`
+	SugarGlucides float64 `json:"sugar_glucides"`
+}
+
+// Health Health status of a consumable
+type Health struct {
+	Additive  []string  `json:"Additive"`
+	Allergen  []string  `json:"allergen"`
+	Nutrition Nutrition `json:"nutrition"`
+}
+
+// Characteristics Characteristics of a consumable
+type Characteristics struct {
+	GlobalInterest GlobalInterest `json:"global_interest"`
+	Health         Health         `json:"health"`
+}
+
+// Pictures all Pictures needed for a consumable
+type Pictures struct {
+	Back        string `json:"back"`
+	BarCode     string `json:"bar_code"`
+	Composition string `json:"composition"`
+	Front       string `json:"front"`
+}
+
+// Quantity Quantity of the product in a pack
+type Quantity struct {
+	Kg    int `json:"kg"`
+	Litre int `json:"litre"`
+}
+
 // Consumable struct used to parse /consumable/...
 type Consumable struct {
-	Name            string `json:"name"`
-	Company         string `json:"Compagny"`
-	Characteristics struct {
-		GlobalInterest struct {
-			Boycott          bool   `json:"boycott"`
-			EcologicalImpact string `json:"ecological_impact"`
-			SocialImpact     string `json:"social_impact"`
-		} `json:"global_interest"`
-		Health struct {
-			Additive  []string `json:"Additive"`
-			Allergen  []string `json:"allergen"`
-			Nutrition struct {
-				Energie       float64 `json:"energie"`
-				Fat           float64 `json:"fat"`
-				Fibres        float64 `json:"fibres"`
-				Glucides      float64 `json:"glucides"`
-				Lipides       float64 `json:"lipides"`
-				Proteins      float64 `json:"proteines"`
-				Salt          float64 `json:"salt"`
-				SaturatedFat  float64 `json:"saturated_fat"`
-				SugarGlucides float64 `json:"sugar_glucides"`
-			} `json:"nutrition"`
-		} `json:"health"`
-	} `json:"characteristics"`
-	Pictures struct {
-		Back        string `json:"back"`
-		BarCode     string `json:"bar_code"`
-		Composition string `json:"composition"`
-		Front       string `json:"front"`
-	} `json:"pictures"`
-	Quantity struct {
-		Kg    int `json:"kg"`
-		Litre int `json:"litre"`
-	} `json:"quantity"`
+	Name            string          `json:"name"`
+	Company         string          `json:"Compagny"`
+	Characteristics Characteristics `json:"characteristics"`
+	Pictures        Pictures        `json:"pictures"`
+	Quantity        Quantity        `json:"quantity"`
 }
 
-// Stock TODO
+// Stock Stock of a product in a store
 type Stock struct {
+	PackQuantity int `json:"pack_quantity" firestore:"pack_quantity"`
+	NbPacks      int `json:"nb_packs" firestore:"nb_packs"`
+	PackPrice    int `json:"pack_price" firestore:"pack_price"`
+	Available    int `json:"available" firestore:"available"`
 }
 
-// ConsumableWithEverything struct used to parse /consumable/...
-type ConsumableWithEverything struct {
+// Consumables struct used to parse /consumable/...
+type Consumables struct {
 	Consumable Consumable `json:"consumable"`
 	Store      Store      `json:"store"`
 	Stock      Stock      `json:"Stock"`
+}
+
+// Location struct to store location informations
+// https://www.w3schools.com/html/html5_geolocation.asp
+type Location struct {
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+// Query used to query certain api to get a personalized result
+type Query struct {
+	Query    string   `json:"query"`
+	Limit    int      `json:"limit"`
+	Location Location `json:"limit"`
 }
