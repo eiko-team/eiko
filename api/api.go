@@ -112,10 +112,10 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	}
 }
 
-// WrapperFunction_cookie allows us to call the functions with rights args.
+// WrapperFunctionCookie allows us to call the functions with rights args.
 // Db must be set already.
 // Read Token cookie and set the User value of D
-func (fun Func) WrapperFunction_cookie(w http.ResponseWriter, r *http.Request,
+func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 	misc.LogRequest(r)
 	w.Header().Set("Content-Type", "application/json")
@@ -154,7 +154,7 @@ func ExecuteAPI() *httprouter.Router {
 		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
 	}
 	for _, tt := range FunctionsWithToken {
-		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction_cookie)
+		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunctionCookie)
 	}
 	return r
 }
