@@ -59,37 +59,40 @@
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
     proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     <div id="login" class="modal">
-        <form class="modal-content animate" action="javascript:loginForm(email.value, password.value, remember.value)">
+        <form name="login" class="modal-content animate" onsubmit="loginForm()" action="javascript:void(0)">
             <div class="imgcontainer">
                 <span onclick="setStyleByID('login', 'display: none;')" class="close" title="Fermer"><i class="material-icons">close</i></span>
             </div>
             <div class="container">
                 <label for="email"><b>Email</b></label>
                 <input type="email" placeholder="Entrez votre email" name="email" id="email" required>
-                <label for="password"><b>Mot De Passe</b></label>
+                <label for="password"><b>Mot de passe</b></label>
                 <input type="password" placeholder="Entrez votre mot de passe" name="password" id="password" required>
                 <a class="error-email" id="error-email" style="display: none;">L'email ou le mot de passe est invalide<br /></a>
-                <button type="submit" name="submit">Connexion</button>
+                <button type="submit" name="submit" id="login-button">
+                    <img src="/img/loading.gif" id="login-loading-gif" style="display: none;" />
+                    <a id="login-loading-text">Connexion</a>
+                </button>
                 <label>
                     <input type="checkbox" checked="checked" name="remember" id="remember"> Se souvenir de moi
                 </label>
             </div>
             <div class="container" id="pbm">
                 <button type="button" onclick="setStyleByID('login', 'display: none;')" class="cancelbtn">Annuler</button>
-                <span class="password"><a href="#">Mot De Passe Oublié ?</a></span>
+                <span class="password"><a href="#">Mot de passe oublié ?</a></span>
             </div>
         </form>
     </div>
     <div id="register" class="modal">
-        <form class="modal-content animate" action="javascript:registerForm(mail.value, password1.value, password2.value, rmb.value)">
+        <form name="register" class="modal-content animate" onsubmit="registerForm()" action="javascript:void(0)">
             <div class="imgcontainer">
                 <span onclick="setStyleByID('register', 'display: none;')" class="close" title="Fermer"><i class="material-icons">close</i></span>
             </div>
             <div class="container">
                 <label for="email"><b>Email</b></label>
                 <input type="email" placeholder="Entrez votre email" name="email" id="mail" required>
-                <label for="password"><b>Mot De Passe</b></label>
-                <input type="password" placeholder="Entrez votre mot de passe" name="password" id="password1" required>
+                <label for="password1"><b>Mot de passe</b></label>
+                <input type="password" placeholder="Entrez votre mot de passe" name="password1" id="password1" required>
                 <meter id="password-strength-meter" max="4" value="4"></meter>
                 <p id="password-strength-text"></p>
                 <p>
@@ -101,16 +104,20 @@
                         <li>Bonus: Encore plus de caractères spéciaux ([]~ ...)</li>
                     </ul>
                 </p>
-                <input type="password" placeholder="Confirmez votre mot de passe" name="password" id="password2" required>
-                <a class="error-email" id="error-email" style="display: none;">Les deux Mots De Passe sont différents<br /></a>
-                <button type="submit" name="submit">Inscription</button>
+                <label for="password2"><b>Confirmation de mot de passe</b></label>
+                <input type="password" placeholder="Confirmez votre mot de passe" name="password2" id="password2" required>
+                <a class="error-email" id="error-email" style="display: none;">Les deux mots de passe sont différents<br /></a>
+                <button type="submit" name="submit" id="register-button">
+                    <img src="/img/loading.gif" id="register-loading-gif" style="display: none;" />
+                    <a id="register-loading-text">Inscription</a>
+                </button>
                 <label>
                     <input type="checkbox" checked="checked" name="rmb" id="rmb"> Se souvenir de moi
                 </label>
             </div>
             <div class="container" id="pbm">
                 <button type="button" onclick="setStyleByID('register', 'display: none;')" class="cancelbtn">Annuler</button>
-                <span class="password"><a href="#">Mot De Passe Oublié ?</a></span>
+                <span class="password"><a href="#">Mot de passe Oublié ?</a></span>
             </div>
         </form>
     </div>

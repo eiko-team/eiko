@@ -1,9 +1,3 @@
-if ("serviceWorker" in navigator) {
-    if (!navigator.serviceWorker.controller) {
-        navigator.serviceWorker.register("/eiko-sw.js", { scope: "./" });
-    }
-}
-
 function redirect() {
     deleteCookie("pass_score");
     window.location.replace("/");
@@ -13,7 +7,6 @@ if (isTokenValid(getCookie("Token"))) {
     log("redirect from login");
     redirect();
 } else {
-    log("login");
     log("welcome login");
 }
 
@@ -71,9 +64,25 @@ password.addEventListener("input", function() {
     }
 });
 
+function displayLoadingGif(display = false, id = 'login') {
+    console.log(`displayLoadingGif(${display}, ${id})`)
+    if (display) {
+        document.getElementById(id + "-button").disabled = true;
+        document.getElementById(id + "-loading-gif").style.display = "";
+        document.getElementById(id + "-loading-text").style.display = "none";
+    } else {
+        document.getElementById(id + "-button").disabled = false;
+        document.getElementById(id + "-loading-gif").style.display = "none";
+        document.getElementById(id + "-loading-text").style.display = "";
+    }
+}
+
 function login(email, password, remember = true) {
+    console.log(`login(${email}, ${password}, ${remember})`)
+    displayLoadingGif(true, "login")
     POST("/login", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
+            displayLoadingGif(false, "login")
             setStyleByID("error-email", "style: ;");
             return false;
         }
@@ -86,8 +95,11 @@ function login(email, password, remember = true) {
 }
 
 function register(email, password, remember = true) {
+    console.log(`register(${email}, ${password}, ${remember})`)
+    displayLoadingGif(true, "register")
     POST("/register", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
+            displayLoadingGif(false, "register")
             setStyleByID("error-email-register", "style: ;");
             return false;
         }
@@ -98,12 +110,18 @@ function register(email, password, remember = true) {
     });
 }
 
-function loginForm(email, password, remember) {
-    console.log("logging")
+function loginForm() {
+    var email = document.forms["login"]["email"].value
+    var password = document.forms["login"]["password"].value
+    var remember = document.forms["login"]["remember"].value
     login(email, password, remember === "on");
 }
 
-function registerForm(email, password1, password2, remember) {
+function registerForm() {
+    var email = document.forms["register"]["email"].value
+    var password1 = document.forms["register"]["password1"].value
+    var password2 = document.forms["register"]["password2"].value
+    var remember = document.forms["register"]["rmb"].value
     if (password1 === password2) {
         register(email, password1, remember === "on");
     }
