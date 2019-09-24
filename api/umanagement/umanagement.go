@@ -18,9 +18,6 @@ var (
 	// Logger used to log output
 	Logger = log.New(os.Stdout, "umanagement: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
-
-	// Salt salt for the passwrd hashing
-	Salt = hash.GenerateKey(666)
 )
 
 // Login get the Login informations and return the token to the user if the
@@ -37,7 +34,7 @@ func Login(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("1.0.1")
 	}
 
-	if !hash.CompareHash(user.Pass, i.UserPass, Salt) {
+	if !hash.CompareHash(user.Pass, i.UserPass) {
 		return "", errors.New("1.0.2")
 	}
 
@@ -61,7 +58,7 @@ func Register(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("1.1.1")
 	}
 
-	pass, err := hash.Hash(i.UserPass, Salt)
+	pass, err := hash.Hash(i.UserPass)
 	if err != nil {
 		return "", errors.New("1.1.2")
 	}
