@@ -72,7 +72,7 @@ type Consumable struct {
 				Fibres        float64 `json:"fibres"`
 				Glucides      float64 `json:"glucides"`
 				Lipides       float64 `json:"lipides"`
-				Proteines     float64 `json:"proteines"`
+				Proteins      float64 `json:"proteines"`
 				Salt          float64 `json:"salt"`
 				SaturatedFat  float64 `json:"saturated_fat"`
 				SugarGlucides float64 `json:"sugar_glucides"`
