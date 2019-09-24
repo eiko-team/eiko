@@ -67,4 +67,3 @@ func Password(d data.Data, r *http.Request) (string, error) {
 	}
 	return fmt.Sprintf("{\"strength\":%d}", res-1), nil
 }
-

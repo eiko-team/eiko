@@ -80,4 +80,3 @@ func TestPassword(t *testing.T) {
 		})
 	}
 }
-
