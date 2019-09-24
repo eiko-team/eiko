@@ -18,6 +18,7 @@ var (
 	GetStore        bool
 	StoreStore      bool
 	StoreConsumable bool
+	GetConsumable   bool
 	Error           error
 	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
@@ -35,6 +36,49 @@ var (
 		Country:    "test store",
 		Zip:        "test store",
 		UserRating: 5,
+	}
+	Consumable     = structures.Consumable{}
+	ConsumableTest = structures.Consumable{
+		Name:    "",
+		Company: "",
+		Characteristics: structures.Characteristics{
+			GlobalInterest: structures.GlobalInterest{
+				Boycott:          false,
+				EcologicalImpact: "",
+				SocialImpact:     "",
+			},
+			Health: structures.Health{
+				Additive: []string{"E404"},
+				Allergen: []string{"glutten"},
+				Nutrition: structures.Nutrition{
+					Energie:       0,
+					Fat:           0,
+					Fibres:        0,
+					Glucides:      0,
+					Lipides:       0,
+					Proteins:      0,
+					Salt:          0,
+					SaturatedFat:  0,
+					SugarGlucides: 0,
+				},
+			},
+		},
+		Pictures: structures.Pictures{
+			Back:        "",
+			BarCode:     "",
+			Composition: "",
+			Front:       "",
+		},
+		Quantity: structures.Quantity{
+			Kg:    0,
+			Litre: 0,
+		},
+	}
+	Consumables     = structures.Consumables{}
+	ConsumablesTest = structures.Consumables{
+		Consumable: ConsumableTest,
+		Store:      StoreTest,
+		Stock:      structures.Stock{},
 	}
 )
 
@@ -87,4 +131,10 @@ func (d Data) StoreStore(store structures.Store) error {
 func (d Data) StoreConsumable(consumable structures.Consumable) error {
 	StoreConsumable = true
 	return Error
+}
+
+// GetConsumable is used to store a log in the datastore
+func (d Data) GetConsumable(consumable structures.Query) ([]structures.Consumables, error) {
+	GetConsumable = true
+	return []structures.Consumables{}, Error
 }
