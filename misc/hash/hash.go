@@ -31,14 +31,12 @@ func Hash(pass, salt string) (string, error) {
 	// https://crackstation.net/hashing-security.htm
 	h := saltPassword(pass, salt)
 	res, err := bcrypt.GenerateFromPassword(h, bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(res), nil
+	return string(res), err
 }
 
 // CompareHash compares a password and the salt with the hash.
 // return an error if the password/salt is not correct
-func CompareHash(h1, pass, salt string) error {
-	return bcrypt.CompareHashAndPassword([]byte(h1), saltPassword(pass, salt))
+func CompareHash(hash, pass, salt string) bool {
+	return nil == bcrypt.CompareHashAndPassword([]byte(hash),
+		saltPassword(pass, salt))
 }

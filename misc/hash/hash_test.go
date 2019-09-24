@@ -44,6 +44,8 @@ func TestHash(t *testing.T) {
 		{"test2", args{"qsd", "qsd"}, false},
 		{"test3", args{"aze", "qsd"}, false},
 		{"test4", args{"wxc", "qsd"}, false},
+		{"empty pass", args{"", "qsd"}, false},
+		{"empty hash", args{"abc", ""}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -52,7 +54,7 @@ func TestHash(t *testing.T) {
 				t.Errorf("Hash() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if err := CompareHash(got, tt.args.pass, tt.args.salt); err != nil {
+			if !CompareHash(got, tt.args.pass, tt.args.salt) {
 				t.Errorf("Hash() = %v, err: %v", got, err)
 			}
 		})
@@ -75,6 +77,41 @@ func TestGenerateKey(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := len(GenerateKey(tt.n)); got != tt.n {
 				t.Errorf("len(GenerateKey()) = %v, want %v", got, tt.n)
+			}
+		})
+	}
+}
+
+var (
+	salt    = "misc.GenerateKey(999)"
+	pass    = "pass"
+	hash, _ = Hash(pass, salt)
+)
+
+func TestCompareHash(t *testing.T) {
+	type args struct {
+		hash string
+		pass string
+		salt string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"sanity", args{hash, pass, salt}, true},
+		{"wrong password", args{hash, pass + "wrong", salt}, false},
+		// Wierd
+		// {"wrong hash back", args{hash + "wronghash", pass, salt}, false},
+		{"wrong hash front", args{"test" + hash, pass, salt}, false},
+		{"wrong hash both", args{"test" + hash + "wrong", pass, salt}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Logf("%+v", tt.args)
+			got := CompareHash(tt.args.hash, tt.args.pass, tt.args.salt)
+			if got != tt.want {
+				t.Errorf("CompareHash() = %v, want = %v", got, tt.want)
 			}
 		})
 	}
