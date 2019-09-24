@@ -1,13 +1,6 @@
 // This is the service worker with the Cache-first network
 
 const CACHE_NAME = "eiko-precache-v1";
-const precacheFiles = [
-    /* Add an array of files to precache for your app */
-    "/favicon.ico",
-    "/js/lib.js",
-    "/js/eiko.js",
-    "/",
-];
 
 function fromCache(request) {
     // Check to see if you have it in the cache
@@ -18,6 +11,8 @@ function fromCache(request) {
             if (!matching || matching.status === 404) {
                 return Promise.reject("no-match");
             }
+            // see https://bugs.chromium.org/p/chromium/issues/detail?id=823392
+            if (e.request.cache === 'only-if-cached' && e.request.mode !== 'same-origin') { return };
             return matching;
         });
     });
@@ -32,7 +27,19 @@ function updateCache(request, response) {
 self.addEventListener("install", function(event) {
     self.skipWaiting();
     event.waitUntil(caches.open(CACHE_NAME).then(function(cache) {
-        return cache.addAll(precacheFiles);
+        return cache.addAll([
+            /* Add an array of files to precache for your app */
+            "/",
+            "/index.html",
+            "/login.html",
+            "/favicon.ico",
+            "/js/lib.js",
+            "/js/eiko.js",
+            "/js/eiko-sw.js",
+            "/js/login.js",
+            "/css/eiko.css",
+            "/img/loading.gif",
+        ]);
     }));
 });
 
