@@ -23,7 +23,8 @@ type Log struct {
 
 // Logging struct used to parse /log information
 type Logging struct {
-	Log string `json:"message"`
+	Log   string `json:"message"`
+	Token string `json:"user_token"`
 }
 
 // Login struct used to parse /login information
