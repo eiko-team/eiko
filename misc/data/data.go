@@ -119,3 +119,13 @@ func (d Data) StoreConsumable(consumable structures.Consumable) error {
 	_, err := d.client.Put(d.ctx, key, &consumable)
 	return err
 }
+
+// GetConsumable is used to store a log in the datastore
+func (d Data) GetConsumable(query structures.Query) ([]structures.Consumables, error) {
+	var res []structures.Consumables
+	q := datastore.NewQuery(d.consumables) // TODO
+	if _, err := d.client.GetAll(d.ctx, q, &stores); err != nil {
+		return res, errors.New("Could no fetch stores")
+	}
+	return stores[0], nil
+}
