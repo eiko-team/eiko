@@ -55,7 +55,7 @@ func TestStoreConsumable(t *testing.T) {
 	}
 }
 
-func TestGetConsumable(t *testing.T) {
+func TestGetConsumables(t *testing.T) {
 	tests := []struct {
 		name    string
 		want    string
@@ -84,10 +84,10 @@ func TestGetConsumable(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("Get() = '%v', want %v", got, tt.want)
 			}
-			if data.GetConsumable == tt.wantErr {
+			if data.GetConsumables == tt.wantErr {
 				t.Errorf("Data was no stored")
 			}
-			data.GetConsumable = false
+			data.GetConsumables = false
 		})
 	}
 }

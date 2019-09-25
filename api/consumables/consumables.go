@@ -42,7 +42,7 @@ func Get(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.1.0")
 	}
 
-	consu, err := d.GetConsumable(i)
+	consu, err := d.GetConsumables(i)
 	if err != nil {
 		return "", errors.New("3.1.1")
 	}
