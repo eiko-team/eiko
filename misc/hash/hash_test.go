@@ -80,7 +80,6 @@ func TestGenerateKey(t *testing.T) {
 		name string
 		n    int
 	}{
-		// TODO: Add test cases.
 		{"simple", 42},
 		{"medium", 21},
 		{"short", 1},
