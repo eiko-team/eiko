@@ -10,7 +10,7 @@ type User struct {
 	Pass      string    `firestore:"Hashed_password"`
 	Created   time.Time `firestore:"created"`
 	Validated bool      `firestore:"valid_user"`
-	id        int64     // The integer ID used in the firestore.
+	ID        int64     // The integer ID used in the firestore.
 }
 
 // Log struct used to store Logs in the datastore
@@ -18,7 +18,7 @@ type Log struct {
 	Email   string    `firestore:"email"`
 	Log     string    `firestore:"log"`
 	Created time.Time `firestore:"created"`
-	id      int64     // The integer ID used in the firestore.
+	ID      int64     // The integer ID used in the firestore.
 }
 
 // Logging struct used to parse /log information
@@ -50,7 +50,7 @@ type Store struct {
 	Country    string `json:"country" firestore:"Country"`
 	Zip        string `json:"zip" firestore:"Zip"`
 	UserRating int    `json:"user_rating" firestore:"created"`
-	id         int64  // The integer ID used in the firestore.
+	ID         int64  // The integer ID used in the firestore.
 }
 
 // GlobalInterest is the global interest of a consumable
@@ -107,14 +107,16 @@ type Consumable struct {
 	Characteristics Characteristics `json:"characteristics"`
 	Pictures        Pictures        `json:"pictures"`
 	Quantity        Quantity        `json:"quantity"`
+	ID              int64           // The integer ID used in the firestore.
 }
 
 // Stock Stock of a product in a store
 type Stock struct {
-	PackQuantity int `json:"pack_quantity" firestore:"pack_quantity"`
-	NbPacks      int `json:"nb_packs" firestore:"nb_packs"`
-	PackPrice    int `json:"pack_price" firestore:"pack_price"`
-	Available    int `json:"available" firestore:"available"`
+	ID           int64 // The integer ID used in the firestore.
+	PackQuantity int   `json:"pack_quantity" firestore:"pack_quantity"`
+	NbPacks      int   `json:"nb_packs" firestore:"nb_packs"`
+	PackPrice    int   `json:"pack_price" firestore:"pack_price"`
+	Available    int   `json:"available" firestore:"available"`
 }
 
 // Consumables struct used to parse /consumable/...

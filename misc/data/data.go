@@ -64,12 +64,11 @@ func InitData(projID string) Data {
 func (d Data) GetUser(UserMail string) (structures.User, error) {
 	var users []structures.User
 	q := datastore.NewQuery(d.users).Filter("Email =", UserMail).Limit(1)
-	if _, err := d.client.GetAll(d.ctx, q, &users); err != nil {
+	keys, err := d.client.GetAll(d.ctx, q, &users)
+	if err != nil || len(users) == 0 {
 		return structures.User{}, errors.New("Could no fetch users")
 	}
-	if len(users) == 0 {
-		return structures.User{}, errors.New("no user found")
-	}
+	users[0].ID = keys[0].ID
 	return users[0], nil
 }
 
@@ -97,12 +96,11 @@ func (d Data) GetStore(store structures.Store) (structures.Store, error) {
 		Filter("Country =", store.Country).
 		Filter("Zip =", store.Zip).
 		Limit(1)
-	if _, err := d.client.GetAll(d.ctx, q, &stores); err != nil {
+	keys, err := d.client.GetAll(d.ctx, q, &stores)
+	if err != nil || len(stores) == 0 {
 		return structures.Store{}, errors.New("Could no fetch stores")
 	}
-	if len(stores) == 0 {
-		return structures.Store{}, errors.New("no store found")
-	}
+	stores[0].ID = keys[0].ID
 	return stores[0], nil
 }
 
@@ -120,12 +118,16 @@ func (d Data) StoreConsumable(consumable structures.Consumable) error {
 	return err
 }
 
-// GetConsumable is used to store a log in the datastore
-func (d Data) GetConsumable(query structures.Query) ([]structures.Consumables, error) {
+// GetConsumables is used to store a log in the datastore
+func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, error) {
 	var res []structures.Consumables
 	q := datastore.NewQuery(d.consumables) // TODO
-	if _, err := d.client.GetAll(d.ctx, q, &res); err != nil {
-		return res, errors.New("Could no fetch stores")
+	keys, err := d.client.GetAll(d.ctx, q, &res)
+	if err != nil {
+		return res, errors.New("Could no fetch consumables")
+	}
+	for i, k := range keys {
+		res[i].ID = k.ID
 	}
 	return res, nil
 }
