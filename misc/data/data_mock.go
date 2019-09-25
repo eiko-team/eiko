@@ -18,7 +18,7 @@ var (
 	GetStore        bool
 	StoreStore      bool
 	StoreConsumable bool
-	GetConsumable   bool
+	GetConsumables  bool
 	Error           error
 	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
@@ -133,8 +133,8 @@ func (d Data) StoreConsumable(consumable structures.Consumable) error {
 	return Error
 }
 
-// GetConsumable is used to store a log in the datastore
-func (d Data) GetConsumable(consumable structures.Query) ([]structures.Consumables, error) {
-	GetConsumable = true
+// GetConsumables is used to store a log in the datastore
+func (d Data) GetConsumables(consumable structures.Query) ([]structures.Consumables, error) {
+	GetConsumables = true
 	return []structures.Consumables{}, Error
 }
