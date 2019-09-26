@@ -50,6 +50,7 @@ type Store struct {
 	Country    string `json:"country" firestore:"Country"`
 	Zip        string `json:"zip" firestore:"Zip"`
 	UserRating int    `json:"user_rating" firestore:"created"`
+	GeoHash    int    `json:"geohash" firestore:"geohash"`
 	ID         int64  // The integer ID used in the firestore.
 }
 
@@ -112,30 +113,39 @@ type Consumable struct {
 
 // Stock Stock of a product in a store
 type Stock struct {
-	ID           int64 // The integer ID used in the firestore.
-	PackQuantity int   `json:"pack_quantity" firestore:"pack_quantity"`
-	NbPacks      int   `json:"nb_packs" firestore:"nb_packs"`
-	PackPrice    int   `json:"pack_price" firestore:"pack_price"`
-	Available    int   `json:"available" firestore:"available"`
+	ID            int64 // The integer ID used in the firestore.
+	PackQuantity  int   `json:"pack_quantity" firestore:"pack_quantity"`
+	NbPacks       int   `json:"nb_packs" firestore:"nb_packs"`
+	PackPrice     int   `json:"pack_price" firestore:"pack_price"`
+	Available     bool  `json:"available" firestore:"available"`
+	StoreKey      int   `json:"store_key" firestore:"store_key"`
+	ConsumableKey int   `json:"consumable_key" firestore:"consumable_key"`
+	GeoHash       int   `json:"geohash" firestore:"geohash"`
 }
 
 // Consumables struct used to parse /consumable/...
 type Consumables struct {
 	Consumable Consumable `json:"consumable"`
 	Store      Store      `json:"store"`
-	Stock      Stock      `json:"Stock"`
-}
-
-// Location struct to store location informations
-// https://www.w3schools.com/html/html5_geolocation.asp
-type Location struct {
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
+	Stock      Stock      `json:"stock"`
 }
 
 // Query used to query certain api to get a personalized result
 type Query struct {
-	Query    string   `json:"query"`
-	Limit    int      `json:"limit"`
-	Location Location `json:"limit"`
+	Query     string  `json:"query"`
+	Limit     int     `json:"limit"`
+	Size      uint64  `json:"size"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+type List struct {
+	ID   int64  `json:"id" firestore:"id"`
+	Name string `json:"name" firestore:"name"`
+}
+
+type ListOwner struct {
+	ID     int64  // The integer ID used in the firestore.
+	ListID int64  `json:"list_id" firestore:"list_id"`
+	Email  string `json:"Email" firestore:"Email"`
 }
