@@ -11,12 +11,17 @@ import (
 	"eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"
+	// https://blog.nobugware.com/post/2015/leveldb_geohash_golang/
+	"github.com/mmcloughlin/geohash"
 )
 
 var (
 	// Logger used to log output
 	Logger = log.New(os.Stdout, "data: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
+
+	// GeoHashRadius is the query bounding box max value
+	GeoHashRadius = uint64(500)
 )
 
 // Data container for all data relative variables
@@ -74,6 +79,7 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 
 // StoreUser is used to store a user in the datastore
 func (d Data) StoreUser(user structures.User) error {
+	user.ID = 0
 	key := datastore.IncompleteKey(d.users, nil)
 	_, err := d.client.Put(d.ctx, key, &user)
 	return err
@@ -106,6 +112,7 @@ func (d Data) GetStore(store structures.Store) (structures.Store, error) {
 
 // StoreStore is used to store a log in the datastore
 func (d Data) StoreStore(store structures.Store) error {
+	store.ID = 0
 	key := datastore.IncompleteKey(d.stores, nil)
 	_, err := d.client.Put(d.ctx, key, &store)
 	return err
@@ -113,21 +120,69 @@ func (d Data) StoreStore(store structures.Store) error {
 
 // StoreConsumable is used to store a log in the datastore
 func (d Data) StoreConsumable(consumable structures.Consumable) error {
+	consumable.ID = 0
 	key := datastore.IncompleteKey(d.consumables, nil)
 	_, err := d.client.Put(d.ctx, key, &consumable)
 	return err
 }
 
-// GetConsumables is used to store a log in the datastore
-func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, error) {
-	var res []structures.Consumables
-	q := datastore.NewQuery(d.consumables) // TODO
+func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structures.Stock, error) {
+	var res []structures.Stock
+	q := datastore.NewQuery(d.stocks).
+		Filter(filter, geo).
+		Order(order).
+		Limit(limit * 10)
 	keys, err := d.client.GetAll(d.ctx, q, &res)
 	if err != nil {
-		return res, errors.New("Could no fetch consumables")
+		return []structures.Stock{}, errors.New("Could no fetch stocks")
 	}
 	for i, k := range keys {
 		res[i].ID = k.ID
+	}
+	return res, nil
+}
+
+// GetConsumables is used to store a log in the datastore
+func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, error) {
+	geo := geohash.EncodeInt(query.Latitude, query.Longitude)
+	limit := query.Limit
+	if limit > 20 {
+		limit = 20
+	}
+	stocks1, err := d.fetchStock(geo, "geohash <", "geohash", limit)
+	if err != nil {
+		return []structures.Consumables{}, err
+	}
+	stocks2, err := d.fetchStock(geo, "geohash >", "-geohash", limit)
+	if err != nil {
+		return []structures.Consumables{}, err
+	}
+	var res []structures.Consumables
+	for _, stock := range append(stocks1, stocks2...) {
+		var consumable []structures.Consumable
+		q := datastore.NewQuery(d.consumables).
+			Filter("__key__ =", stock.ConsumableKey).
+			Filter("name = ", query.Query).
+			Limit(1)
+		keys, err := d.client.GetAll(d.ctx, q, &consumable)
+		if err != nil || len(consumable) == 0 {
+			continue
+		}
+		consumable[0].ID = keys[0].ID
+		var store []structures.Store
+		q = datastore.NewQuery(d.stores).
+			Filter("__key__ =", stock.StoreKey).
+			Limit(1)
+		keys, err = d.client.GetAll(d.ctx, q, &store)
+		if err != nil || len(store) == 0 {
+			continue
+		}
+		store[0].ID = keys[0].ID
+		res = append(res, structures.Consumables{
+			Consumable: consumable[0],
+			Store:      store[0],
+			Stock:      stock,
+		})
 	}
 	return res, nil
 }
