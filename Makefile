@@ -7,9 +7,12 @@ COVFILE = coverage.txt
 REPORT = report.xml
 DKNAME = eikoapp/eiko
 DKTAG = latest-prod
+UGLY-JS = uglifyjs
+UGLY-CSS = uglifycss
 
 all: build-go-light
 all: lint
+all: vet
 all: test
 all: clean
 
@@ -38,8 +41,10 @@ push:
 push-tag:
 	$(DK) push "$(DKNAME):$(DKTAG)"
 
-push-all: push
-push-all: push-tag
+docker: mini-css
+docker: build
+docker: push
+docker: push-tag
 
 up: build-go-light
 up:
@@ -64,9 +69,12 @@ cover-race:
 	$(GO) test -tags mock -race -coverprofile=$(COVFILE) -covermode=atomic ./...
 
 vet:
-	$(GO) vet $(ARGS) ./...
+	$(GO) vet $(ARGS) -tags mock ./...
 
 clean:
-	$(RM) $(BIN) $(CPROFILE) $(REPORT) $(COVFILE)
+	$(RM) $(BIN) $(CPROFILE) $(REPORT) $(COVFILE) static/**/*-min.*
+
+mini-css:
+	$(UGLY-CSS) $(ARGS) static/css/* --debug --output static/css/eiko-min.css
 
 .PHONY: clean all build cover test

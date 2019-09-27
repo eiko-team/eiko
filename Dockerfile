@@ -6,4 +6,4 @@ COPY static /srv/static
 
 # Binary
 COPY app /srv/app
-CMD ["./app"]
+CMD ["/srv/app"]

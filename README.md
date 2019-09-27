@@ -7,6 +7,30 @@
 
 eiko web app
 
+## Docker
+
+.env file:
+```
+NAME=
+PROJECT_ID=
+CREDENTIALS=CREDENTIALS.json
+SALT=
+```
+
+```
+  eiko:
+    image: eikoapp/eiko:latest-prod
+    restart: always
+    environment:
+      - 'PROJECT_ID=${PROJECT_ID}'
+      - 'PORT=80'
+      - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
+      - 'GRPC_GO_LOG_SEVERITY_LEVEL=INFO'
+    volumes:
+      - './CREDENTIALS.json:/srv/CREDENTIALS.json'
+      - '/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt'
+```
+
 ## Compte de services
 
 ```bash

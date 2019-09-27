@@ -13,3 +13,7 @@ CREDENTIALS.json
 .env
 test.html
 coverage.txt
+
+# minimified files
+*-min.js
+*-min.css
