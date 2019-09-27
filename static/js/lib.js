@@ -40,7 +40,7 @@ function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
  * @param {string} value value to set the cookie to
  * @param {number} days number of days of validity of the cookie
  */
-function createCookie(name, value, days) {
+function createCookie(name, value, days = null) {
     var expire = "";
     if (days) {
         var d = new Date();
@@ -101,17 +101,17 @@ function setStyleByID(id, style) {
 }
 
 function checkPassword(password) {
-    return POST("/verify/password", { password: password }, (e) => {
+    return POST("/verify/password", { password }, (e) => {
         createCookie("pass_score", e.strength);
     });
 }
 
 function openNav() {
-    setStyleByID("mySidenav", "width:250px;");
+    setStyleByID("mySidenav", "display: block;");
 }
 
 function closeNav() {
-    setStyleByID("mySidenav", "width:0;");
+    setStyleByID("mySidenav", "display: none;");
 }
 
 function closeLogin() {
@@ -121,4 +121,48 @@ function closeLogin() {
 function closeRegister() {
     deleteCookie("pass_score");
     setStyleByID("register", "display: none;");
+}
+
+function loadList() {
+    POST("/list/getall", {}, (e) => {
+        localStorage.setItem("lists", JSON.stringify(e));
+        e.lists.forEach(addlist);
+    }, (e) => {
+        var lists = localStorage.getItem("lists");
+        var json = { lists: [] };
+        if (lists !== null) {
+            json = JSON.parse(lists);
+        }
+        json.forEach(addlist);
+    });
+}
+
+function createList(name = "Liste de course") {
+    POST("/list/create", { name }, (e) => {
+        var lists = localStorage.getItem("lists");
+        var json = { lists: [] };
+        if (lists !== null) {
+            json = JSON.parse(lists);
+        }
+        json.lists.push(e);
+        localStorage.setItem("lists", JSON.stringify(json));
+        addlist(e.name);
+    });
+}
+
+function addlist(list) {
+    let li = document.createElement('li');
+    li.innerHTML = `<a href="/l/${list.id}"><i class="material-icons">remove</i>${list.name}</a>`;
+    var lists = document.getElementById("dropdown-lists");
+    var last = lists.children[lists.children.length - 1]
+    lists.appendChild(li);
+    lists.appendChild(last);
+}
+
+function shareList(id, email) {
+    POST("/list/share", { id, email });
+}
+
+function deleteList(id) {
+    POST("/list/delete", { id });
 }
