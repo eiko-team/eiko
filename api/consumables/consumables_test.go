@@ -63,9 +63,13 @@ func TestGetConsumables(t *testing.T) {
 		wantErr bool
 	}{
 		{"sanity", `{"query":\[\]}`, "query", false},
+		{"simple", fmt.Sprintf(`\[%s\]`, data.ConsumablesRe), "query", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "simple" {
+				data.Consumables = data.ConsumablesTest
+			}
 			body := fmt.Sprintf("{\"query\":\"%s\",\"limit\":%d}",
 				tt.query, 4)
 			req, _ := http.NewRequest("POST", "/consumable/get",
