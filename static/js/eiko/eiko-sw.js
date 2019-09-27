@@ -1,6 +1,6 @@
 // This is the service worker with the Cache-first network
 
-const CACHE_NAME = "eiko-precache-v1";
+var CACHE_NAME = "eiko-precache-v1";
 
 function fromCache(request) {
     // Check to see if you have it in the cache
@@ -34,9 +34,10 @@ self.addEventListener("install", function(event) {
             "/login.html",
             "/favicon.ico",
             "/js/lib.js",
-            "/js/eiko.js",
-            "/js/eiko-sw.js",
-            "/js/login.js",
+            "/js/eiko/eiko.js",
+            "/js/eiko/eiko-sw.js",
+            "/js/login/login.js",
+            "/js/color.js",
             "/css/eiko.css",
             "/img/loading.gif",
         ]);
@@ -46,8 +47,8 @@ self.addEventListener("install", function(event) {
 // Allow sw to control of current page
 self.addEventListener("activate", function(event) {
     // Remove previous cached data from disk.
-    event.waitUntil(caches.keys().then((keyList) => {
-        return Promise.all(keyList.map((key) => {
+    event.waitUntil(caches.keys().then(function(keyList) {
+        return Promise.all(keyList.map(function(key) {
             if (key !== CACHE_NAME) { return caches.delete(key); }
         }));
     }));
@@ -83,12 +84,12 @@ self.addEventListener("fetch", function(event) {
 });
 
 // for a 'add to home screen'
-self.addEventListener("beforeinstallprompt", (e) => {
+self.addEventListener("beforeinstallprompt", function(e) {
     // showInstallPromotion();
     log("beforeinstallprompt");
 });
 
 // log is the user has installed the app
-self.addEventListener("appinstalled", (e) => {
+self.addEventListener("appinstalled", function(e) {
     log("appinstalled");
 });
