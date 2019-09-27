@@ -19,6 +19,10 @@ var (
 	StoreStore      bool
 	StoreConsumable bool
 	GetConsumables  bool
+	GetList         bool
+	CreateList      bool
+	GetAllLists     bool
+	GetListContent  bool
 	Error           error
 	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
@@ -30,6 +34,7 @@ var (
 		Validated: false,
 	}
 	Store     = structures.Store{}
+	StoreRe   = `{"name":"[a-z ]+","address":"[a-z ]+","country":"[a-z ]+","zip":"[a-z ]+","user_rating":\d+,"geohash":\d+,"ID":\d+}`
 	StoreTest = structures.Store{
 		Name:       "test store",
 		Address:    "test store",
@@ -37,48 +42,69 @@ var (
 		Zip:        "test store",
 		UserRating: 5,
 	}
+	Stock          = structures.Stock{}
+	StockRe        = `{"ID":\d+,"pack_quantity":\d+,"nb_packs":\d+,"pack_price":\d+,"available":[a-z]+,"store_key":\d+,"consumable_key":\d+,"geohash":\d+}`
+	StockTest      = structures.Stock{}
 	Consumable     = structures.Consumable{}
+	ConsumableRe   = `{"name":"[a-zA-Z0-9 ]+","Compagny":"[a-zA-Z0-9 ]+","characteristics":{"global_interest":{"boycott":[a-z]+,"ecological_impact":"[a-zA-Z0-9 ]+","social_impact":"[a-zA-Z0-9 ]+"},"health":{"Additive":\["([a-zA-Z0-9 ]+",?)+\],"allergen":\["([a-zA-Z0-9 ]+",?)+\],"nutrition":{"energie":\d+,"fat":\d+,"fibres":\d+,"glucides":\d+,"lipides":\d+,"proteins":\d+,"salt":\d+,"saturated_fat":\d+,"sugar_glucides":\d+}}},"pictures":{"back":"\S+","bar_code":"\S+","composition":"\S+","front":"\S+"},"quantity":{"kg":\d+,"litre":\d+},"ID":\d+}`
 	ConsumableTest = structures.Consumable{
-		Name:    "",
-		Company: "",
+		Name:    "Simple Name",
+		Company: "Simple Compagny Name",
 		Characteristics: structures.Characteristics{
 			GlobalInterest: structures.GlobalInterest{
 				Boycott:          false,
-				EcologicalImpact: "",
-				SocialImpact:     "",
+				EcologicalImpact: "Yes",
+				SocialImpact:     "Inexistant",
 			},
 			Health: structures.Health{
 				Additive: []string{"E404"},
 				Allergen: []string{"glutten"},
 				Nutrition: structures.Nutrition{
-					Energie:       0,
-					Fat:           0,
-					Fibres:        0,
-					Glucides:      0,
-					Lipides:       0,
-					Proteins:      0,
-					Salt:          0,
-					SaturatedFat:  0,
-					SugarGlucides: 0,
+					Energie:       9001,
+					Fat:           9001,
+					Fibres:        9001,
+					Glucides:      9001,
+					Lipides:       9001,
+					Proteins:      9001,
+					Salt:          9001,
+					SaturatedFat:  9001,
+					SugarGlucides: 9001,
 				},
 			},
 		},
 		Pictures: structures.Pictures{
-			Back:        "",
-			BarCode:     "",
-			Composition: "",
-			Front:       "",
+			Back:        "url",
+			BarCode:     "url",
+			Composition: "url",
+			Front:       "url",
 		},
 		Quantity: structures.Quantity{
-			Kg:    0,
-			Litre: 0,
+			Kg:    42,
+			Litre: 21,
 		},
 	}
-	Consumables     = structures.Consumables{}
-	ConsumablesTest = structures.Consumables{
-		Consumable: ConsumableTest,
-		Store:      StoreTest,
-		Stock:      structures.Stock{},
+	Consumables   []structures.Consumables
+	ConsumablesRe = fmt.Sprintf("{\"consumable\":%s,\"store\":%s,\"stock\":%s}",
+		ConsumableRe, StoreRe, StockRe)
+	ConsumablesTest = []structures.Consumables{
+		structures.Consumables{
+			Consumable: ConsumableTest,
+			Store:      StoreTest,
+			Stock:      structures.Stock{},
+		},
+	}
+	List     = structures.List{}
+	ListRe   = `{"id":\d+,"name":"[a-zA-Z0-9 ]+"}`
+	ListTest = structures.List{
+		ID:   0,
+		Name: "List name Test",
+	}
+	ListContent   = structures.ListContent{}
+	ListContentRe = fmt.Sprintf(`{"ID":\d+,"list_id":\d+,"consumable":%s,"name":"[a-zA-Z0-9 ]+","done":false,"erased":false}`,
+		ConsumablesRe)
+	ListContentTest = structures.ListContent{
+		Consumables: ConsumablesTest[0],
+		Name:        ConsumablesTest[0].Consumable.Name,
 	}
 )
 
@@ -136,5 +162,26 @@ func (d Data) StoreConsumable(consumable structures.Consumable) error {
 // GetConsumables is used to store a log in the datastore
 func (d Data) GetConsumables(consumable structures.Query) ([]structures.Consumables, error) {
 	GetConsumables = true
-	return []structures.Consumables{}, Error
+	return Consumables, Error
+}
+
+func (d Data) GetList(id int64) (structures.List, error) {
+	GetList = true
+	return List, Error
+}
+
+func (d Data) CreateList(list structures.List) (structures.List, error) {
+	CreateList = true
+	return List, Error
+}
+
+func (d Data) GetAllLists() ([]structures.List, error) {
+	GetAllLists = true
+	return []structures.List{List}, Error
+}
+
+// GetListContent return list content
+func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
+	GetListContent = true
+	return []structures.ListContent{ListContent}, Error
 }

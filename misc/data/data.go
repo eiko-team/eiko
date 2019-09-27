@@ -41,6 +41,12 @@ type Data struct {
 	consumables string
 	// stocks log name inside the datastore
 	stocks string
+	// listsOwner list of lists and owners
+	listsOwner string
+	// list list of lists and owners
+	list string
+	// listContent list content
+	listContent string
 
 	// User the user making the request. Got from the cookie in the header
 	User structures.User
@@ -54,6 +60,9 @@ func InitData(projID string) Data {
 	d.stores = "Stores"
 	d.consumables = "Consumables"
 	d.stocks = "Stocks"
+	d.listsOwner = "listsOwner"
+	d.list = "list"
+	d.listContent = "ListContent"
 	d.ctx = context.Background()
 
 	var err error
@@ -185,4 +194,104 @@ func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, 
 		})
 	}
 	return res, nil
+}
+
+// GetList return a list if the id provided is right and the user know the list
+func (d Data) GetList(id int64) (structures.List, error) {
+	// Checks if the user know the list
+	var listsOwners []structures.ListOwner
+	q := datastore.NewQuery(d.listsOwner).
+		Filter("ListID =", id).
+		Filter("Email =", d.User.Email).
+		Limit(1)
+	_, err := d.client.GetAll(d.ctx, q, &listsOwners)
+	if err != nil || len(listsOwners) == 0 {
+		return structures.List{}, errors.New("No List found")
+	}
+
+	// Fetch list
+	var lists []structures.List
+	k := datastore.IDKey(d.list, id, nil)
+	q = datastore.NewQuery(d.list).
+		Filter("__key__ =", k).
+		Limit(1)
+	keys, err := d.client.GetAll(d.ctx, q, &lists)
+	if err != nil || len(lists) == 0 {
+		return structures.List{}, errors.New("Could no fetch list")
+	}
+	lists[0].ID = keys[0].ID
+	return lists[0], nil
+}
+
+// CreateList is used to create a list in the datastore
+func (d Data) CreateList(list structures.List) (structures.List, error) {
+	list.ID = 0
+	key := datastore.IncompleteKey(d.list, nil)
+	key, err := d.client.Put(d.ctx, key, &list)
+	if err != nil {
+		return structures.List{}, err
+	}
+	list.ID = key.ID
+	listOwner := structures.ListOwner{
+		ListID: key.ID,
+		Email:  d.User.Email,
+	}
+	key = datastore.IncompleteKey(d.listsOwner, nil)
+	_, err = d.client.Put(d.ctx, key, &listOwner)
+	return list, err
+}
+
+// GetAllLists return all lists of a user
+func (d Data) GetAllLists() ([]structures.List, error) {
+	var listsOwners []structures.ListOwner
+	q := datastore.NewQuery(d.listsOwner).
+		Filter("Email =", d.User.Email)
+	_, err := d.client.GetAll(d.ctx, q, &listsOwners)
+	if err != nil || len(listsOwners) == 0 {
+		return []structures.List{}, errors.New("No List found")
+	}
+	var res []structures.List
+	for _, listOwner := range listsOwners {
+		var lists []structures.List
+		k := datastore.IDKey(d.list, listOwner.ListID, nil)
+		q = datastore.NewQuery(d.list).
+			Filter("__key__ =", k).
+			Limit(1)
+		keys, err := d.client.GetAll(d.ctx, q, &lists)
+		if err != nil || len(lists) == 0 {
+			return []structures.List{}, errors.New("Could no fetch list")
+		}
+		res = append(res, structures.List{
+			ID:   keys[0].ID,
+			Name: lists[0].Name,
+		})
+	}
+	return res, nil
+}
+
+// GetListContent return list content
+func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
+	// Checks if the user know the list
+	var listsOwners []structures.ListOwner
+	q := datastore.NewQuery(d.listsOwner).
+		Filter("ListID =", id).
+		Filter("Email =", d.User.Email).
+		Limit(1)
+	_, err := d.client.GetAll(d.ctx, q, &listsOwners)
+	if err != nil || len(listsOwners) == 0 {
+		return []structures.ListContent{}, errors.New("No List found")
+	}
+
+	// Fetch content
+	var listContents []structures.ListContent
+	q = datastore.NewQuery(d.listContent).
+		Filter("ListID =", id)
+	keys, err := d.client.GetAll(d.ctx, q, &listContents)
+	if err != nil || len(listContents) == 0 {
+		return []structures.ListContent{}, errors.New("No Content found")
+	}
+	for i, k := range keys {
+		listContents[i].ID = k.ID
+	}
+	return listContents, nil
 }
