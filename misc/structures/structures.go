@@ -139,13 +139,25 @@ type Query struct {
 	Longitude float64 `json:"longitude"`
 }
 
+// List content of a list
 type List struct {
 	ID   int64  `json:"id" firestore:"id"`
 	Name string `json:"name" firestore:"name"`
 }
 
+// ListOwner list reference to know who own the list
 type ListOwner struct {
 	ID     int64  // The integer ID used in the firestore.
 	ListID int64  `json:"list_id" firestore:"list_id"`
-	Email  string `json:"Email" firestore:"Email"`
+	Email  string `json:"email" firestore:"email"`
+}
+
+// ListContent list content
+type ListContent struct {
+	ID          int64       // The integer ID used in the firestore.
+	ListID      int64       `json:"list_id" firestore:"list_id"`
+	Consumables Consumables `json:"consumable" firestore:"consumable"`
+	Name        string      `json:"name" firestore:"name"`
+	Done        bool        `json:"done" firestore:"done"`
+	Erased      bool        `json:"erased" firestore:"erased"`
 }
