@@ -1,9 +1,10 @@
-:root {
-    --main: #40C4FF;
+html {
+    --main: #40C4FF; /*40C4FF;*/
     --light: #82F7FF;
     --dark: #0094CC;
     --complementary: #FF8138;
     --grey-light: #424242;
+    --grey-light-opaque: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
     --red: #f44336;
@@ -13,51 +14,150 @@
     --text-color-light: white; /* Text color on light background*/
     --text-color-white: black; /* Text color on white background*/
     --text-color-black: white; /* Text color on black background*/
+    --background: var(--white);
+    --popup-shadow: 0 5px 16px rgba(0, 0, 0, .25);
+}
+
+/* https://medium.com/@mwichary/dark-theme-in-a-day-3518dde2955a */
+html[data-theme="dark"] {
+    --main: #0094CC;
+    --light: #40C4FF;
+    --dark: #00669b;
+    --complementary: #FF8138;
+    --grey-light: #424242;
+    --grey-light-opaque:rgba(66, 66, 66, 0.6);
+    --grey-dark: #212121;
+    --white: white;
+    --red: #f44336;
+    --black: black;
+    --text-color: white;       /* Text color on main background*/
+    --text-color-dark: white;  /* Text color on dark background*/
+    --text-color-light: white; /* Text color on light background*/
+    --text-color-white: black; /* Text color on white background*/
+    --text-color-black: white; /* Text color on black background*/
+    --background: var(--black);
+    --popup-shadow: 0 5px 32px black;
+    filter: invert(100%) hue-rotate(180deg);
+    mix-blend-mode: screen;
+}
+
+/* setTheme("high-contrast"); */
+html[data-theme="high-contrast"] {
+    --main: black;
+    --light: black;
+    --dark: black;
+    --complementary: black;
+    --grey-light: white;
+    --grey-light-opaque: white;
+    --grey-dark: white;
+    --white: black;
+    --red: black;
+    --black: white;
+    --text-color: white;       /* Text color on main background*/
+    --text-color-dark: black;  /* Text color on dark background*/
+    --text-color-light: black; /* Text color on light background*/
+    --text-color-white: black; /* Text color on white background*/
+    --text-color-black: black; /* Text color on black background*/
+    --background: black;
+    --popup-shadow: 0 0 5px white, 0 0 5px white;
+}
+
+html.color-theme-in-transition,
+html.color-theme-in-transition *,
+html.color-theme-in-transition *:before,
+html.color-theme-in-transition *:after {
+  transition: all 500ms !important;
+  transition-delay: 0 !important;
+}
+
+img {
+  mix-blend-mode: multiply;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
+    background-color: var(--background);
+    color: var(--black);
 }
 
 @media print {
-
     .navbar,
     .sidenav {
         display: none;
     }
 }
 
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+    display: none;
+    color: var(--text-color);
+    background-color: var(--main);
+    padding-left: 8px;
+    text-overflow: ellipsis
+}
+
 .sidenav {
+    display: none;
     height: 100%;
-    width: 0;
+    width: 42%;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
+    color: var(--text-color);
     background-color: var(--main);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    box-shadow: 2px 2px 4px var(--grey-light)
 }
 
+@media screen and (max-width: 450px) {
+    .sidenav {
+        width: 95%;
+    }
+
+}
+
+.dropdown-container,
+.sidenav button,
 .sidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 8px 8px 8px 16px;
     text-decoration: none;
     font-size: 25px;
     color: var(--text-color);
     display: block;
     transition: 0.3s;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.dropdown-container {
+    display: none;
+    padding-left: 68px;
+    background-color: var(--main);
+}
+
+.sidenav button {
+    background-color: var(--main);
 }
 
 .sidenav #nav-closebtn {
     position: absolute;
     cursor: pointer;
     top: 0;
-    right: 25px;
+    right: 16px;
     font-size: 36px;
     padding: 8px 8px 8px 8px;
+}
+
+.sidenav ul {
+    list-style: none;
 }
 
 @media screen and (max-height: 450px) {
@@ -71,10 +171,12 @@ body {
 }
 
 .navbar {
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    color: var(--text-color);
     background-color: var(--main);
     width: 100%
 }
@@ -97,7 +199,9 @@ body {
 }
 
 .sidenav a:hover,
+.sidenav button:hover,
 li a:hover:not(#nav-name) {
+    color: var(--text-color);
     background-color: var(--dark);
 }
 
@@ -131,12 +235,14 @@ button:hover {
 button:disabled,
 button[disabled]{
     background-color: var(--white);
+    color: var(--text-color);
 }
 
 .cancelbtn {
     width: auto;
     padding: 10px 18px;
     background-color: var(--red);
+    color: var(--text-color);
 }
 
 .imgcontainer {
@@ -147,9 +253,12 @@ button[disabled]{
 
 .container {
     padding: 16px;
+    color: var(--text-color);
+    background-color: var(--background);
 }
 
 .container #pbm {
+    color: var(--text-color);
     background-color: var(--grey-dark);
 }
 
@@ -167,12 +276,13 @@ span.password {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: var(--black);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--grey-light-opaque);
+    color: var(--text-color);
     padding-top: 60px;
 }
 
 .modal-content {
+    color: var(--text-color);
     background-color: var(--white);
     margin: 5% auto 15% auto;
     border: 0px solid var(--grey-dark);
@@ -183,7 +293,7 @@ span.password {
     position: absolute;
     right: 25px;
     top: 0;
-    color: var(--black);
+    color: var(----text-color);
     font-size: 35px;
     font-weight: bold;
 }
@@ -236,23 +346,24 @@ span.password {
 }
 
 meter {
-  /* Reset the default appearance */
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+    /* Reset the default appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 
-  margin: 0 auto 1em;
-  width: 100%;
-  height: 0.5em;
+    margin: 0 auto 1em;
+    width: 100%;
+    height: 0.5em;
 
-  /* Applicable only to Firefox */
-  background: none;
-  background-color: rgba(0, 0, 0, 0.1);
+    /* Applicable only to Firefox */
+    background: none;
+    color: var(--text-color);
+    background-color: var(--grey-light);
 }
 
 meter::-webkit-meter-bar {
-  background: none;
-  background-color: rgba(0, 0, 0, 0.1);
+    background: none;
+    background-color: var(--grey-light);
 }
 
 /* Webkit based browsers */
