@@ -19,6 +19,7 @@ var (
 )
 
 // AddStore creates a store
+// i.ID is ignored
 func AddStore(d data.Data, r *http.Request) (string, error) {
 	var i structures.Store
 	err := misc.ParseJSON(r, &i)

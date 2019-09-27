@@ -62,7 +62,7 @@ func TestGetStore(t *testing.T) {
 		token   string
 		wantErr bool
 	}{
-		{"sanity", `{"name":"[a-z ]+","address":"[a-z ]+","country":"[a-z ]+","zip":"[a-z ]+","user_rating":\d+,"geohash":\d+,"ID":\d+}`, token, false},
+		{"sanity", data.StoreRe, token, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
