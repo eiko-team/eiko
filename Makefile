@@ -20,8 +20,6 @@ HTML_MIN_ARGS = --collapse-whitespace \
 				--minify-css true \
 				--minify-js true
 
-all: create-dir
-all: mini
 all: build-go-light
 all: lint
 all: vet
@@ -53,7 +51,7 @@ push:
 push-tag:
 	$(DK) push "$(DKNAME):$(DKTAG)"
 
-docker: mini-css
+docker: mini
 docker: build
 docker: push
 docker: push-tag
