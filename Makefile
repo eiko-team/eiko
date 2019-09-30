@@ -57,7 +57,6 @@ docker: push
 docker: push-tag
 
 up: create-dir
-up: mini
 up: build-go-light
 up:
 	$(DC) up
