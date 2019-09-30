@@ -15,5 +15,4 @@ test.html
 coverage.txt
 
 # minimified files
-*-min.js
-*-min.css
+static/min
