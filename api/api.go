@@ -40,8 +40,6 @@ type File struct {
 	URL []string
 	// Title page title
 	Title string
-	// Type MIME type for the file
-	Type string
 }
 
 // Page Page struct to contain most elements on a page
@@ -54,8 +52,6 @@ type Page struct {
 	Name string
 	// URL of the GET router
 	URL string
-	// Type set usage of minimified files
-	Type string
 }
 
 var (
@@ -87,17 +83,17 @@ var (
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
-		{"./static/html/login.html", "text/html", []string{"/login.html"}, "", ""},
-		{"./static/html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html"}, "Acceuil", ""},
-		{"./static/js/eiko/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}, "", ""},
-		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}, "", ""},
-		{"./static/img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}, "", ""},
-		{"./static/json/manifest.json", "application/json", []string{"/manifest.json"}, "", ""},
+		{"html/login.html", "text/html", []string{"/login.html"}, ""},
+		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html"}, "Acceuil"},
+		{"js/eiko/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}, ""},
+		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}, ""},
+		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}, ""},
+		{"json/manifest.json", "application/json", []string{"/manifest.json"}, ""},
 	}
 
 	// FunctionsWithParam slice of Page
 	FunctionsWithParam = []Page{
-		{"", 0, "id", "/l/:id", ""},
+		{"", 0, "id", "/l/:id"},
 	}
 )
 
@@ -107,7 +103,7 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	misc.LogRequest(r)
 	w.Header().Set("Content-Type", "application/json")
 
-	fileContent, err := files.GetFileContent(file.Path)
+	fileContent, err := files.GetFileContent("./static/" + file.Path)
 	if err != nil {
 		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
 		return
@@ -127,6 +123,18 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+func ServeFilesCustom(router *httprouter.Router, urlpath, filepath string) {
+	fileServer := http.FileServer(http.Dir(filepath))
+	router.GET(urlpath+"/*filepath",
+		func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+			misc.LogRequest(r)
+			w.Header().Set("Vary", "Accept-Encoding")
+			w.Header().Set("Cache-Control", "public, max-age=7776000")
+			r.URL.Path = ps.ByName("filepath")
+			fileServer.ServeHTTP(w, r)
+		})
+}
+
 // ServeFiles adds to a Router special files URLs to be served. It also adds all
 // static files to the Router
 func ServeFiles(r *httprouter.Router) {
@@ -136,8 +144,16 @@ func ServeFiles(r *httprouter.Router) {
 			r.GET(URL, file.SpecialFiles)
 		}
 	}
+
+	fileType := "./static/"
+	fileTypeStr := "FILE_TYPE"
+	if os.Getenv(fileTypeStr) == "" {
+		Logger.Println(fileTypeStr + " not set using default (none)")
+	} else {
+		fileType += "min/"
+	}
 	for _, tt := range []string{"img", "js", "css"} {
-		r.ServeFiles("/"+tt+"/*filepath", http.Dir("./static/"+tt))
+		ServeFilesCustom(r, "/"+tt, fileType+tt)
 	}
 }
 

@@ -9,7 +9,19 @@ DKNAME = eikoapp/eiko
 DKTAG = latest-prod
 UGLY-JS = uglifyjs
 UGLY-CSS = uglifycss
+TRASHDIR = static/min
+HTML_MIN_ARGS = --collapse-whitespace \
+				--remove-comments \
+				--remove-optional-tags \
+				--remove-redundant-attributes \
+				--remove-script-type-attributes \
+				--remove-tag-whitespace \
+				--use-short-doctype \
+				--minify-css true \
+				--minify-js true
 
+all: create-dir
+all: mini
 all: build-go-light
 all: lint
 all: vet
@@ -30,7 +42,7 @@ build-dc:
 
 build: build-go
 build:
-	$(DK) build -t "$(DKNAME):$(shell git rev-parse --short HEAD)" .
+	$(DK) build --no-cache -t "$(DKNAME):$(shell git rev-parse --short HEAD)" .
 
 tag:
 	$(DK) tag "$(DKNAME):$(shell git rev-parse --short HEAD)" "$(DKNAME):$(DKTAG)"
@@ -46,6 +58,8 @@ docker: build
 docker: push
 docker: push-tag
 
+up: create-dir
+up: mini
 up: build-go-light
 up:
 	$(DC) up
@@ -72,9 +86,33 @@ vet:
 	$(GO) vet $(ARGS) -tags mock ./...
 
 clean:
-	$(RM) $(BIN) $(CPROFILE) $(REPORT) $(COVFILE) static/**/*-min.*
+	$(RM) -r $(BIN) $(CPROFILE) $(REPORT) $(COVFILE) $(TRASHDIR)
+
+create-dir:
+	mkdir -p $(TRASHDIR)
+
+mini: mini-css
+mini: mini-html
+mini: mini-js
+mini: mini-img
 
 mini-css:
-	$(UGLY-CSS) $(ARGS) static/css/* --debug --output static/css/eiko-min.css
+	mkdir -p static/min/css
+	$(UGLY-CSS) $(ARGS) static/css/eiko.css --debug --output static/min/css/eiko.css
+
+HTML = $(shell ls static/html | grep html)
+
+mini-html:
+	mkdir -p static/min/html
+	for file in $(HTML); do \
+		html-minifier $(ARGS) $(HTML_MIN_ARGS) static/html/$$file \
+			 -o static/min/html/$$file; \
+	done
+
+mini-js:
+	cp -r static/js static/min
+
+mini-img:
+	cp -r static/img static/min
 
 .PHONY: clean all build cover test
