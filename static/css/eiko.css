@@ -1,10 +1,15 @@
+:root{
+    --shadow: 2px 2px 4px var(--grey-light-opaque), 2px 2px 4px var(--grey-light-opaque-2x);
+}
+
 html {
     --main: #40C4FF; /*40C4FF;*/
     --light: #82F7FF;
     --dark: #0094CC;
     --complementary: #FF8138;
     --grey-light: #424242;
-    --grey-light-opaque: rgba(66, 66, 66, 0.6);
+    --grey-light-opaque: rgba(66, 66, 66, 0.3);
+    --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
     --red: #f44336;
@@ -111,7 +116,7 @@ body {
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-    box-shadow: 2px 2px 4px var(--grey-light)
+    box-shadow: var(--shadow);
 }
 
 @media screen and (max-width: 450px) {
@@ -171,7 +176,7 @@ body {
 }
 
 .navbar {
-    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    box-shadow: var(--shadow);
     list-style-type: none;
     margin: 0;
     padding: 0;
