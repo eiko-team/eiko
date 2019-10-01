@@ -11,6 +11,8 @@ function fromCache(request) {
             if (!matching || matching.status === 404) {
                 return Promise.reject("no-match");
             }
+            // see https://bugs.chromium.org/p/chromium/issues/detail?id=823392
+            if (e.request.cache === 'only-if-cached' && e.request.mode !== 'same-origin') { return }
             return matching;
         });
     });
