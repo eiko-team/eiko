@@ -1,3 +1,8 @@
+function redirect() {
+    deleteCookie("pass_score");
+    window.location.replace("/");
+}
+
 window.addEventListener("load", function() {
     if (isTokenValid(getCookie("Token"))) {
         log("redirect from login");
@@ -11,11 +16,6 @@ window.addEventListener("load", function() {
     }
 
 });
-
-function redirect() {
-    deleteCookie("pass_score");
-    window.location.replace("/");
-}
 
 function closeLogin() {
     setStyleByID("login", "display: none;");
@@ -133,7 +133,7 @@ function registerForm() {
     var email = document.forms["register"]["email"].value;
     var password1 = document.forms["register"]["password1"].value;
     var password2 = document.forms["register"]["password2"].value;
-    var remember = document.forms["register"]["rmb"].value
+    var remember = document.forms["register"]["rmb"].value;
     if (password1 === password2) {
         register(email, password1, remember === "on");
     }
