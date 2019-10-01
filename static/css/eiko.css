@@ -7,12 +7,14 @@ html {
     --light: #82F7FF;
     --dark: #0094CC;
     --complementary: #FF8138;
+    --grey-lighter: #ccc;
     --grey-light: #424242;
     --grey-light-opaque: rgba(66, 66, 66, 0.3);
     --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
     --red: #f44336;
+    --green: green;
     --black: black;
     --text-color: black;       /* Text color on main background*/
     --text-color-dark: white;  /* Text color on dark background*/
@@ -30,10 +32,12 @@ html[data-theme="dark"] {
     --dark: #00669b;
     --complementary: #FF8138;
     --grey-light: #424242;
+    --grey-lighter: #ccc;
     --grey-light-opaque:rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
     --red: #f44336;
+    --green: green;
     --black: black;
     --text-color: white;       /* Text color on main background*/
     --text-color-dark: white;  /* Text color on dark background*/
@@ -52,11 +56,13 @@ html[data-theme="high-contrast"] {
     --light: black;
     --dark: black;
     --complementary: black;
+    --grey-lighter: white;
     --grey-light: white;
     --grey-light-opaque: white;
     --grey-dark: white;
     --white: black;
     --red: black;
+    --green: white;
     --black: white;
     --text-color: white;       /* Text color on main background*/
     --text-color-dark: black;  /* Text color on dark background*/
@@ -73,6 +79,10 @@ html.color-theme-in-transition *:before,
 html.color-theme-in-transition *:after {
   transition: all 500ms !important;
   transition-delay: 0 !important;
+}
+
+.material-icons {
+    vertical-align: middle;
 }
 
 img {
@@ -390,4 +400,55 @@ meter[value="4"]::-moz-meter-bar { background: green; }
 
 .content {
     padding: 10px;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--grey-lighter);
+    margin: 1em 0;
+    padding: 0;
+}
+
+.row-check {
+    width: 10%;
+}
+
+.row-name {
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.row-indicator {
+    width: 5%;
+}
+
+.row-price {
+    width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.consumables {
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+
+td,
+th {
+    text-align: left;
+    padding: 5px 10px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: var(--green);
+  border-radius: 50%;
+  display: inline-block;
 }
