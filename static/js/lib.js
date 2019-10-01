@@ -102,44 +102,67 @@ function setStyleByClass(className, style) {
     }
 }
 
+/**
+ * set style of an element of a certain id
+ * @param {string} id name of the id
+ * @param {string} style style to apply on the element
+ */
 function setStyleByID(id, style) {
     document.getElementById(id).style = style;
 }
 
+/**
+ * set the cookie "pass_score" with the score of the password to enable password
+ * strenght display
+ * @param {string} password to check
+ */
 function checkPassword(password) {
     return POST("/verify/password", { password }, (e) => {
         createCookie("pass_score", e.strength);
     });
 }
 
+/**
+ * open thena bar
+ */
 function openNav() {
     log("openNav");
     setStyleByID("mySidenav", "display: block;");
 }
 
+/**
+ * close thena bar
+ */
 function closeNav() {
     log("closeNav");
     setStyleByID("mySidenav", "display: none;");
 }
 
+/**
+ * add a list in the nav bar
+ * @param {object} list to add
+ */
 function addlist(list) {
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
     li.innerHTML = `<a href="${uri}"><i class="material-icons">remove</i>${list.name}</a>`;
     var lists = document.getElementById("dropdown-lists");
-    var last = lists.children[lists.children.length - 1]
+    var last = lists.children[lists.children.length - 1];
     lists.appendChild(li);
     lists.appendChild(last);
 }
 
-function loadList() {
-    log("loadList");
+/**
+ * load lists of the user. If the api fails, load lists from local storage
+ */
+function loadLists() {
+    log("loadLists");
     POST("/list/getall", {}, (e) => {
         localStorage.setItem("lists", JSON.stringify(e));
         e.lists.forEach(addlist);
     }, (e) => {
         var lists = localStorage.getItem("lists");
-        var json = { lists: [] };
+        var json = [];
         if (lists !== null) {
             json = JSON.parse(lists);
         }
@@ -147,10 +170,14 @@ function loadList() {
     });
 }
 
+/**
+ * create a list, sends it to the api and store it in local storage
+ * @param {string} name of the list
+ */
 function createList(name = "Liste de course") {
     log("createList=" + name);
     var lists = localStorage.getItem("lists");
-    var json = { lists: [] };
+    var json = [];
     if (lists !== null) {
         json = JSON.parse(lists);
     }
@@ -160,10 +187,88 @@ function createList(name = "Liste de course") {
     POST("/list/create", { name });
 }
 
+/**
+ * Shares a list with a user
+ * @param {interger} id of the list
+ * @param {string} email of the user to share the list with
+ */
 function shareList(id, email) {
     POST("/list/share", { id, email });
 }
 
+/**
+ * Delete a list
+ * @param {interger} id of the list
+ */
 function deleteList(id) {
     POST("/list/delete", { id });
+}
+
+/**
+ * retrieve consumables of a list from the api and stores it in the local
+ * storage
+ * @param {object} list
+ */
+function getConsumables(list) {
+    POST("/list/get", { list }, (e) => {
+        var consumables = localStorage.getItem("consumables");
+        var json = [];
+        if (consumables !== null) {
+            json = JSON.parse(consumables);
+        }
+        json = json.filter(function(element) {
+            return element.list_id !== list.ID;
+        })
+        e.forEach(json.push);
+        localStorage.setItem("consumables", JSON.stringify(json));
+    });
+}
+
+/**
+ * return the id of the list displayed (or to be displayed) on the page
+ */
+function getCurrentListID() {
+    var elts = document.URL.split("/");
+    return elts[elts.length - 1];
+}
+
+/**
+ * add a consumable to the page
+ * @param {object} consumable to display
+ */
+function showConsumable(consumable) {
+    if (!"content" in document.createElement("template")) { return; }
+    var template = document.querySelector("#consumable");
+    var clone = document.importNode(template.content, true);
+    var td = clone.querySelectorAll("td");
+    td[1].textContent = consumable.consumable.name;
+    td[5].textContent = consumable.stock.pack_price / 100 + "€";
+    document.querySelector("tbody").appendChild(clone);
+}
+
+
+/**
+ * add all consumables to the page according to the list id.
+ * if the api fails, uses local storage.
+ * else store the result in local storage
+ * @param {object} consumable to display
+ */
+function fillConsumables() {
+    log("fillConsumables");
+    var list = {id: getCurrentListID()};
+    POST("/list/get", { list }, function(e) {
+        e.forEach(showConsumable);
+        getConsumables(list);
+    }, function(e) {
+        var consumables = localStorage.getItem("consumables");
+        var json = [];
+        if (consumables !== null) {
+            json = JSON.parse(consumables);
+        }
+        json.forEach(function(element) {
+            if (element.list_id === list.ID) {
+                showConsumable(element);
+            }
+        });
+    })
 }
