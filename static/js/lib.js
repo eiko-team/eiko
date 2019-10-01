@@ -77,6 +77,12 @@ function log(msg) {
 }
 
 
+function logout() {
+    log("logout");
+    deleteCookie("token");
+    window.location.replace("/login.html");
+}
+
 /**
  * check is the token is valid
  */
@@ -107,23 +113,27 @@ function checkPassword(password) {
 }
 
 function openNav() {
+    log("openNav");
     setStyleByID("mySidenav", "display: block;");
 }
 
 function closeNav() {
+    log("closeNav");
     setStyleByID("mySidenav", "display: none;");
 }
 
-function closeLogin() {
-    setStyleByID("login", "display: none;");
-}
-
-function closeRegister() {
-    deleteCookie("pass_score");
-    setStyleByID("register", "display: none;");
+function addlist(list) {
+    let li = document.createElement("li");
+    var uri = encodeURI(`/l/${list.id}`);
+    li.innerHTML = `<a href="${uri}"><i class="material-icons">remove</i>${list.name}</a>`;
+    var lists = document.getElementById("dropdown-lists");
+    var last = lists.children[lists.children.length - 1]
+    lists.appendChild(li);
+    lists.appendChild(last);
 }
 
 function loadList() {
+    log("loadList");
     POST("/list/getall", {}, (e) => {
         localStorage.setItem("lists", JSON.stringify(e));
         e.lists.forEach(addlist);
@@ -138,25 +148,16 @@ function loadList() {
 }
 
 function createList(name = "Liste de course") {
-    POST("/list/create", { name }, (e) => {
-        var lists = localStorage.getItem("lists");
-        var json = { lists: [] };
-        if (lists !== null) {
-            json = JSON.parse(lists);
-        }
-        json.lists.push(e);
-        localStorage.setItem("lists", JSON.stringify(json));
-        addlist(e.name);
-    });
-}
-
-function addlist(list) {
-    let li = document.createElement('li');
-    li.innerHTML = `<a href="/l/${list.id}"><i class="material-icons">remove</i>${list.name}</a>`;
-    var lists = document.getElementById("dropdown-lists");
-    var last = lists.children[lists.children.length - 1]
-    lists.appendChild(li);
-    lists.appendChild(last);
+    log("createList=" + name);
+    var lists = localStorage.getItem("lists");
+    var json = { lists: [] };
+    if (lists !== null) {
+        json = JSON.parse(lists);
+    }
+    json.lists.push(e);
+    localStorage.setItem("lists", JSON.stringify(json));
+    addlist(e.name);
+    POST("/list/create", { name });
 }
 
 function shareList(id, email) {

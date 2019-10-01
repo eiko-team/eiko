@@ -1,18 +1,33 @@
+window.addEventListener("load", function() {
+    if (isTokenValid(getCookie("Token"))) {
+        log("redirect from login");
+        redirect();
+    } else {
+        log("welcome login");
+    }
+
+    if (location.search !== "") {
+        log("location.search=" + location.search.substring(1));
+    }
+
+});
+
 function redirect() {
     deleteCookie("pass_score");
     window.location.replace("/");
 }
 
-if (isTokenValid(getCookie("Token"))) {
-    log("redirect from login");
-    redirect();
-} else {
-    log("welcome login");
+function closeLogin() {
+    setStyleByID("login", "display: none;");
+}
+
+function closeRegister() {
+    deleteCookie("pass_score");
+    setStyleByID("register", "display: none;");
 }
 
 var login_form = document.getElementById("login");
 var register_form = document.getElementById("register");
-
 window.onclick = function(event) {
     if (event.target === login_form) {
         closeLogin();
@@ -20,7 +35,7 @@ window.onclick = function(event) {
     if (event.target === register_form) {
         closeRegister();
     }
-}
+};
 
 window.addEventListener("keydown", function(e) {
     if ((e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) &&
@@ -38,7 +53,7 @@ password.addEventListener("input", function() {
     var text = document.getElementById("password-strength-text");
     var val = password.value;
     checkPassword(val);
-    var score = getCookie("pass_score")
+    var score = getCookie("pass_score");
     var meter = document.getElementById("password-strength-meter");
 
     // Update the password strength meter
@@ -64,7 +79,7 @@ password.addEventListener("input", function() {
     }
 });
 
-function displayLoadingGif(display = false, id = 'login') {
+function displayLoadingGif(display = false, id = "login") {
     if (display) {
         document.getElementById(id + "-button").disabled = true;
         document.getElementById(id + "-loading-gif").style.display = "";
@@ -77,14 +92,14 @@ function displayLoadingGif(display = false, id = 'login') {
 }
 
 function login(email, password, remember = true) {
-    displayLoadingGif(true, "login")
+    displayLoadingGif(true, "login");
     POST("/login", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
-            displayLoadingGif(false, "login")
+            displayLoadingGif(false, "login");
             setStyleByID("error-email", "style: ;");
             return false;
         }
-        user_token = e.token;
+        var user_token = e.token;
         createCookie("token", user_token, remember ? 7 : null);
         log("login");
         redirect();
@@ -93,14 +108,14 @@ function login(email, password, remember = true) {
 }
 
 function register(email, password, remember = true) {
-    displayLoadingGif(true, "register")
+    displayLoadingGif(true, "register");
     POST("/register", { user_email: email, user_password: password }, (e) => {
         if (e.token === undefined) {
-            displayLoadingGif(false, "register")
+            displayLoadingGif(false, "register");
             setStyleByID("error-email-register", "style: ;");
             return false;
         }
-        user_token = e.token;
+        var user_token = e.token;
         createCookie("token", user_token, remember ? 7 : null);
         log("register");
         redirect();
@@ -108,16 +123,16 @@ function register(email, password, remember = true) {
 }
 
 function loginForm() {
-    var email = document.forms["login"]["email"].value
-    var password = document.forms["login"]["password"].value
-    var remember = document.forms["login"]["remember"].value
+    var email = document.forms["login"]["email"].value;
+    var password = document.forms["login"]["password"].value;
+    var remember = document.forms["login"]["remember"].value;
     login(email, password, remember === "on");
 }
 
 function registerForm() {
-    var email = document.forms["register"]["email"].value
-    var password1 = document.forms["register"]["password1"].value
-    var password2 = document.forms["register"]["password2"].value
+    var email = document.forms["register"]["email"].value;
+    var password1 = document.forms["register"]["password1"].value;
+    var password2 = document.forms["register"]["password2"].value;
     var remember = document.forms["register"]["rmb"].value
     if (password1 === password2) {
         register(email, password1, remember === "on");

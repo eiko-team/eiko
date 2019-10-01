@@ -129,6 +129,7 @@ body {
 .dropdown-container,
 .sidenav button,
 .sidenav a {
+    cursor: pointer;
     padding: 8px 8px 8px 16px;
     text-decoration: none;
     font-size: 25px;
@@ -197,6 +198,10 @@ body {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+#search-navbar {
+    float: right;
 }
 
 #nav-name {
@@ -382,3 +387,7 @@ meter[value="1"]::-moz-meter-bar { background: red; }
 meter[value="2"]::-moz-meter-bar { background: yellow; }
 meter[value="3"]::-moz-meter-bar { background: orange; }
 meter[value="4"]::-moz-meter-bar { background: green; }
+
+.content {
+    padding: 10px;
+}

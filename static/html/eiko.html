@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,7 +13,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <!-- Progressive Web App -->
     <meta name="theme-color" content="#38B5FF">
-    <link rel='manifest' href='/manifest.json'>
+    <link rel="manifest" href="/manifest.json">
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="/img/EIKO.png">
@@ -45,14 +46,14 @@
 
 <body>
     <ul class="navbar">
-        <li><a onclick="openNav()" class="nav-menu"><i class="material-icons">menu</i></a></li>
+        <li><a class="nav-menu" id="open-nav"><i class="material-icons">menu</i></a></li>
         <li><a href="#" class="nav-menu" id="nav-name">{{.Title}} - Eiko</a></li>
-        <li style="float:right"><a href="#" class="nav-menu"><i class="material-icons">search</i></a></li>
+        <li id="search-navbar"><a href="#" class="nav-menu"><i class="material-icons">search</i></a></li>
     </ul>
     <div id="mySidenav" class="sidenav">
-        <a id="nav-closebtn" onclick="closeNav()" class="nav-nav"><i class="material-icons">close</i></a>
+        <a id="nav-closebtn" class="nav-nav"><i class="material-icons">close</i></a>
         <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
-        <a class="nav-nav" onclick="swapTheme()"><i class="material-icons">highlight</i>Theme</a>
+        <a class="nav-nav" id="theme-selector"><i class="material-icons">highlight</i>Theme</a>
         <button class="dropdown-btn"><i class="material-icons">list</i>Mes Listes
             <i class="material-icons">keyboard_arrow_down</i>
             <i class="material-icons">add</i>
@@ -61,9 +62,19 @@
             <li><a href="#"><i class="material-icons">home</i>Accueil liste</a></li>
             <li><a href="#"><i class="material-icons">add</i>Ajouter Liste de courses</a></li>
         </ul>
-        <a href="#" class="nav-nav" onclick="logout()"><i class="material-icons">exit_to_app</i>Logout</a>
+        <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
     </div>
-    <div class="content"></div>
+    <div class="content">
+        <table id="consumables">
+            <tbody></tbody>
+        </table>
+    </div>
+    <template id="consumable">
+        <tr>
+            <td class="record"></td>
+            <td></td>
+        </tr>
+    </template>
     <noscript>
         Turn on JavaScript to access this site content.
     </noscript>
