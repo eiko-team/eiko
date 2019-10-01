@@ -8,7 +8,8 @@ window.addEventListener("load", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
-    loadList();
+    loadLists();
+    fillConsumables();
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
     }
@@ -37,24 +38,6 @@ for (var i = 0; i < dropdown.length; i++) {
             dropdownContent.style.display = "block";
         }
     });
-}
-
-if ("content" in document.createElement("template")) {
-    var tbody = document.querySelector("tbody");
-    var template = document.querySelector("#consumable");
-    var clone = document.importNode(template.content, true);
-    var td = clone.querySelectorAll("td");
-    td[0].textContent = "1235646565";
-    td[1].textContent = "Stuff";
-    tbody.appendChild(clone);
-
-    var clone2 = document.importNode(template.content, true);
-    td = clone2.querySelectorAll("td");
-    td[0].textContent = "0384928528";
-    td[1].textContent = "Acme Kidney Beans";
-    tbody.appendChild(clone2);
-} else {
-    // no templates available
 }
 
 document.getElementById("logout-button").addEventListener("click", logout);
