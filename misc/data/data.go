@@ -273,6 +273,7 @@ func (d Data) GetAllLists() ([]structures.List, error) {
 func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 	// Checks if the user know the list
 	var listsOwners []structures.ListOwner
+	Logger.Printf("list: %d, user: %+v", id, d.User)
 	q := datastore.NewQuery(d.listsOwner).
 		Filter("ListID =", id).
 		Filter("Email =", d.User.Email).

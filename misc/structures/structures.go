@@ -109,6 +109,13 @@ type Consumable struct {
 	Pictures        Pictures        `json:"pictures"`
 	Quantity        Quantity        `json:"quantity"`
 	ID              int64           // The integer ID used in the firestore.
+	// Mode is used to signifiy the mode of the consumable
+	// It's content should be:
+	// 	- "sample": for testing purpose
+	// 	- "consumable": for a "real" consumable
+	// 	- "personnal": for a user imported consmable where only the Name field is
+	// used. stock and store are also not used
+	Mode string `json:"mode"`
 }
 
 // Stock Stock of a product in a store
