@@ -152,14 +152,21 @@ type ListOwner struct {
 	Email  string `json:"email" firestore:"email"`
 }
 
+// ConsumablesID struct used to get a Consumable
+type ConsumablesID struct {
+	ConsumableID int64 `json:"consumable"`
+	StoreID      int64 `json:"store"`
+	StockID      int64 `json:"stock"`
+}
+
 // ListContent list content
 type ListContent struct {
-	ID          int64       // The integer ID used in the firestore.
-	ListID      int64       `json:"list_id" firestore:"list_id"`
-	Consumables Consumables `json:"consumable" firestore:"consumable"`
-	Name        string      `json:"name" firestore:"name"`
-	Done        bool        `json:"done" firestore:"done"`
-	Erased      bool        `json:"erased" firestore:"erased"`
+	ID          int64         // The integer ID used in the firestore.
+	ListID      int64         `json:"list_id" firestore:"list_id"`
+	Consumables ConsumablesID `json:"consumable" firestore:"consumable"`
+	Name        string        `json:"name" firestore:"name"`
+	Done        bool          `json:"done" firestore:"done"`
+	Erased      bool          `json:"erased" firestore:"erased"`
 	// Mode is used to signifiy the mode of the consumable
 	// It's content should be:
 	// 	- "sample": for testing purpose
