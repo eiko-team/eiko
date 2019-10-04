@@ -55,6 +55,9 @@ type Page struct {
 }
 
 var (
+	// Path of the api to serve files
+	Path = os.Getenv("PWD")
+
 	// D api to communicate with datasctore
 	D data.Data
 
@@ -63,8 +66,8 @@ var (
 
 	// FunctionsWithToken List all api functions that does require a token
 	FunctionsWithToken = []Func{
-		{Function: umanagement.Delete, Path: "/delete"},
 		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
+		{Function: umanagement.Delete, Path: "/delete"},
 		{Function: store.AddStore, Path: "/store/add"},
 		{Function: store.GetStore, Path: "/store/get"},
 		{Function: consumables.Store, Path: "/consumable/add"},
@@ -74,21 +77,25 @@ var (
 	}
 	// Functions List all api functions that does not require a token
 	Functions = []Func{
+		{Function: global.Log, Path: "/log"},
 		{Function: umanagement.Login, Path: "/login"},
 		{Function: umanagement.Register, Path: "/register"},
 		{Function: verify.Email, Path: "/verify/email"},
 		{Function: verify.Password, Path: "/verify/password"},
-		{Function: global.Log, Path: "/log"},
 	}
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
 		{"html/login.html", "text/html", []string{"/login.html"}, ""},
-		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html"}, "Acceuil"},
 		{"js/eiko/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}, ""},
 		{"json/manifest.json", "application/json", []string{"/manifest.json"}, ""},
+	}
+
+	// TFiles is an array of Templated files
+	TFiles = []File{
+		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html"}, "Acceuil"},
 	}
 
 	// FunctionsWithParam slice of Page
@@ -101,9 +108,25 @@ var (
 func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 	misc.LogRequest(r)
+
+	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
+		return
+	}
+
+	w.Header().Set("Content-Type", file.CType)
+	fmt.Fprint(w, fileContent)
+}
+
+// TemplatedFiles simple html file server
+func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+	misc.LogRequest(r)
 	w.Header().Set("Content-Type", "application/json")
 
-	fileContent, err := files.GetFileContent("./static/" + file.Path)
+	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
 	if err != nil {
 		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
 		return
@@ -123,6 +146,7 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// ServeFilesCustom TODO
 func ServeFilesCustom(router *httprouter.Router, urlpath, filepath string) {
 	fileServer := http.FileServer(http.Dir(filepath))
 	router.GET(urlpath+"/*filepath",
@@ -144,8 +168,13 @@ func ServeFiles(r *httprouter.Router) {
 			r.GET(URL, file.SpecialFiles)
 		}
 	}
+	for _, file := range TFiles {
+		for _, URL := range file.URL {
+			r.GET(URL, file.TemplatedFiles)
+		}
+	}
 
-	fileType := "./static/"
+	fileType := Path + "/static/"
 	fileTypeStr := "FILE_TYPE"
 	if os.Getenv(fileTypeStr) == "" {
 		Logger.Println(fileTypeStr + " not set using default (none)")
@@ -181,33 +210,17 @@ func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 	w.Header().Set("Content-Type", "application/json")
 	token, err := r.Cookie("token")
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
 		return
 	}
 	D.User, err = misc.TokenToUser(token.Value)
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
 		return
 	}
-	fun.WrapperFunction(w, r, nil)
-}
-
-// WrapperFunctionCookieParam allows us to call the functions with rights args.
-// Db must be set already.
-// Read Token cookie and set the User value of D
-func (fun Func) WrapperFunctionCookieParam(w http.ResponseWriter,
-	r *http.Request, _ httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
-	token, err := r.Cookie("token")
-	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
-		return
-	}
-	D.User, err = misc.TokenToUser(token.Value)
-	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
-		return
-	}
+	w.WriteHeader(200)
 	fun.WrapperFunction(w, r, nil)
 }
 
@@ -218,17 +231,20 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 	w.Header().Set("Content-Type", "application/json")
 	token, err := r.Cookie("token")
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
 		return
 	}
 	D.User, err = misc.TokenToUser(token.Value)
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
 		return
 	}
 
 	pageID, err := strconv.Atoi(ps.ByName(page.Name))
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_page_found\"}")
 		return
 	}
@@ -237,44 +253,40 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 	list, err := D.GetList(page.ID)
 	if err != nil {
 		Logger.Printf("%+v", err)
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_list_found\"}")
 		return
 	}
 	page.Title = list.Name
 
-	file, err := files.GetFileContent("./static/html/eiko.html")
+	file, err := files.GetFileContent(Path + "/static/html/eiko.html")
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
 		return
 	}
 
 	h, err := template.New("webpage").Parse(file)
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"parse_failed\"}")
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(200)
 	err = h.Execute(w, page)
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"could_not_exec\"}")
 		return
 	}
 }
 
-// ExecuteAPI Execute the api and return the bdd configured.
-func ExecuteAPI() *httprouter.Router {
+// InitApi Execute the api and return the bdd configured.
+func InitApi() *httprouter.Router {
 	r := httprouter.New()
 	ServeFiles(r)
-
-	projIDStr := "PROJECT_ID"
-	projID := os.Getenv(projIDStr)
-	if projID == "" {
-		Logger.Fatal(fmt.Sprintf("please set: '%s'", projIDStr))
-	}
-
-	D = data.InitData(projID)
-
 	for _, tt := range Functions {
 		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
 	}
@@ -285,4 +297,17 @@ func ExecuteAPI() *httprouter.Router {
 		r.GET(tt.URL, tt.WrapperFunctionCookieParam)
 	}
 	return r
+}
+
+// ExecuteAPI Execute the api and return the bdd configured.
+func ExecuteAPI() *httprouter.Router {
+
+	projIDStr := "PROJECT_ID"
+	projID := os.Getenv(projIDStr)
+	if projID == "" {
+		Logger.Fatal(fmt.Sprintf("please set: '%s'", projIDStr))
+	}
+
+	D = data.InitData(projID)
+	return InitApi()
 }
