@@ -30,6 +30,9 @@ var (
 // ParseJSON generic function to parse request body, extract it's content and
 // fill the struct
 func ParseJSON(r *http.Request, v interface{}) error {
+	if r == nil || r.Body == nil {
+		return fmt.Errorf("No Body")
+	}
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	err := decoder.Decode(v)
@@ -41,6 +44,10 @@ func ParseJSON(r *http.Request, v interface{}) error {
 
 // LogRequest logs a *http.Request using the Logger
 func LogRequest(r *http.Request) {
+	if r == nil {
+		return
+	}
+
 	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
 		Logger.Println(err)

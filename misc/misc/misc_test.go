@@ -1,12 +1,54 @@
 package misc_test
 
 import (
+	"encoding/json"
+	"net/http"
+	"strings"
 	"testing"
 	"time"
 
+	"eiko/misc/data"
 	"eiko/misc/misc"
 	"eiko/misc/structures"
 )
+
+func TestParseJSON(t *testing.T) {
+	t.Run("no request", func(t *testing.T) {
+		var consumable structures.Consumable
+		misc.ParseJSON(nil, &consumable)
+	})
+	t.Run("no body", func(t *testing.T) {
+		r, _ := http.NewRequest("POST", "/test", nil)
+		var consumable structures.Consumable
+		misc.ParseJSON(r, &consumable)
+	})
+	t.Run("ParseJSON", func(t *testing.T) {
+		body, _ := json.Marshal(data.ConsumableTest)
+		r, _ := http.NewRequest("POST", "/test",
+			strings.NewReader(string(body)))
+		var consumable structures.Consumable
+		misc.ParseJSON(r, &consumable)
+		// TODO assert deepequals data.ConsumableTest and consumable
+	})
+	t.Run("Bad Json", func(t *testing.T) {
+		body := "toto"
+		r, _ := http.NewRequest("POST", "/test",
+			strings.NewReader(body))
+		var consumable structures.Consumable
+		misc.ParseJSON(r, &consumable)
+		// TODO assert deepequals data.ConsumableTest and consumable
+	})
+}
+
+func TestLogRequest(t *testing.T) {
+	t.Run("LogRequest", func(t *testing.T) {
+		r, _ := http.NewRequest("POST", "/test", nil)
+		misc.LogRequest(r)
+	})
+	t.Run("nil request", func(t *testing.T) {
+		misc.LogRequest(nil)
+	})
+}
 
 func TestToken(t *testing.T) {
 	tests := []struct {
