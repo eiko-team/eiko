@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -161,10 +162,19 @@ func TestWrapperFunctionCookieParam(t *testing.T) {
 		{"no token", "", 500, "/l/424242", "{\"error\":\"no_token_found\"}\n"},
 		{"invalid token", " ", 500, "/l/424242", "{\"error\":\"token_invalid\"}\n"},
 		{"no id", token, 301, "/l/", "<a href=\"/l\">Moved Permanently</a>.\n\n"},
+		{"wrong id", token, 500, "/l/test", "{\"error\":\"no_page_found\"}\n"},
 		{"wrong url", token, 404, "/l", "404 page not found\n"},
+		{"wrong data", token, 500, "/l/424242", "{\"error\":\"no_list_found\"}\n"},
+		{"wrong path", token, 500, "/l/424242", "{\"error\":\"invalid_file\"}\n"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "wrong data" {
+				data.Error = data.ErrTest
+			}
+			if tt.name == "wrong path" {
+				Path = ""
+			}
 			if tt.err == "" {
 				data.Error = nil
 			}
@@ -185,7 +195,12 @@ func TestWrapperFunctionCookieParam(t *testing.T) {
 				t.Errorf("WrapperFunctionCookie = '%s', want '%s'",
 					body, tt.err)
 			}
-
+			data.Error = nil
 		})
 	}
+}
+
+func TestExecuteAPI(t *testing.T) {
+	os.Setenv("PROJECT_ID", "api_test.go")
+	ExecuteAPI()
 }
