@@ -225,11 +225,14 @@ function getConsumables(list) {
 }
 
 /**
- * return the id of the list displayed (or to be displayed) on the page
+ * return the id of the list displayed (or to be displayed) on the page and
+ * stores it in the cookies
  */
 function getCurrentListID() {
     var elts = document.URL.split("/");
-    return elts[elts.length - 1];
+    var ListID = Number(elts[elts.length - 1]);
+    createCookie("ListID", ListID);
+    return ListID;
 }
 
 /**
