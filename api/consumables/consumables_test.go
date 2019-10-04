@@ -17,23 +17,30 @@ import (
 var (
 	d        data.Data
 	token, _ = misc.UserToToken(data.UserTest)
-	consu    = structures.Consumable{}
 )
 
 func TestStoreConsumable(t *testing.T) {
+	j, _ := json.Marshal(data.ConsumableTest)
+	c := string(j)
 	tests := []struct {
 		name    string
 		want    string
 		wantErr bool
+		body    string
+		useData bool
 	}{
-		{"sanity", `{"done":"true"}`, false},
+		{"sanity", `{"done":"true"}`, false, "{\"consumable\":" + c + "}",
+			true},
+		{"bad json", `3.0.0`, true, "}", false},
+		{"wrong data", `3.0.1`, true, "{\"consumable\":" + c + "}", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			j, _ := json.Marshal(consu)
-			body := fmt.Sprintf("{\"consumable\":%s}", j)
+			if tt.name == "wrong data" {
+				data.Error = data.ErrTest
+			}
 			req, _ := http.NewRequest("POST", "/consumable/add",
-				strings.NewReader(body))
+				strings.NewReader(tt.body))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := consumables.Store(d, req)
 			if (err != nil) != tt.wantErr {
@@ -47,10 +54,11 @@ func TestStoreConsumable(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("Store() = '%v', want %v", got, tt.want)
 			}
-			if data.StoreConsumable == tt.wantErr {
-				t.Errorf("Data was no stored")
+			if data.StoreConsumable != tt.useData {
+				t.Errorf("data.StoreConsumable not used")
 			}
 			data.StoreConsumable = false
+			data.Error = nil
 		})
 	}
 }
@@ -59,21 +67,37 @@ func TestGetConsumables(t *testing.T) {
 	tests := []struct {
 		name    string
 		want    string
-		query   string
+		body    string
 		wantErr bool
+		useData bool
 	}{
-		{"sanity", `{"query":\[\]}`, "query", false},
-		{"simple", fmt.Sprintf(`\[%s\]`, data.ConsumablesRe), "query", false},
+		{"sanity", `{"query":\[\]}`, "{\"query\":\"query\"}", false, true},
+		{"wrong json in body", `3.1.0`, "}", true, false},
+		{"simple", fmt.Sprintf(`{"query":\[(%s,?)+\]}`, data.ConsumablesRe),
+			"{\"query\":\"query\"}", false, true},
+		{"no data", `3.1.1`, "{\"query\":\"query\"}", true, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.name == "simple" {
-				data.Consumables = data.ConsumablesTest
+				data.Consumables = []structures.Consumables{
+					structures.Consumables{
+						Consumable: data.ConsumableTest,
+						Store:      data.StoreTest,
+						Stock:      structures.Stock{},
+					},
+					structures.Consumables{
+						Consumable: data.ConsumableTest,
+						Store:      data.StoreTest,
+						Stock:      structures.Stock{},
+					},
+				}
 			}
-			body := fmt.Sprintf("{\"query\":\"%s\",\"limit\":%d}",
-				tt.query, 4)
+			if tt.name == "no data" {
+				data.Error = data.ErrTest
+			}
 			req, _ := http.NewRequest("POST", "/consumable/get",
-				strings.NewReader(body))
+				strings.NewReader(tt.body))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := consumables.Get(d, req)
 			if (err != nil) != tt.wantErr {
@@ -88,7 +112,7 @@ func TestGetConsumables(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("Get() = '%v', want %v", got, tt.want)
 			}
-			if data.GetConsumables == tt.wantErr {
+			if data.GetConsumables != tt.useData {
 				t.Errorf("Data was no stored")
 			}
 			data.GetConsumables = false
