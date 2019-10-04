@@ -20,22 +20,29 @@ var (
 )
 
 func TestAddStore(t *testing.T) {
+	j, _ := json.Marshal(data.StoreTest)
+	s := string(j)
 	tests := []struct {
 		name    string
 		want    string
-		token   string
 		wantErr bool
+		body    string
+		useData bool
 	}{
-		{"sanity", `{"done":"true"}`, token, false},
+		{"sanity", `{"done":"true"}`, false, "{\"store\":" + s + "}", true},
+		{"wrong json", `4.0.0`, true, "test", false},
+		{"wrong data", `4.0.1`, true, "{\"store\":" + s + "}", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			j, _ := json.Marshal(data.StoreTest)
-			body := fmt.Sprintf("{\"store\":%s}", j)
+			if tt.name == "wrong data" {
+				data.Error = data.ErrTest
+			}
 			req, _ := http.NewRequest("POST", "/store/add",
-				strings.NewReader(body))
-			req.Header.Set("Cookie", fmt.Sprintf("token=%s", tt.token))
+				strings.NewReader(tt.body))
+			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := store.AddStore(d, req)
+			t.Logf("%v", got)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("AddStore() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -47,31 +54,37 @@ func TestAddStore(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("AddStore() = '%v', want %v", got, tt.want)
 			}
-			if data.StoreStore == tt.wantErr {
-				t.Errorf("Data was no stored")
+			if data.StoreStore != tt.useData {
+				t.Errorf("data.StoreStore was no used")
 			}
 			data.StoreStore = false
+			data.Error = nil
 		})
 	}
 }
 
 func TestGetStore(t *testing.T) {
+	j, _ := json.Marshal(data.StoreTest)
+	s := string(j)
 	tests := []struct {
 		name    string
 		want    string
-		token   string
 		wantErr bool
+		body    string
+		useData bool
 	}{
-		{"sanity", data.StoreRe, token, false},
+		{"sanity", data.StoreRe, false, "{\"store\":" + s + "}", true},
+		{"wrong json", "4.1.0", true, "}", false},
+		{"wrong data", "4.1.1", true, "{\"store\":" + s + "}", true},
 	}
 	for _, tt := range tests {
+		if tt.name == "wrong data" {
+			data.Error = data.ErrTest
+		}
 		t.Run(tt.name, func(t *testing.T) {
 			data.Store = data.StoreTest
-			j, _ := json.Marshal(data.StoreTest)
-			body := fmt.Sprintf("{\"user_token\":\"%s\",\"store\":%s}",
-				tt.token, j)
 			req, _ := http.NewRequest("POST", "/store/get",
-				strings.NewReader(body))
+				strings.NewReader(tt.body))
 			got, err := store.GetStore(d, req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetStore() error = %v, wantErr %v", err, tt.wantErr)
@@ -84,10 +97,11 @@ func TestGetStore(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("GetStore() = '%v', want %v", got, tt.want)
 			}
-			if data.GetStore == tt.wantErr {
-				t.Errorf("Data was no retrieved")
+			if data.GetStore != tt.useData {
+				t.Errorf("data.GetStore was no used")
 			}
 			data.GetStore = false
+			data.Error = nil
 		})
 	}
 }

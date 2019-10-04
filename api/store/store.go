@@ -29,7 +29,7 @@ func AddStore(d data.Data, r *http.Request) (string, error) {
 
 	err = d.StoreStore(i)
 	if err != nil {
-		return "", errors.New("4.0.2")
+		return "", errors.New("4.0.1")
 	}
 
 	return "{\"done\":\"true\"}", nil
@@ -45,12 +45,12 @@ func GetStore(d data.Data, r *http.Request) (string, error) {
 
 	store, err := d.GetStore(i)
 	if err != nil {
-		return "", errors.New("4.1.2")
+		return "", errors.New("4.1.1")
 	}
 
 	res, err := json.Marshal(store)
 	if err != nil {
-		return "", errors.New("4.1.3")
+		return "", errors.New("4.1.2")
 	}
 	Logger.Printf("%v", string(res))
 	return string(res), nil
