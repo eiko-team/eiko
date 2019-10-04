@@ -119,7 +119,7 @@ func (d Data) GetStore(store structures.Store) (structures.Store, error) {
 	return stores[0], nil
 }
 
-// StoreStore is used to store a log in the datastore
+// StoreStore is used to store a consumable in the datastore
 func (d Data) StoreStore(store structures.Store) error {
 	store.ID = 0
 	key := datastore.IncompleteKey(d.stores, nil)
@@ -127,7 +127,7 @@ func (d Data) StoreStore(store structures.Store) error {
 	return err
 }
 
-// StoreConsumable is used to store a log in the datastore
+// StoreConsumable is used to store a consumable in the datastore
 func (d Data) StoreConsumable(consumable structures.Consumable) error {
 	consumable.ID = 0
 	key := datastore.IncompleteKey(d.consumables, nil)
@@ -295,4 +295,15 @@ func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 		listContents[i].ID = k.ID
 	}
 	return listContents, nil
+}
+
+// StoreContent is used to store a content in the datastore
+func (d Data) StoreContent(content structures.ListContent) (int64, error) {
+	content.ID = 0
+	key := datastore.IncompleteKey(d.listContent, nil)
+	key, err := d.client.Put(d.ctx, key, &content)
+	if key != nil {
+		return key.ID, err
+	}
+	return 0, err
 }

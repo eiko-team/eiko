@@ -101,6 +101,7 @@ func TestGetListContent(t *testing.T) {
 			data.ListContent = data.ListContentTest
 			j, _ := json.Marshal(data.ListTest)
 			body := fmt.Sprintf("{\"list\":%s}", j)
+			t.Logf("%s", body)
 			req, _ := http.NewRequest("POST", "/list/get",
 				strings.NewReader(body))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
@@ -109,6 +110,7 @@ func TestGetListContent(t *testing.T) {
 				t.Errorf("GetListContent() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+			t.Logf("%+v", got)
 			if tt.wantErr {
 				got = err.Error()
 			}
@@ -120,6 +122,45 @@ func TestGetListContent(t *testing.T) {
 				t.Errorf("Data was no listd")
 			}
 			data.GetListContent = false
+		})
+	}
+}
+
+func TestAddPersonnal(t *testing.T) {
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+	}{
+		{"sanity", `{"done":true,"id":\d+}`, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			data.ID = data.IDTest
+			j, _ := json.Marshal(data.ListContentTest)
+			t.Logf("%s", string(j))
+			req, _ := http.NewRequest("POST", "/list/get",
+				strings.NewReader(string(j)))
+			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
+			got, err := list.AddPersonnal(d, req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AddPersonnal() error = %v, wantErr %v",
+					err, tt.wantErr)
+				return
+			}
+			t.Logf("%+v", got)
+			if tt.wantErr {
+				got = err.Error()
+			}
+			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
+			if len(matchs) == 0 {
+				t.Errorf("AddPersonnal() = '%v', want %v", got, tt.want)
+			}
+			if data.StoreContent == tt.wantErr {
+				t.Errorf("StoreContent = %v, want = %v",
+					data.StoreContent, tt.wantErr)
+			}
+			data.StoreContent = false
 		})
 	}
 }

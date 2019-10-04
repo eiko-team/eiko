@@ -3,6 +3,7 @@ package list
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -64,6 +65,7 @@ func GetListContent(d data.Data, r *http.Request) (string, error) {
 
 	content, err := d.GetListContent(i.ID)
 	if err != nil {
+		Logger.Println(err)
 		return "", errors.New("5.2.1")
 	}
 
@@ -73,4 +75,18 @@ func GetListContent(d data.Data, r *http.Request) (string, error) {
 	}
 
 	return string(json), err
+}
+
+// AddPersonnal add a personnal item to a list
+func AddPersonnal(d data.Data, r *http.Request) (string, error) {
+	var i structures.ListContent
+	err := misc.ParseJSON(r, &i)
+	if err != nil {
+		return "", errors.New("5.3.0")
+	}
+
+	Logger.Printf("%+v", i)
+
+	keyID, err := d.StoreContent(i)
+	return fmt.Sprintf(`{"done":true,"id":%d}`, keyID), err
 }

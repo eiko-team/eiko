@@ -23,6 +23,7 @@ var (
 	CreateList      bool
 	GetAllLists     bool
 	GetListContent  bool
+	StoreContent    bool
 	Error           error
 	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
@@ -99,13 +100,21 @@ var (
 		ID:   0,
 		Name: "List name Test",
 	}
-	ListContent   = structures.ListContent{}
-	ListContentRe = fmt.Sprintf(`{"ID":\d+,"list_id":\d+,"consumable":%s,"name":"[a-zA-Z0-9 ]+","done":false,"erased":false}`,
-		ConsumablesRe)
+	ConsumableIDsRe = `{"consumable":0,"store":0,"stock":0}`
+	ListContent     = structures.ListContent{}
+	ListContentRe   = fmt.Sprintf(`{"ID":\d+,"list_id":\d+,"consumable":%s,"name":"[a-zA-Z0-9 ]+","done":false,"erased":false,"mode":"[a-z]+"}`,
+		ConsumableIDsRe)
 	ListContentTest = structures.ListContent{
-		Consumables: ConsumablesTest[0],
-		Name:        ConsumablesTest[0].Consumable.Name,
+		Consumables: structures.ConsumablesID{
+			ConsumableID: 12,
+			StoreID:      24,
+			StockID:      48,
+		},
+		Name: ConsumablesTest[0].Consumable.Name,
+		Mode: "sample",
 	}
+	ID     = int64(0)
+	IDTest = int64(42)
 )
 
 // Data container for all data relative variables
@@ -184,4 +193,10 @@ func (d Data) GetAllLists() ([]structures.List, error) {
 func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 	GetListContent = true
 	return []structures.ListContent{ListContent}, Error
+}
+
+// StoreContent is used to store a content in the datastore
+func (d Data) StoreContent(content structures.ListContent) (int64, error) {
+	StoreContent = true
+	return ID, Error
 }
