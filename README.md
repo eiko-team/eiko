@@ -9,6 +9,16 @@
 
 eiko web app
 
+# Installation
+> Prerequirement: have golang>=1.10.4 install on your machine
+
+```bash
+git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/eiko
+cd $GOPATH/src/eiko
+get get ./...
+make up
+```
+
 ## Docker
 
 .env file:
@@ -25,6 +35,7 @@ SALT=
     environment:
       - 'PROJECT_ID=${PROJECT_ID}'
       - 'PORT=80'
+      - 'PWD=/srv'
       - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
       - 'GRPC_GO_LOG_SEVERITY_LEVEL=INFO' # google datastore debug
       - 'SALT=${SALT}
