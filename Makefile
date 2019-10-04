@@ -2,11 +2,13 @@ DC = docker-compose
 DK = docker
 BIN = app
 GO = go
+GITHASH = $(shell git rev-parse --short HEAD)
 CPROFILE = count.out
 COVFILE = coverage.txt
 REPORT = report.xml
 DKNAME = eikoapp/eiko
 DKTAG = latest-prod
+DKTAGHASH = $(GITHASH)
 UGLY-JS = uglifyjs
 UGLY-CSS = uglifycss
 TRASHDIR = static/min
@@ -40,13 +42,13 @@ build-dc:
 
 build: build-go
 build:
-	$(DK) build --no-cache -t "$(DKNAME):$(shell git rev-parse --short HEAD)" .
+	$(DK) build --no-cache -t "$(DKNAME):$(DKTAGHASH)" .
 
 tag:
-	$(DK) tag "$(DKNAME):$(shell git rev-parse --short HEAD)" "$(DKNAME):$(DKTAG)"
+	$(DK) tag "$(DKNAME):$(DKTAGHASH)" "$(DKNAME):$(DKTAG)"
 
 push:
-	$(DK) push "$(DKNAME):$(shell git rev-parse --short HEAD)"
+	$(DK) push "$(DKNAME):$(DKTAGHASH)"
 
 push-tag:
 	$(DK) push "$(DKNAME):$(DKTAG)"
