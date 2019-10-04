@@ -283,8 +283,8 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 	}
 }
 
-// InitApi Execute the api and return the bdd configured.
-func InitApi() *httprouter.Router {
+// InitAPI Execute the api and return the bdd configured.
+func InitAPI() *httprouter.Router {
 	r := httprouter.New()
 	ServeFiles(r)
 	for _, tt := range Functions {
@@ -309,5 +309,5 @@ func ExecuteAPI() *httprouter.Router {
 	}
 
 	D = data.InitData(projID)
-	return InitApi()
+	return InitAPI()
 }

@@ -82,7 +82,7 @@ func TestGet400(t *testing.T) {
 }
 
 func TestWrapperFunction(t *testing.T) {
-	router := InitApi()
+	router := InitAPI()
 	Path = "/home/tm/go/src/eiko"
 	fun := Functions[0]
 	t.Run("TestWrapperFunction without body", func(t *testing.T) {
@@ -108,7 +108,7 @@ func TestWrapperFunction(t *testing.T) {
 }
 
 func TestWrapperFunctionCookie(t *testing.T) {
-	router := InitApi()
+	router := InitAPI()
 	Path = "/home/tm/go/src/eiko"
 	fun := FunctionsWithToken[0]
 
@@ -148,7 +148,7 @@ func TestWrapperFunctionCookie(t *testing.T) {
 }
 
 func TestWrapperFunctionCookieParam(t *testing.T) {
-	router := InitApi()
+	router := InitAPI()
 	Path = "/home/tm/go/src/eiko"
 
 	tests := []struct {
