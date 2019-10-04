@@ -12,7 +12,7 @@ import (
 
 var (
 	UserStored      bool
-	Logged          bool
+	Log             bool
 	GetUser         bool
 	Inited          bool
 	GetStore        bool
@@ -140,13 +140,13 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 // StoreUser is used to store a user in the datastore
 func (d Data) StoreUser(user structures.User) error {
 	UserStored = true
-	return nil
+	return Error
 }
 
 // Log is used to store a log in the datastore
 func (d Data) Log(user structures.Log) error {
-	Logged = true
-	return nil
+	Log = true
+	return Error
 }
 
 // GetStore is used to find if a store is already in the datastore using
