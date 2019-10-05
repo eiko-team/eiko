@@ -69,7 +69,7 @@ func Register(d data.Data, r *http.Request) (string, error) {
 		Created:   time.Now(),
 		Validated: false,
 	}
-	if d.StoreUser(user); err != nil {
+	if d.StoreUser(user) != nil {
 		Logger.Println(err)
 		return "", errors.New("1.1.3")
 	}

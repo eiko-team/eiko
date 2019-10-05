@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	UserStored      bool
+	StoreUser       bool
 	Log             bool
 	GetUser         bool
 	Inited          bool
@@ -25,6 +25,7 @@ var (
 	GetListContent  bool
 	StoreContent    bool
 	Error           error
+	Error2          error
 	pass, _         = hash.Hash("pass")
 	ErrTest         = fmt.Errorf("Test %s", "error")
 	User            = structures.User{}
@@ -139,8 +140,8 @@ func (d Data) GetUser(UserMail string) (structures.User, error) {
 
 // StoreUser is used to store a user in the datastore
 func (d Data) StoreUser(user structures.User) error {
-	UserStored = true
-	return Error
+	StoreUser = true
+	return Error2
 }
 
 // Log is used to store a log in the datastore
