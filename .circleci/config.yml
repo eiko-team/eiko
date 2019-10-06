@@ -7,6 +7,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup custom environment variables
+          command: |
+            echo 'export PWD="/root/go/src/eiko"' >> $BASH_ENV
+      - run:
           name: make all
           command: make all
       - run:
@@ -23,7 +27,9 @@ jobs:
           command: make cover-race && bash <(curl -s https://codecov.io/bash)
       - run:
           name: exporting test results
-          command: mkdir -p test-results/gotest && mv report.xml test-results/gotest/report.xml
+          command: |
+            mkdir -p test-results/gotest
+            mv report.xml test-results/gotest/report.xml
       - store_test_results:
           path: test-results
       - store_artifacts:
