@@ -35,7 +35,7 @@ SALT=
     environment:
       - 'PROJECT_ID=${PROJECT_ID}'
       - 'PORT=80'
-      - 'PWD=/srv'
+      - 'STATIC_PWD=/srv'
       - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
       - 'GRPC_GO_LOG_SEVERITY_LEVEL=INFO' # google datastore debug
       - 'SALT=${SALT}

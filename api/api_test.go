@@ -36,7 +36,6 @@ func (m *mockResponseWriter) WriteHeader(int) {}
 
 func TestGet400(t *testing.T) {
 	router := httprouter.New()
-	Path = "/home/tm/go/src/eiko"
 	ServeFiles(router)
 
 	tests := []struct {
@@ -66,6 +65,7 @@ func TestGet400(t *testing.T) {
 			if tt.name == "no path" {
 				Path = ""
 			}
+			t.Logf("%s", Path)
 			w := httptest.NewRecorder()
 			req, _ := http.NewRequest(tt.method, tt.URL, nil)
 			router.ServeHTTP(w, req)
@@ -83,7 +83,6 @@ func TestGet400(t *testing.T) {
 
 func TestWrapperFunction(t *testing.T) {
 	router := InitAPI()
-	Path = "/home/tm/go/src/eiko"
 	fun := Functions[0]
 	t.Run("TestWrapperFunction without body", func(t *testing.T) {
 		w := httptest.NewRecorder()
@@ -109,7 +108,6 @@ func TestWrapperFunction(t *testing.T) {
 
 func TestWrapperFunctionCookie(t *testing.T) {
 	router := InitAPI()
-	Path = "/home/tm/go/src/eiko"
 	fun := FunctionsWithToken[0]
 
 	tests := []struct {
@@ -149,7 +147,6 @@ func TestWrapperFunctionCookie(t *testing.T) {
 
 func TestWrapperFunctionCookieParam(t *testing.T) {
 	router := InitAPI()
-	Path = "/home/tm/go/src/eiko"
 
 	tests := []struct {
 		name  string
@@ -169,6 +166,7 @@ func TestWrapperFunctionCookieParam(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			Path = os.Getenv("STATIC_PWD")
 			if tt.name == "wrong data" {
 				data.Error = data.ErrTest
 			}
@@ -202,5 +200,7 @@ func TestWrapperFunctionCookieParam(t *testing.T) {
 
 func TestExecuteAPI(t *testing.T) {
 	os.Setenv("PROJECT_ID", "api_test.go")
+	ExecuteAPI()
+	os.Setenv("FILE_TYPE", "test")
 	ExecuteAPI()
 }

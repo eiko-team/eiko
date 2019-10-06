@@ -56,7 +56,7 @@ type Page struct {
 
 var (
 	// Path of the api to serve files
-	Path = os.Getenv("PWD")
+	Path = os.Getenv("STATIC_PWD")
 
 	// D api to communicate with datasctore
 	D data.Data

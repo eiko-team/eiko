@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Setup custom environment variables
           command: |
-            echo 'export PWD="/root/go/src/eiko"' >> $BASH_ENV
+            echo 'export STATIC_PWD="/root/go/src/eiko"' >> $BASH_ENV
       - run:
           name: make all
           command: make all
