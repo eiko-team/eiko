@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="utf-8">
@@ -65,15 +65,30 @@
         <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
     </div>
     <div class="content">
-        <table id="consumables">
+        <table class="consumables">
+            <thead>
+                <tr>
+                    <th class="row-check"></th>
+                    <th class="row-name"></th>
+                    <th class="row-indicator"><i class="material-icons">home</i></th>
+                    <th class="row-indicator"><i class="material-icons">eco</i></th>
+                    <th class="row-indicator"><i class="material-icons">euro_symbol</i></th>
+                    <th class="row-price"></th>
+                </tr>
+            </thead>
             <tbody></tbody>
         </table>
     </div>
     <template id="consumable">
         <tr>
-            <td class="record"></td>
-            <td></td>
+            <td class="row-check"><i class="material-icons">radio_button_unchecked</i></td>
+            <td class="row-name"></td>
+            <td class="row-indicator"><span class="dot" id="indic1"></span></td>
+            <td class="row-indicator"><span class="dot" id="indic2"></span></td>
+            <td class="row-indicator"><span class="dot" id="indic3"></span></td>
+            <td class="row-price"></td>
         </tr>
+        <hr />
     </template>
     <noscript>
         Turn on JavaScript to access this site content.
