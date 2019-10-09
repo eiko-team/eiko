@@ -35,13 +35,15 @@ build-go-light:
 	$(GO) build -o $(BIN)
 
 build-go:
-	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux $(GO) build -a -installsuffix cgo -o $(BIN)
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux $(GO) build -ldflags="-w -s" -a -installsuffix cgo -o $(BIN)
+
+build-pi:
+	GOARM=5 CGO_ENABLED=0 GOARCH=arm GOOS=linux $(GO) build -ldflags="-w -s" -a -installsuffix cgo -o $(BIN)
 
 build-dc:
 	$(DC) build
 
-build: build-go
-build:
+build-docker:
 	$(DK) build --no-cache -t "$(DKNAME):$(DKTAGHASH)" .
 
 tag:
@@ -54,9 +56,19 @@ push-tag:
 	$(DK) push "$(DKNAME):$(DKTAG)"
 
 docker: mini
-docker: build
+docker: build-go
+docker: build-docker
 docker: push
+docker: tag
 docker: push-tag
+
+docker-pi:
+	make DKTAGHASH=arm-$(DKTAGHASH) mini
+	make DKTAGHASH=arm-$(DKTAGHASH) build-pi
+	make DKTAGHASH=arm-$(DKTAGHASH) build-docker
+	make DKTAGHASH=arm-$(DKTAGHASH) push
+	make DKTAGHASH=arm-$(DKTAGHASH) DKTAG=arm-$(DKTAG) tag
+	make DKTAGHASH=arm-$(DKTAGHASH) DKTAG=arm-$(DKTAG) push-tag
 
 up: create-dir
 up: build-go-light
@@ -64,7 +76,7 @@ up:
 	$(DC) up
 
 test:
-	$(GO) test -tags mock -covermode=count -cover -coverprofile=$(CPROFILE) ./...
+	$(GO) test $(ARGS) -tags mock -covermode=count -cover -coverprofile=$(CPROFILE) ./...
 
 test-simple:
 	$(GO) test -tags mock ./...
