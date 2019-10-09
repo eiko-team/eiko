@@ -42,15 +42,17 @@
     <meta name="twitter:title" content="Eiko">
     <meta name="twitter:url" content="Eiko">
     <link rel="stylesheet" type="text/css" href="/css/eiko.css">
+    <!-- https://materializecss.com/getting-started.html -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
 <body>
     <ul class="navbar">
         <li><a class="nav-menu" id="open-nav"><i class="material-icons">menu</i></a></li>
         <li><a href="#" class="nav-menu" id="nav-name">{{.Title}} - Eiko</a></li>
-        <li id="search-navbar"><a href="#" class="nav-menu"><i class="material-icons">search</i></a></li>
+        <li id="search-navbar"><a href="/search/" class="nav-menu"><i class="material-icons">search</i></a></li>
     </ul>
-    <div id="mySidenav" class="sidenav">
+    <div id="mySidenav" class="mysidenav">
         <a id="nav-closebtn" class="nav-nav"><i class="material-icons">close</i></a>
         <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
         <a class="nav-nav" id="theme-selector"><i class="material-icons">highlight</i>Theme</a>
@@ -64,7 +66,8 @@
         </ul>
         <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
     </div>
-    <div class="content">
+    <img src="/img/loading.gif" id="main-loading-gif" class="loading-gif" />
+    <div class="content" id="content">
         <table class="consumables">
             <thead>
                 <tr>
@@ -78,8 +81,13 @@
             </thead>
             <tbody></tbody>
         </table>
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a id="add-item" class="btn-blue btn btn-floating btn-large waves-effect waves-light" href="/search/">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
     </div>
-    <template id="consumable">
+    <template id="consumable" class="hoverable">
         <tr>
             <td class="row-check"><i class="material-icons">radio_button_unchecked</i></td>
             <td class="row-name"></td>
@@ -88,7 +96,6 @@
             <td class="row-indicator"><span class="dot" id="indic3"></span></td>
             <td class="row-price"></td>
         </tr>
-        <hr />
     </template>
     <noscript>
         Turn on JavaScript to access this site content.
@@ -97,5 +104,7 @@
 <script type="text/javascript" src="/js/lib.js"></script>
 <script type="text/javascript" src="/js/color.js"></script>
 <script type="text/javascript" src="/js/eiko/eiko.js"></script>
+<!-- https://materializecss.com/getting-started.html -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 </html>
