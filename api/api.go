@@ -71,9 +71,11 @@ var (
 		{Function: store.AddStore, Path: "/store/add"},
 		{Function: store.GetStore, Path: "/store/get"},
 		{Function: consumables.Store, Path: "/consumable/add"},
+		{Function: consumables.Get, Path: "/consumable/get"},
 		{Function: list.AddList, Path: "/list/create"},
 		{Function: list.GetLists, Path: "/list/getall"},
 		{Function: list.GetListContent, Path: "/list/get"},
+		{Function: list.AddPersonnal, Path: "/list/add/personnal"},
 	}
 	// Functions List all api functions that does not require a token
 	Functions = []Func{
@@ -87,6 +89,7 @@ var (
 	// SFiles is stored informations on special files
 	SFiles = []File{
 		{"html/login.html", "text/html", []string{"/login.html"}, ""},
+		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, ""},
 		{"js/eiko/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}, ""},
@@ -112,10 +115,12 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
 		return
 	}
 
+	w.WriteHeader(200)
 	w.Header().Set("Content-Type", file.CType)
 	fmt.Fprint(w, fileContent)
 }
@@ -124,16 +129,19 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 	misc.LogRequest(r)
-	w.Header().Set("Content-Type", "application/json")
 
 	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
 	if err != nil {
+		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
 		return
 	}
 
 	h, err := template.New("webpage").Parse(fileContent)
 	if err != nil {
+		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "{\"error\":\"parse_failed\"}")
 		return
 	}
@@ -141,6 +149,7 @@ func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
 	w.Header().Set("Content-Type", file.CType)
 	err = h.Execute(w, file)
 	if err != nil {
+		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"could_not_exec\"}")
 		return
 	}
@@ -196,10 +205,10 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-	} else {
-		w.WriteHeader(200)
-		fmt.Fprintln(w, data)
+		return
 	}
+	w.WriteHeader(200)
+	fmt.Fprintln(w, data)
 }
 
 // WrapperFunctionCookie allows us to call the functions with rights args.
@@ -207,20 +216,21 @@ func (fun Func) WrapperFunction(w http.ResponseWriter, r *http.Request,
 // Read Token cookie and set the User value of D
 func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	token, err := r.Cookie("token")
 	if err != nil {
 		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
 		return
 	}
+
 	D.User, err = misc.TokenToUser(token.Value)
 	if err != nil {
 		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
 		return
 	}
-	w.WriteHeader(200)
 	fun.WrapperFunction(w, r, nil)
 }
 
