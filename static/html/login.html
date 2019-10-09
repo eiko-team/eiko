@@ -69,7 +69,7 @@
                 <label for="password"><b>Mot de passe</b></label>
                 <input type="password" placeholder="Entrez votre mot de passe" name="password" id="password" required>
                 <a class="error-email" id="error-email" style="display: none;">L'email ou le mot de passe est invalide<br /></a>
-                <button type="submit" name="submit" id="login-button">
+                <button type="submit" name="submit" id="login-button" class="waves-effect waves-light">
                     <img src="/img/loading.gif" id="login-loading-gif" style="display: none;" />
                     <a id="login-loading-text">Connexion</a>
                 </button>
@@ -78,7 +78,7 @@
                 </label>
             </div>
             <div class="container" id="pbm">
-                <button type="button" onclick="setStyleByID('login', 'display: none;')" class="cancelbtn">Annuler</button>
+                <button type="button" onclick="setStyleByID('login', 'display: none;')" class="cancelbtn waves-effect waves-light">Annuler</button>
                 <span class="password"><a href="#">Mot de passe oublié ?</a></span>
             </div>
         </form>
@@ -107,7 +107,7 @@
                 <label for="password2"><b>Confirmation de mot de passe</b></label>
                 <input type="password" placeholder="Confirmez votre mot de passe" name="password2" id="password2" required>
                 <a class="error-email" id="error-email" style="display: none;">Les deux mots de passe sont différents<br /></a>
-                <button type="submit" name="submit" id="register-button">
+                <button type="submit" name="submit" id="register-button" class="waves-effect waves-light">
                     <img src="/img/loading.gif" id="register-loading-gif" style="display: none;" />
                     <a id="register-loading-text">Inscription</a>
                 </button>
@@ -116,7 +116,7 @@
                 </label>
             </div>
             <div class="container" id="pbm">
-                <button type="button" onclick="setStyleByID('register', 'display: none;')" class="cancelbtn">Annuler</button>
+                <button type="button" onclick="setStyleByID('register', 'display: none;')" class="cancelbtn waves-effect waves-light">Annuler</button>
                 <span class="password"><a href="#">Mot de passe Oublié ?</a></span>
             </div>
         </form>
@@ -128,5 +128,7 @@
 <script type="text/javascript" src="/js/lib.js"></script>
 <script type="text/javascript" src="/js/color.js"></script>
 <script type="text/javascript" src="/js/login/login.js"></script>
+<!-- https://materializecss.com/getting-started.html -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 </html>
