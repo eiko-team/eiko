@@ -56,9 +56,9 @@ func TestGet400(t *testing.T) {
 		{"js lib", "GET", "/js/lib.js", http.StatusOK, false},
 		{"js color", "GET", "/js/color.js", http.StatusOK, false},
 		{"not existing", "GET", "/blabla", 404, false},
-		{"no path", "GET", "/manifest.json", http.StatusOK, true},
-		{"no path", "GET", "/login.html", http.StatusOK, true},
-		{"no path", "GET", "/index.html", http.StatusOK, true},
+		{"no path", "GET", "/manifest.json", 500, true},
+		{"no path", "GET", "/login.html", 500, true},
+		{"no path", "GET", "/index.html", 500, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
