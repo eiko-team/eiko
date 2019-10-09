@@ -1,6 +1,6 @@
 // This is the service worker with the Cache-first network
 
-var CACHE_NAME = "eiko-precache-v1";
+var CACHE_NAME = "eiko-precache-v1.0.1";
 
 function fromCache(request) {
     // Check to see if you have it in the cache
@@ -32,10 +32,11 @@ self.addEventListener("install", function(event) {
             "/",
             "/index.html",
             "/login.html",
+            "/search/",
             "/favicon.ico",
             "/js/lib.js",
+            "/js/search.js",
             "/js/eiko/eiko.js",
-            "/js/eiko/eiko-sw.js",
             "/js/login/login.js",
             "/js/color.js",
             "/css/eiko.css",
