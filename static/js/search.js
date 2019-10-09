@@ -52,7 +52,7 @@ function addPersonnal(value) {
         });
         localStorage.setItem("consumables", JSON.stringify(json));
     })
-    // goBackList();
+    goBackList();
 }
 
 window.addEventListener("load", function() {
