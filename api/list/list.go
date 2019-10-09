@@ -85,6 +85,7 @@ func AddPersonnal(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("5.3.0")
 	}
 
+	i.Mode = "personnal"
 	Logger.Printf("%+v", i)
 
 	keyID, err := d.StoreContent(i)
