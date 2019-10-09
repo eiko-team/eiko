@@ -157,16 +157,13 @@ function addlist(list) {
  */
 function loadLists() {
     log("loadLists");
+    var json = JSON.parse(localStorage.getItem("lists"));
+    if (json === null || json.error !== undefined) { json = []; }
+    json.forEach(addlist);
     POST("/list/getall", {}, (e) => {
+        if (e.error !== undefined) { e = [] }
         localStorage.setItem("lists", JSON.stringify(e));
-        e.lists.forEach(addlist);
-    }, (e) => {
-        var lists = localStorage.getItem("lists");
-        var json = [];
-        if (lists !== null) {
-            json = JSON.parse(lists);
-        }
-        json.forEach(addlist);
+        e.forEach(addlist);
     });
 }
 
@@ -244,8 +241,15 @@ function showConsumable(consumable) {
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll("td");
-    td[1].textContent = consumable.consumable.name;
-    td[5].textContent = consumable.stock.pack_price / 100 + "€";
+    if (consumable.Mode === "personnal") {
+        td[1].textContent = consumable.Name;
+    } else {
+        td[1].textContent = consumable.consumable.name;
+        td[2].firstElementChild.classList.add("dot-green")
+        td[3].firstElementChild.classList.add("dot-green")
+        td[4].firstElementChild.classList.add("dot-green")
+        td[5].textContent = consumable.stock.pack_price / 100 + "€";
+    }
     document.querySelector("tbody").appendChild(clone);
 }
 
@@ -258,20 +262,55 @@ function showConsumable(consumable) {
  */
 function fillConsumables() {
     log("fillConsumables");
-    var list = {id: getCurrentListID()};
+    var list = { id: getCurrentListID() };
+    var consumables = localStorage.getItem("consumables");
+    var json = [];
+    if (consumables !== null) {
+        json = JSON.parse(consumables);
+    }
+    json.forEach(function(element) {
+        if (element.list_id === list.ID) {
+            showConsumable(element);
+        }
+    });
+    showLoadingGif(false);
     POST("/list/get", { list }, function(e) {
         e.forEach(showConsumable);
         getConsumables(list);
-    }, function(e) {
-        var consumables = localStorage.getItem("consumables");
-        var json = [];
-        if (consumables !== null) {
-            json = JSON.parse(consumables);
-        }
-        json.forEach(function(element) {
-            if (element.list_id === list.ID) {
-                showConsumable(element);
-            }
-        });
     })
+}
+
+function showLoadingGif(status = false, id = "main") {
+    if (status) {
+        document.getElementById(id + "-loading-gif").style.display = "";
+    } else {
+        document.getElementById(id + "-loading-gif").style.display = "none";
+    }
+}
+
+
+function getTargetPosition() {
+    if (getCookie("posMode") === "local") {
+        if (!navigator.geolocation) {
+            console.log("Nous ne pouvons pas récuperer votre localisation :/");
+        }
+        navigator.geolocation.getCurrentPosition(function(e) {
+            createCookie("posLat", e.coords.latitude);
+            createCookie("posLon", e.coords.longitude);
+            createCookie("posAcc", e.coords.accuracy);
+        }, function(e) {}, options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        });
+    }
+}
+
+function goBackList() {
+    var listID = getCookie("ListID");
+    if (listID === "") {
+        window.location.replace("/");
+    } else {
+        window.location.replace("/l/" + listID);
+    }
 }
