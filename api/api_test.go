@@ -39,26 +39,27 @@ func TestGet400(t *testing.T) {
 	ServeFiles(router)
 
 	tests := []struct {
-		name    string
-		method  string
-		URL     string
-		code    int
-		invalid bool
+		name        string
+		method      string
+		URL         string
+		code        int
+		invalid     bool
+		contentType string
 	}{
-		{"root", "GET", "/", http.StatusOK, false},
-		{"index", "GET", "/index.html", http.StatusOK, false},
-		{"index", "GET", "/login.html", http.StatusOK, false},
-		{"app", "GET", "/eiko.html", http.StatusOK, false},
-		{"service_worker", "GET", "/eiko-sw.js", http.StatusOK, false},
-		{"favicon_Eiko", "GET", "/EIKO.ico", http.StatusOK, false},
-		{"favicon", "GET", "/favicon.ico", http.StatusOK, false},
-		{"manifest", "GET", "/manifest.json", http.StatusOK, false},
-		{"js lib", "GET", "/js/lib.js", http.StatusOK, false},
-		{"js color", "GET", "/js/color.js", http.StatusOK, false},
-		{"not existing", "GET", "/blabla", 404, false},
-		{"no path", "GET", "/manifest.json", 500, true},
-		{"no path", "GET", "/login.html", 500, true},
-		{"no path", "GET", "/index.html", 500, true},
+		{"root", "GET", "/", http.StatusOK, false, "text/html"},
+		{"index", "GET", "/index.html", http.StatusOK, false, "text/html"},
+		{"login", "GET", "/login.html", http.StatusOK, false, "text/html; charset=utf-8"},
+		{"app", "GET", "/eiko.html", http.StatusOK, false, "text/html"},
+		{"service_worker", "GET", "/eiko-sw.js", http.StatusOK, false, "application/javascript; charset=utf-8"},
+		{"favicon_Eiko", "GET", "/EIKO.ico", http.StatusOK, false, "image/vnd.microsoft.icon; charset=utf-8"},
+		{"favicon", "GET", "/favicon.ico", http.StatusOK, false, "image/vnd.microsoft.icon; charset=utf-8"},
+		{"manifest", "GET", "/manifest.json", http.StatusOK, false, "application/json; charset=utf-8"},
+		{"js lib", "GET", "/js/lib.js", http.StatusOK, false, "application/javascript"},
+		{"js color", "GET", "/js/color.js", http.StatusOK, false, "application/javascript"},
+		{"not existing", "GET", "/blabla", 404, false, "text/plain; charset=utf-8"},
+		{"no path", "GET", "/manifest.json", 500, true, "application/json"},
+		{"no path", "GET", "/login.html", 500, true, "application/json"},
+		{"no path", "GET", "/index.html", 500, true, "application/json"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -74,6 +75,10 @@ func TestGet400(t *testing.T) {
 					w.Code, tt.code, tt.URL)
 			}
 			body := w.Body.String()
+			if w.Header()["Content-Type"][0] != tt.contentType {
+				t.Errorf("Content-Type = '%s' want '%s'",
+					w.Header()["Content-Type"][0], tt.contentType)
+			}
 			if (body == "{\"error\":\"invalid_file\"}\n") != tt.invalid {
 				t.Errorf("%+v", body)
 			}

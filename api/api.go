@@ -90,9 +90,8 @@ var (
 	SFiles = []File{
 		{"html/login.html", "text/html", []string{"/login.html"}, ""},
 		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, ""},
-		{"js/eiko/eiko-sw.js", "application/x-javascript", []string{"/eiko-sw.js"}, ""},
-		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico"}, ""},
-		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/EIKO.ico"}, ""},
+		{"js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}, ""},
+		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}, ""},
 		{"json/manifest.json", "application/json", []string{"/manifest.json"}, ""},
 	}
 
@@ -121,7 +120,7 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	}
 
 	w.WriteHeader(200)
-	w.Header().Set("Content-Type", file.CType)
+	w.Header().Set("Content-Type", fmt.Sprintf("%s; charset=utf-8", file.CType))
 	fmt.Fprint(w, fileContent)
 }
 
