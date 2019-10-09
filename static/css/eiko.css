@@ -1,51 +1,66 @@
-:root{
+:root {
     --shadow: 2px 2px 4px var(--grey-light-opaque), 2px 2px 4px var(--grey-light-opaque-2x);
 }
 
 html {
-    --main: #40C4FF; /*40C4FF;*/
-    --light: #82F7FF;
-    --dark: #0094CC;
-    --complementary: #FF8138;
+    --main: rgba(255, 182, 75, 1);
+    --light: rgba(255, 199, 117, 1);
+    --dark: rgba(255, 152, 0, 1);
     --grey-lighter: #ccc;
     --grey-light: #424242;
+    --grey: rgba(112, 112, 112, 0.7);
     --grey-light-opaque: rgba(66, 66, 66, 0.3);
     --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
-    --red: #f44336;
-    --green: green;
-    --black: black;
-    --text-color: black;       /* Text color on main background*/
-    --text-color-dark: white;  /* Text color on dark background*/
-    --text-color-light: white; /* Text color on light background*/
-    --text-color-white: black; /* Text color on white background*/
-    --text-color-black: white; /* Text color on black background*/
+    --complementary: rgba(38, 153, 251, 1);
+    --red: rgb(254, 54, 54, 0.7);
+    --green: rgb(0, 191, 45, 0.7);
+    --black: rgba(66, 66, 66, 1);
+    --orange: rgba(255, 152, 0, 0.7);
+    --text-color: var(--black);
+    /* Text color on main background*/
+    --text-color-dark: white;
+    /* Text color on dark background*/
+    --text-color-light: white;
+    /* Text color on light background*/
+    --text-color-white: var(--black);
+    /* Text color on white background*/
+    --text-color-black: white;
+    /* Text color on black background*/
     --background: var(--white);
     --popup-shadow: 0 5px 16px rgba(0, 0, 0, .25);
 }
 
 /* https://medium.com/@mwichary/dark-theme-in-a-day-3518dde2955a */
 html[data-theme="dark"] {
-    --main: #0094CC;
-    --light: #40C4FF;
-    --dark: #00669b;
-    --complementary: #FF8138;
-    --grey-light: #424242;
+    --main: rgba(255, 152, 0, 1);
+    --light: rgba(255, 199, 117, 1);
+    --dark: rgba(255, 182, 75, 1);
     --grey-lighter: #ccc;
-    --grey-light-opaque:rgba(66, 66, 66, 0.6);
+    --grey-light: #424242;
+    --grey: rgba(112, 112, 112, 0.7);
+    --grey-light-opaque: rgba(66, 66, 66, 0.3);
+    --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
-    --white: white;
-    --red: #f44336;
-    --green: green;
-    --black: black;
-    --text-color: white;       /* Text color on main background*/
-    --text-color-dark: white;  /* Text color on dark background*/
-    --text-color-light: white; /* Text color on light background*/
-    --text-color-white: black; /* Text color on white background*/
-    --text-color-black: white; /* Text color on black background*/
-    --background: var(--black);
-    --popup-shadow: 0 5px 32px black;
+    --white: black;
+    --complementary: rgba(38, 153, 251, 1);
+    --red: rgb(254, 54, 54, 0.7);
+    --green: rgb(0, 191, 45, 0.7);
+    --black: rgba(66, 66, 66, 1);
+    --orange: rgba(255, 152, 0, 0.7);
+    --text-color: var(--black);
+    /* Text color on main background*/
+    --text-color-dark: white;
+    /* Text color on dark background*/
+    --text-color-light: white;
+    /* Text color on light background*/
+    --text-color-white: var(--black);
+    /* Text color on white background*/
+    --text-color-black: white;
+    /* Text color on black background*/
+    --background: var(--white);
+    --popup-shadow: 0 5px 16px rgba(0, 0, 0, .25);
     filter: invert(100%) hue-rotate(180deg);
     mix-blend-mode: screen;
 }
@@ -55,7 +70,6 @@ html[data-theme="high-contrast"] {
     --main: black;
     --light: black;
     --dark: black;
-    --complementary: black;
     --grey-lighter: white;
     --grey-light: white;
     --grey-light-opaque: white;
@@ -64,11 +78,17 @@ html[data-theme="high-contrast"] {
     --red: black;
     --green: white;
     --black: white;
-    --text-color: white;       /* Text color on main background*/
-    --text-color-dark: black;  /* Text color on dark background*/
-    --text-color-light: black; /* Text color on light background*/
-    --text-color-white: black; /* Text color on white background*/
-    --text-color-black: black; /* Text color on black background*/
+    --orange: white;
+    --text-color: white;
+    /* Text color on main background*/
+    --text-color-dark: black;
+    /* Text color on dark background*/
+    --text-color-light: black;
+    /* Text color on light background*/
+    --text-color-white: black;
+    /* Text color on white background*/
+    --text-color-black: black;
+    /* Text color on black background*/
     --background: black;
     --popup-shadow: 0 0 5px white, 0 0 5px white;
 }
@@ -77,16 +97,17 @@ html.color-theme-in-transition,
 html.color-theme-in-transition *,
 html.color-theme-in-transition *:before,
 html.color-theme-in-transition *:after {
-  transition: all 500ms !important;
-  transition-delay: 0 !important;
+    transition: all 500ms !important;
+    transition-delay: 0 !important;
 }
 
 .material-icons {
     vertical-align: middle;
+    color: var(--black);
 }
 
 img {
-  mix-blend-mode: multiply;
+    mix-blend-mode: multiply;
 }
 
 body {
@@ -98,8 +119,9 @@ body {
 }
 
 @media print {
+
     .navbar,
-    .sidenav {
+    .mysidenav {
         display: none;
     }
 }
@@ -113,7 +135,7 @@ body {
     text-overflow: ellipsis
 }
 
-.sidenav {
+.mysidenav {
     display: none;
     height: 100%;
     width: 42%;
@@ -130,15 +152,15 @@ body {
 }
 
 @media screen and (max-width: 450px) {
-    .sidenav {
+    .mysidenav {
         width: 95%;
     }
 
 }
 
 .dropdown-container,
-.sidenav button,
-.sidenav a {
+.mysidenav button,
+.mysidenav a {
     cursor: pointer;
     padding: 8px 8px 8px 16px;
     text-decoration: none;
@@ -159,11 +181,11 @@ body {
     background-color: var(--main);
 }
 
-.sidenav button {
+.mysidenav button {
     background-color: var(--main);
 }
 
-.sidenav #nav-closebtn {
+.mysidenav #nav-closebtn {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -172,16 +194,16 @@ body {
     padding: 8px 8px 8px 8px;
 }
 
-.sidenav ul {
+.mysidenav ul {
     list-style: none;
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {
+    .mysidenav {
         padding-top: 15px;
     }
 
-    .sidenav a {
+    .mysidenav a {
         font-size: 18px;
     }
 }
@@ -218,8 +240,8 @@ body {
     cursor: default;
 }
 
-.sidenav a:hover,
-.sidenav button:hover,
+.mysidenav a:hover,
+.mysidenav button:hover,
 li a:hover:not(#nav-name) {
     color: var(--text-color);
     background-color: var(--dark);
@@ -253,7 +275,7 @@ button:hover {
 }
 
 button:disabled,
-button[disabled]{
+button[disabled] {
     background-color: var(--white);
     color: var(--text-color);
 }
@@ -266,9 +288,9 @@ button[disabled]{
 }
 
 .imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  position: relative;
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
 }
 
 .container {
@@ -387,16 +409,38 @@ meter::-webkit-meter-bar {
 }
 
 /* Webkit based browsers */
-meter[value="1"]::-webkit-meter-optimum-value { background: red; }
-meter[value="2"]::-webkit-meter-optimum-value { background: yellow; }
-meter[value="3"]::-webkit-meter-optimum-value { background: orange; }
-meter[value="4"]::-webkit-meter-optimum-value { background: green; }
+meter[value="1"]::-webkit-meter-optimum-value {
+    background: red;
+}
+
+meter[value="2"]::-webkit-meter-optimum-value {
+    background: yellow;
+}
+
+meter[value="3"]::-webkit-meter-optimum-value {
+    background: orange;
+}
+
+meter[value="4"]::-webkit-meter-optimum-value {
+    background: green;
+}
 
 /* Gecko based browsers */
-meter[value="1"]::-moz-meter-bar { background: red; }
-meter[value="2"]::-moz-meter-bar { background: yellow; }
-meter[value="3"]::-moz-meter-bar { background: orange; }
-meter[value="4"]::-moz-meter-bar { background: green; }
+meter[value="1"]::-moz-meter-bar {
+    background: red;
+}
+
+meter[value="2"]::-moz-meter-bar {
+    background: yellow;
+}
+
+meter[value="3"]::-moz-meter-bar {
+    background: orange;
+}
+
+meter[value="4"]::-moz-meter-bar {
+    background: green;
+}
 
 .content {
     padding: 10px;
@@ -446,9 +490,104 @@ th {
 }
 
 .dot {
-  height: 10px;
-  width: 10px;
-  background-color: var(--green);
-  border-radius: 50%;
-  display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-green {
+    background-color: var(--green);
+}
+
+.dot-orange {
+    background-color: var(--orange);
+}
+
+.dot-red {
+    background-color: var(--red);
+}
+
+.dot-grey {
+    background-color: var(--grey);
+}
+
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    vertical-align: middle;
+    z-index: 1;
+    -webkit-transition: .3s ease-out;
+    transition: .3s ease-out;
+}
+
+.waves-effect .waves-ripple {
+    position: absolute;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    opacity: 0;
+    background: var(--grey-dark);
+    -webkit-transition: all 0.7s ease-out;
+    transition: all 0.7s ease-out;
+    -webkit-transition-property: opacity, -webkit-transform;
+    transition-property: opacity, -webkit-transform;
+    transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.waves-circle {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+}
+
+.waves-effect.waves-light .waves-ripple {
+    background-color: var(--grey-lighter);
+}
+
+.waves-block {
+    display: block;
+}
+
+.waves-effect .waves-ripple {
+    z-index: -1;
+}
+
+.waves-effect input[type="button"],
+.waves-effect input[type="reset"],
+.waves-effect input[type="submit"] {
+    border: 0;
+    font-style: normal;
+    font-size: inherit;
+    text-transform: inherit;
+    background: none
+}
+
+.waves-effect img {
+    position: relative;
+    z-index: -1;
+}
+
+.loading-gif {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+}
+
+.btn-blue {
+    background-color: var(--complementary) !important ;
 }
