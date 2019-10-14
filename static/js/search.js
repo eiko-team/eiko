@@ -1,5 +1,4 @@
-function displaySearchResult(consumable) {
-}
+function displaySearchResult(consumable) {}
 
 function search(element) {
     return function(e) {
@@ -20,6 +19,7 @@ function search(element) {
 }
 
 var UUID = 1;
+
 function addPersonnal(value) {
     if (value === undefined) { return; }
     var consumables = localStorage.getItem("consumables");
@@ -50,7 +50,18 @@ function addPersonnal(value) {
         });
         localStorage.setItem("consumables", JSON.stringify(json));
     })
-    goBackList();
+    window.history.back();
+}
+
+var autocompleteData = {
+    "Carrotes": null,
+    "Dentifrice": null,
+    "Pain": null,
+    "Pastèque": null,
+    "Patates": null,
+    "Poires": null,
+    "Poivons": null,
+    "Pommes": null
 }
 
 window.addEventListener("load", function() {
@@ -60,10 +71,10 @@ window.addEventListener("load", function() {
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
         elems.value = location.search.substring(3);
-        document.getElementById("autocomplete-input-label").classList.add("active");
+        document.getElementById("search-input-label").classList.add("active");
         search(elems)();
     }
-    var elems = document.getElementById("autocomplete-input");
+    var elems = document.getElementById("search-input");
     elems.addEventListener("input", search(elems));
     elems.focus();
     elems.select();
@@ -72,5 +83,14 @@ window.addEventListener("load", function() {
             addPersonnal(elems.value);
         }
     });
-    document.getElementById("nav-back").addEventListener("click", goBackList);
+    var addBtn = document.getElementById("add-item");
+    addBtn.addEventListener("click", function(e) {
+        addPersonnal(elems.value);
+    });
+    var autocompleteElt = document.querySelectorAll('.autocomplete');
+    var autocomplete = M.Autocomplete.init(autocompleteElt, {
+        data: autocompleteData
+    });
+    document.getElementById("nav-back").addEventListener("click",
+        window.history.back);
 });
