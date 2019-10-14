@@ -1,10 +1,8 @@
 function displaySearchResult(consumable) {
-    console.log(consumable);
 }
 
 function search(element) {
     return function(e) {
-        console.log(e)
         showLoadingGif(true)
         getTargetPosition();
         POST("/consumable/get", {
@@ -23,7 +21,6 @@ function search(element) {
 
 var UUID = 1;
 function addPersonnal(value) {
-    console.log("Adding ", value)
     if (value === undefined) { return; }
     var consumables = localStorage.getItem("consumables");
     var json = [];
