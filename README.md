@@ -12,6 +12,25 @@ eiko web app
 # Installation
 > Prerequirement: have golang>=1.10.4 install on your machine
 
+You need to have a services account for the google Datastore
+
+## Services account
+
+```bash
+export ACCOUNT_NAME=
+export PROJECT_ID=
+export CREDENTIALS=CREDENTIALS.json
+```
+
+```bash
+gcloud iam service-accounts create $ACCOUNT_NAME
+gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" --role "roles/owner"
+gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
+
+```
+
+## Compilation and local building
+
 ```bash
 git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/eiko
 cd $GOPATH/src/eiko
@@ -19,9 +38,9 @@ get get ./...
 make up
 ```
 
-## Docker
+## Docker compose
 
-.env file:
+.env file content:
 ```
 PROJECT_ID=
 CREDENTIALS=CREDENTIALS.json
@@ -44,22 +63,6 @@ SALT=
       - '/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt'
 ```
 
-## Compte de services
-
-```bash
-export ACCOUNT_NAME=
-export PROJECT_ID=
-export CREDENTIALS=CREDENTIALS.json
-export SALT= # For the password hashing
-```
-
-```bash
-gcloud iam service-accounts create $ACCOUNT_NAME
-gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" --role "roles/owner"
-gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
-
-```
-
 ## minimified version
 ### Build
 ```bash
@@ -77,3 +80,4 @@ make mini
 ## Requirements
 ### Build minimified version
 [html-minifier](https://www.npmjs.com/package/html-minifier)
+[css-minifier](https://www.npmjs.com/package/uglifycss)
