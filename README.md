@@ -15,7 +15,6 @@ eiko web app
 You need to have a services account for the google Datastore
 
 ## Services account
-
 ```bash
 export ACCOUNT_NAME=
 export PROJECT_ID=
@@ -30,7 +29,6 @@ gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME
 ```
 
 ## Compilation and local building
-
 ```bash
 git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/eiko
 cd $GOPATH/src/eiko
@@ -38,8 +36,13 @@ get get ./...
 make up
 ```
 
-## Docker compose
+### Display test coverage
+```bash
+make cover
+$BROWSER test.html
+```
 
+## Docker compose
 .env file content:
 ```
 PROJECT_ID=
