@@ -32,6 +32,7 @@ function addPersonnal(value) {
     }
 
     var consumable = {
+        uuid: UUID,
         ID: UUID++,
         ListID: getCookie("ListID"),
         Name: value,
@@ -67,6 +68,8 @@ window.addEventListener("load", function() {
     }
     var elems = document.getElementById("autocomplete-input");
     elems.addEventListener("input", search(elems));
+    elems.focus();
+    elems.select();
     elems.addEventListener("keyup", function(event) {
         if (event.key === "Enter") {
             addPersonnal(elems.value);
