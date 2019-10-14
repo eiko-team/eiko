@@ -145,10 +145,25 @@ function closeNav() {
 function addlist(list) {
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
+    li.id = list.id
     li.innerHTML = `<a href="${uri}"><i class="material-icons">remove</i>${list.name}</a>`;
     var lists = document.getElementById("dropdown-lists");
     var last = lists.children[lists.children.length - 1];
     lists.appendChild(li);
+    lists.appendChild(last);
+}
+
+/**
+ * Removes all lists from sidenav
+ */
+function removeLists() {
+    var lists = document.getElementById("dropdown-lists");
+    var first = lists.children[0];
+    var last = lists.children[lists.children.length - 1];
+    while (lists.firstChild) {
+        lists.removeChild(lists.firstChild);
+    }
+    lists.appendChild(first);
     lists.appendChild(last);
 }
 
@@ -163,6 +178,7 @@ function loadLists() {
     POST("/list/getall", {}, (e) => {
         if (e.error !== undefined) { e = [] }
         localStorage.setItem("lists", JSON.stringify(e));
+        remodeLists();
         e.forEach(addlist);
     });
 }
@@ -178,7 +194,7 @@ function createList(name = "Liste de course") {
     if (lists !== null) {
         json = JSON.parse(lists);
     }
-    json.lists.push(e);
+    json.push();
     localStorage.setItem("lists", JSON.stringify(json));
     addlist(e.name);
     POST("/list/create", { name });
@@ -232,15 +248,57 @@ function getCurrentListID() {
     return ListID;
 }
 
+function validateConsumable(consumableId) {
+    return function(event) {
+        var consumables = document.querySelector("tbody");
+        var consumablesChilds = consumables.children;
+        var consumable = null;
+        var consumableIdStr = consumableId.toString()
+        for (var i = 0; i < consumablesChilds.length; i++) {
+            if (consumablesChilds[i].id === consumableIdStr) {
+                consumable = consumablesChilds[i];
+                break;
+            }
+        }
+        if (consumable === null) { return; }
+        consumables.removeChild(consumable);
+
+        var consumables = localStorage.getItem("consumables");
+        var json = [];
+        if (consumables !== null) {
+            json = JSON.parse(consumables);
+        }
+        cons = json.filter(function(element) {
+            return element.uuid === consumableId;
+        })
+        if (cons.length === 0) {return;}
+        cons = cons[0];
+        cons.Done = !cons.Done;
+        json = json.filter(function(element) {
+            return element.uuid !== consumableId;
+        })
+        json.push(cons);
+        localStorage.setItem("consumables", JSON.stringify(json));
+        showConsumable(cons, !cons.Done);
+        // TODO: send update to api
+    }
+}
+
 /**
  * add a consumable to the page
  * @param {object} consumable to display
  */
-function showConsumable(consumable) {
+function showConsumable(consumable, up = false) {
     if (!"content" in document.createElement("template")) { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll("td");
+    var tr = clone.querySelector("tr");
+    tr.id = consumable.uuid
+    td[0].addEventListener("click", validateConsumable(consumable.uuid));
+    if (consumable.Done) {
+        tr.style = "text-decoration: line-through"
+    }
     if (consumable.Mode === "personnal") {
         td[1].textContent = consumable.Name;
     } else {
@@ -253,46 +311,44 @@ function showConsumable(consumable) {
     document.querySelector("tbody").appendChild(clone);
 }
 
+var loadingGifTimeoutID = [];
+
+function showLoadingGif(status = false, id = "main") {
+    if (status) {
+        loadingGifTimeoutID.push(setTimeout(function(e) {
+            document.getElementById(id + "-loading-gif").style.display = "";
+        }, 2000))
+    } else {
+        loadingGifTimeoutID.forEach(clearTimeout);
+        loadingGifTimeoutID = [];
+        document.getElementById(id + "-loading-gif").style.display = "none";
+    }
+}
 
 /**
- * add all consumables to the page according to the list id.
- * if the api fails, uses local storage.
- * else store the result in local storage
+ * add all consumables to the page according to the list id from local storage.
  * @param {object} consumable to display
  */
 function fillConsumables() {
-    log("fillConsumables");
     var list = { id: getCurrentListID() };
     var consumables = localStorage.getItem("consumables");
     var json = [];
     if (consumables !== null) {
         json = JSON.parse(consumables);
     }
+    if (list.id === 0) { return; };
     json.forEach(function(element) {
-        if (element.list_id === list.ID) {
+        if (element.ListID === list.id.toString()) {
             showConsumable(element);
         }
     });
-    showLoadingGif(false);
-    POST("/list/get", { list }, function(e) {
-        e.forEach(showConsumable);
-        getConsumables(list);
-    })
 }
-
-function showLoadingGif(status = false, id = "main") {
-    if (status) {
-        document.getElementById(id + "-loading-gif").style.display = "";
-    } else {
-        document.getElementById(id + "-loading-gif").style.display = "none";
-    }
-}
-
 
 function getTargetPosition() {
     if (getCookie("posMode") === "local") {
         if (!navigator.geolocation) {
-            console.log("Nous ne pouvons pas récuperer votre localisation :/");
+            // cannot use localisation *sad*
+            return;
         }
         navigator.geolocation.getCurrentPosition(function(e) {
             createCookie("posLat", e.coords.latitude);
@@ -306,11 +362,11 @@ function getTargetPosition() {
     }
 }
 
-function goBackList() {
+function goBackList(fragment = "") {
     var listID = getCookie("ListID");
-    if (listID === "") {
-        window.location.replace("/");
+    if (listID === "" || listID === "0") {
+        window.location.replace("/" + fragment);
     } else {
-        window.location.replace("/l/" + listID);
+        window.location.replace("/l/" + listID + fragment);
     }
 }
