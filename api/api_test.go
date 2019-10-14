@@ -75,9 +75,16 @@ func TestGet400(t *testing.T) {
 					w.Code, tt.code, tt.URL)
 			}
 			body := w.Body.String()
-			if w.Header()["Content-Type"][0] != tt.contentType {
+			cType := w.Header()["Content-Type"][0]
+			if tt.contentType == "application/javascript" {
+				if cType != "application/javascript" &&
+					cType != "application/x-javascript" {
+					t.Errorf("Content-Type = '%s' want '%s'",
+						cType, tt.contentType)
+				}
+			} else if cType != tt.contentType {
 				t.Errorf("Content-Type = '%s' want '%s'",
-					w.Header()["Content-Type"][0], tt.contentType)
+					cType, tt.contentType)
 			}
 			if (body == "{\"error\":\"invalid_file\"}\n") != tt.invalid {
 				t.Errorf("%+v", body)
