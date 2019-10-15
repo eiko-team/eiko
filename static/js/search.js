@@ -21,24 +21,17 @@ function search(element) {
 
 function addPersonnal(value) {
     if (value === undefined) { return; }
-    var consumables = localStorage.getItem("consumables");
-    var json = [];
-    if (consumables !== null) {
-        json = JSON.parse(consumables);
-    }
     var uuid = getNewUID();
     var consumable = {
-        uuid: uuid,
         ID: uuid,
-        ListID: getCookie("ListID"),
-        Name: value,
-        Done: false,
-        Erased: false,
-        Mode: "personnal",
+        list_id: Number(getCookie("ListID")),
+        name: value,
+        done: false,
+        erased: false,
+        mode: "personnal",
     }
 
-    json.push(consumable)
-    localStorage.setItem("consumables", JSON.stringify(json));
+    addConsumableLocalStorage(consumable);
     POST("/list/add/personnal", consumable, function(event) {
         var json = JSON.parse(localStorage.getItem("consumables"));
         if (json === null) { return; };
