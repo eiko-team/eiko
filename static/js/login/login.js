@@ -3,7 +3,7 @@ function redirect() {
     window.location.replace("/");
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("DOMContentLoaded", function() {
     if (isTokenValid(getCookie("Token"))) {
         log("redirect from login");
         redirect();

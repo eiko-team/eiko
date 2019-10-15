@@ -4,7 +4,7 @@ if ("serviceWorker" in navigator) {
     }
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
