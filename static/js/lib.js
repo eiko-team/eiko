@@ -17,6 +17,22 @@ function POST(url, body, successCallback = (e) => {},
 }
 
 /**
+ * Make a GET request to the server
+ * @param {string} url The url
+ * @param {object} body Data to send
+ * @param {function} successCallback Function called on success
+ * @param {function} failCallback Function called on failure
+ */
+function GET(url, successCallback = (e) => {},
+    failCallback = (e) => {}) {
+    return fetch(url, {
+            method: "GET",
+        })
+        .then((e) => { return e.json().then(successCallback); })
+        .catch(failCallback);
+}
+
+/**
  * Send a notification to the user if the user has granted permissions
  * It might be usefull to use Server-sent events
  * https://en.wikipedia.org/wiki/Server-sent_events
@@ -177,7 +193,7 @@ function removeLists() {
 function loadLists() {
     log("loadLists");
     var json = JSON.parse(localStorage.getItem("lists"));
-    if (json === null || json.error !== undefined) { json = []; }
+    if (json === null || json.error === undefined) { json = []; }
     json.forEach(addlist);
     POST("/list/getall", {}, (e) => {
         if (e.error !== undefined) { e = [] }
@@ -200,7 +216,7 @@ function createList(name = "Liste de course") {
     }
     json.push();
     localStorage.setItem("lists", JSON.stringify(json));
-    addlist(e.name);
+    addlist(name);
     POST("/list/create", { name });
 }
 
