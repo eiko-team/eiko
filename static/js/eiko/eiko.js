@@ -8,7 +8,6 @@ window.addEventListener("load", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
-    showLoadingGif(true);
     loadLists();
     fillConsumables();
     if (location.search !== "") {
