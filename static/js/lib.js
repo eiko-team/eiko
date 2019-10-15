@@ -7,6 +7,7 @@
  */
 function POST(url, body, successCallback = (e) => {},
     failCallback = (e) => {}) {
+    console.log("post:", "/api" + url, body);
     return fetch("/api" + url, {
             method: "POST",
             body: JSON.stringify(body),
@@ -165,7 +166,7 @@ function addlist(list) {
     li.innerHTML = `<i class="material-icons">remove</i>${list.name}`;
     li.addEventListener("click", function(event) {
         createCookie("ListID", list.id);
-        window.location.replace("/l/"+list.id);
+        window.location.replace("/l/" + list.id);
     });
     var lists = document.getElementById("dropdown-lists");
     var last = lists.children[lists.children.length - 1];
@@ -264,20 +265,20 @@ function getConsumables(list) {
 function getCurrentListID() {
     var listID = getCookie("ListID");
     if (listID !== null && listID !== "" && listID !== "0") {
-        return listID;
+        return Number(listID);
     }
     var elts = document.URL.split("/");
-    var last = elts[elts.length - 1];
-    var fragmentIndex = last.indexOf('#');
-    if (fragmentIndex !== -1 ) {
-        last = last.substring(0, fragmentIndex);
+    listID = elts[elts.length - 1];
+    var fragmentIndex = listID.indexOf('#');
+    if (fragmentIndex !== -1) {
+        listID = listID.substring(0, fragmentIndex);
     }
-    listID = Number(last);
     createCookie("ListID", listID);
-    return listID;
+    return Number(listID);
 }
 
 function hideConsumable(consumableId) {
+    if (consumableId === undefined) { return; }
     var consumables = document.querySelector("tbody");
     var consumablesChilds = consumables.children;
     var consumable = null;
@@ -296,7 +297,7 @@ function idToConsumable(consumableId) {
     var consumables = localStorage.getItem("consumables");
     if (consumables === null) { return; }
     return JSON.parse(consumables).filter(function(element) {
-        return element.uuid === consumableId;
+        return element.ID === consumableId;
     })[0];
 }
 
@@ -307,13 +308,13 @@ function toggleDoneConsumable(consumableId) {
         json = JSON.parse(consumables);
     }
     cons = json.filter(function(element) {
-        return element.uuid === consumableId;
+        return element.ID === consumableId;
     })
     if (cons.length === 0) { return; }
     cons = cons[0];
     cons.Done = !cons.Done;
     json = json.filter(function(element) {
-        return element.uuid !== consumableId;
+        return element.ID !== consumableId;
     })
     json.push(cons);
     localStorage.setItem("consumables", JSON.stringify(json));
@@ -341,27 +342,28 @@ function validateConsumable(consumableId) {
  * @param {object} consumable to display
  */
 function showConsumable(consumable) {
+    console.log("showConsumable", consumable)
     if (!"content" in document.createElement("template")) { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll("td");
     var tr = clone.querySelector("tr");
-    tr.id = consumable.uuid
-    td[0].addEventListener("click", validateConsumable(consumable.uuid));
+    tr.id = consumable.ID
+    td[0].addEventListener("click", validateConsumable(consumable.ID));
     if (consumable.Done) {
         tr.classList.add("done");
         td[0].innerHTML = "<i class='material-icons'>radio_button_checked</i>";
     } else {
         td[0].innerHTML = "<i class='material-icons'>radio_button_unchecked</i>";
     }
-    if (consumable.Mode === "personnal") {
-        td[1].textContent = consumable.Name;
+    if (consumable.mode === "personnal") {
+        td[1].textContent = consumable.name;
     } else {
         td[1].textContent = consumable.consumable.name;
         td[2].firstElementChild.classList.add("dot-green")
         td[3].firstElementChild.classList.add("dot-green")
         td[4].firstElementChild.classList.add("dot-green")
-        td[5].textContent = consumable.stock.pack_price / 100 + "€";
+        // td[5].textContent = consumable.stock.pack_price / 100 + "€";
     }
     document.querySelector("tbody").appendChild(clone);
 }
@@ -380,11 +382,43 @@ function showLoadingGif(status = false, timout = 2000, id = "main") {
     }
 }
 
+function addConsumableLocalStorage(consumable) {
+    var consumables = localStorage.getItem("consumables");
+    var json = [];
+    if (consumables !== null) {
+        json = JSON.parse(consumables);
+    }
+
+    json = json.filter(function(element) {
+        return element.ID !== consumable.ID;
+    });
+    json.push(consumable)
+    localStorage.setItem("consumables", JSON.stringify(json));
+}
+
+function addConsumablesFromList(consumables) {
+    if (consumables.error !== undefined) { return; }
+    consumables.forEach(addConsumableLocalStorage);
+    fillConsumables();
+}
+
+function fetchConsumables() {
+    var current = getCurrentListID();
+    POST("/list/getcontent", { ID: current }, addConsumablesFromList);
+    var lists = JSON.parse(localStorage.getItem("lists"));
+    if (lists === null) { return; }
+    for (var i = 0; i < lists.length; i++) {
+        var ID = lists[i].id;
+        if (ID === current) { continue; }
+        POST("/list/getcontent", { ID }, addConsumablesFromList);
+    }
+}
+
 /**
  * add all consumables to the page according to the list id from local storage.
- * @param {object} consumable to display
+ * @param {boolean} fetch updated version on the server
  */
-function fillConsumables() {
+function fillConsumables(fetch = false) {
     var list = { id: getCurrentListID() };
     var consumables = localStorage.getItem("consumables");
     var json = [];
@@ -395,11 +429,12 @@ function fillConsumables() {
     showLoadingGif(true);
     var done = [];
     json.sort(function(a, b) {
-        return a.uuid - b.uuid;
+        return a.ID - b.ID;
     });
     json.forEach(function(element) {
-        if (element.ListID === list.id.toString()) {
-            hideConsumable(element.uuid);
+        console.log(element, element.list_id, list.id)
+        if (element.list_id === list.id) {
+            hideConsumable(element.ID);
             if (element.Done) {
                 done.push(element);
             } else {
@@ -409,6 +444,9 @@ function fillConsumables() {
     });
     done.forEach(showConsumable);
     showLoadingGif(false);
+    if (fetch) {
+        fetchConsumables();
+    }
 }
 
 function getTargetPosition() {
