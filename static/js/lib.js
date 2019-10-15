@@ -146,7 +146,11 @@ function addlist(list) {
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
     li.id = list.id
-    li.innerHTML = `<a href="${uri}"><i class="material-icons">remove</i>${list.name}</a>`;
+    li.innerHTML = `<i class="material-icons">remove</i>${list.name}`;
+    li.addEventListener("click", function(event) {
+        createCookie("ListID", list.id);
+        window.location.replace("/l/"+list.id);
+    });
     var lists = document.getElementById("dropdown-lists");
     var last = lists.children[lists.children.length - 1];
     lists.appendChild(li);
@@ -178,7 +182,7 @@ function loadLists() {
     POST("/list/getall", {}, (e) => {
         if (e.error !== undefined) { e = [] }
         localStorage.setItem("lists", JSON.stringify(e));
-        remodeLists();
+        removeLists();
         e.forEach(addlist);
     });
 }
@@ -242,44 +246,76 @@ function getConsumables(list) {
  * stores it in the cookies
  */
 function getCurrentListID() {
+    var listID = getCookie("ListID");
+    if (listID !== null && listID !== "" && listID !== "0") {
+        return listID;
+    }
     var elts = document.URL.split("/");
-    var ListID = Number(elts[elts.length - 1]);
-    createCookie("ListID", ListID);
-    return ListID;
+    var last = elts[elts.length - 1];
+    var fragmentIndex = last.indexOf('#');
+    if (fragmentIndex !== -1 ) {
+        last = last.substring(0, fragmentIndex);
+    }
+    listID = Number(last);
+    createCookie("ListID", listID);
+    return listID;
+}
+
+function hideConsumable(consumableId) {
+    var consumables = document.querySelector("tbody");
+    var consumablesChilds = consumables.children;
+    var consumable = null;
+    var consumableIdStr = consumableId.toString()
+    for (var i = 0; i < consumablesChilds.length; i++) {
+        if (consumablesChilds[i].id.toString() === consumableIdStr) {
+            consumable = consumablesChilds[i];
+            break;
+        }
+    }
+    if (consumable === null) { return; }
+    consumables.removeChild(consumable);
+}
+
+function idToConsumable(consumableId) {
+    var consumables = localStorage.getItem("consumables");
+    if (consumables === null) { return; }
+    return JSON.parse(consumables).filter(function(element) {
+        return element.uuid === consumableId;
+    })[0];
+}
+
+function toggleDoneConsumable(consumableId) {
+    var consumables = localStorage.getItem("consumables");
+    var json = [];
+    if (consumables !== null) {
+        json = JSON.parse(consumables);
+    }
+    cons = json.filter(function(element) {
+        return element.uuid === consumableId;
+    })
+    if (cons.length === 0) { return; }
+    cons = cons[0];
+    cons.Done = !cons.Done;
+    json = json.filter(function(element) {
+        return element.uuid !== consumableId;
+    })
+    json.push(cons);
+    localStorage.setItem("consumables", JSON.stringify(json));
+}
+
+/**
+ * create and return a new Unic IDentifier.
+ */
+function getNewUID() {
+    var uid = Number(localStorage.getItem("UID")) + 1;
+    localStorage.setItem("UID", uid);
+    return uid;
 }
 
 function validateConsumable(consumableId) {
     return function(event) {
-        var consumables = document.querySelector("tbody");
-        var consumablesChilds = consumables.children;
-        var consumable = null;
-        var consumableIdStr = consumableId.toString()
-        for (var i = 0; i < consumablesChilds.length; i++) {
-            if (consumablesChilds[i].id === consumableIdStr) {
-                consumable = consumablesChilds[i];
-                break;
-            }
-        }
-        if (consumable === null) { return; }
-        consumables.removeChild(consumable);
-
-        var consumables = localStorage.getItem("consumables");
-        var json = [];
-        if (consumables !== null) {
-            json = JSON.parse(consumables);
-        }
-        cons = json.filter(function(element) {
-            return element.uuid === consumableId;
-        })
-        if (cons.length === 0) {return;}
-        cons = cons[0];
-        cons.Done = !cons.Done;
-        json = json.filter(function(element) {
-            return element.uuid !== consumableId;
-        })
-        json.push(cons);
-        localStorage.setItem("consumables", JSON.stringify(json));
-        showConsumable(cons, !cons.Done);
+        toggleDoneConsumable(consumableId);
+        fillConsumables();
         // TODO: send update to api
     }
 }
@@ -288,7 +324,7 @@ function validateConsumable(consumableId) {
  * add a consumable to the page
  * @param {object} consumable to display
  */
-function showConsumable(consumable, up = false) {
+function showConsumable(consumable) {
     if (!"content" in document.createElement("template")) { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
@@ -297,7 +333,10 @@ function showConsumable(consumable, up = false) {
     tr.id = consumable.uuid
     td[0].addEventListener("click", validateConsumable(consumable.uuid));
     if (consumable.Done) {
-        tr.style = "text-decoration: line-through"
+        tr.classList.add("done");
+        td[0].innerHTML = "<i class='material-icons'>radio_button_checked</i>";
+    } else {
+        td[0].innerHTML = "<i class='material-icons'>radio_button_unchecked</i>";
     }
     if (consumable.Mode === "personnal") {
         td[1].textContent = consumable.Name;
@@ -313,11 +352,11 @@ function showConsumable(consumable, up = false) {
 
 var loadingGifTimeoutID = [];
 
-function showLoadingGif(status = false, id = "main") {
+function showLoadingGif(status = false, timout = 2000, id = "main") {
     if (status) {
         loadingGifTimeoutID.push(setTimeout(function(e) {
             document.getElementById(id + "-loading-gif").style.display = "";
-        }, 2000))
+        }, timout))
     } else {
         loadingGifTimeoutID.forEach(clearTimeout);
         loadingGifTimeoutID = [];
@@ -337,11 +376,23 @@ function fillConsumables() {
         json = JSON.parse(consumables);
     }
     if (list.id === 0) { return; };
+    showLoadingGif(true);
+    var done = [];
+    json.sort(function(a, b) {
+        return a.uuid - b.uuid;
+    });
     json.forEach(function(element) {
         if (element.ListID === list.id.toString()) {
-            showConsumable(element);
+            hideConsumable(element.uuid);
+            if (element.Done) {
+                done.push(element);
+            } else {
+                showConsumable(element);
+            }
         }
     });
+    done.forEach(showConsumable);
+    showLoadingGif(false);
 }
 
 function getTargetPosition() {
@@ -363,6 +414,8 @@ function getTargetPosition() {
 }
 
 function goBackList(fragment = "") {
+    // removing Events
+    if (fragment.type !== undefined) { fragment = ""; }
     var listID = getCookie("ListID");
     if (listID === "" || listID === "0") {
         window.location.replace("/" + fragment);
