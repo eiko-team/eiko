@@ -122,7 +122,7 @@ func TestGetListContent(t *testing.T) {
 			if tt.name == "wrong data" {
 				data.Error = data.ErrTest
 			}
-			req, _ := http.NewRequest("POST", "/list/get",
+			req, _ := http.NewRequest("POST", "/list/getcontent",
 				strings.NewReader(tt.body))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := list.GetListContent(d, req)

@@ -74,7 +74,7 @@ var (
 		{Function: consumables.Get, Path: "/consumable/get"},
 		{Function: list.AddList, Path: "/list/create"},
 		{Function: list.GetLists, Path: "/list/getall"},
-		{Function: list.GetListContent, Path: "/list/get"},
+		{Function: list.GetListContent, Path: "/list/getcontent"},
 		{Function: list.AddPersonnal, Path: "/list/add/personnal"},
 	}
 	// Functions List all api functions that does not require a token
