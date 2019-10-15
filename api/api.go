@@ -189,7 +189,7 @@ func ServeFiles(r *httprouter.Router) {
 	} else {
 		fileType += "min/"
 	}
-	for _, tt := range []string{"img", "js", "css"} {
+	for _, tt := range []string{"img", "js", "css", "json"} {
 		ServeFilesCustom(r, "/"+tt, fileType+tt)
 	}
 }

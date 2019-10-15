@@ -30,17 +30,19 @@ self.addEventListener("install", function(event) {
         return cache.addAll([
             /* Add an array of files to precache for your app */
             "/",
+            "/css/eiko.css",
+            "/eiko-sw.js",
+            "/favicon.ico",
+            "/img/loading.gif",
             "/index.html",
+            "/js/color.js",
+            "/js/eiko/eiko.js",
+            "/js/lib.js",
+            "/js/login/login.js",
+            "/js/search.js",
+            "/json/autocomplete_data.json",
             "/login.html",
             "/search/",
-            "/favicon.ico",
-            "/js/lib.js",
-            "/js/search.js",
-            "/js/eiko/eiko.js",
-            "/js/login/login.js",
-            "/js/color.js",
-            "/css/eiko.css",
-            "/img/loading.gif",
         ]);
     }));
 });

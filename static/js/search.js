@@ -1,4 +1,5 @@
 function displaySearchResult(consumable) {}
+function clearSearchResult(consumable) {}
 
 function search(element) {
     return function(e) {
@@ -51,18 +52,13 @@ function addPersonnal(value) {
     window.history.back();
 }
 
-var autocompleteData = {
-    "Carrotes": null,
-    "Dentifrice": null,
-    "Pain": null,
-    "Pastèque": null,
-    "Patates": null,
-    "Poires": null,
-    "Poivons": null,
-    "Pommes": null
+function fillAutoComplete() {
+    GET("/json/autocomplete_data.json", function(data) {
+        M.Autocomplete.init(document.querySelectorAll('.autocomplete'), { data });
+    });
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
@@ -72,6 +68,11 @@ window.addEventListener("load", function() {
         document.getElementById("search-input-label").classList.add("active");
         search(elems)();
     }
+    var addBtn = document.getElementById("add-item");
+    addBtn.addEventListener("click", function(e) {
+        addPersonnal(elems.value);
+    });
+    fillAutoComplete();
     var elems = document.getElementById("search-input");
     elems.addEventListener("input", search(elems));
     elems.focus();
@@ -81,14 +82,7 @@ window.addEventListener("load", function() {
             addPersonnal(elems.value);
         }
     });
-    var addBtn = document.getElementById("add-item");
-    addBtn.addEventListener("click", function(e) {
-        addPersonnal(elems.value);
+    document.getElementById("nav-back").addEventListener("click", function(e) {
+        window.history.back();
     });
-    var autocompleteElt = document.querySelectorAll('.autocomplete');
-    var autocomplete = M.Autocomplete.init(autocompleteElt, {
-        data: autocompleteData
-    });
-    document.getElementById("nav-back").addEventListener("click",
-        window.history.back);
 });
