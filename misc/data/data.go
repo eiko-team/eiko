@@ -289,7 +289,8 @@ func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 		Filter("ListID =", id)
 	keys, err := d.client.GetAll(d.ctx, q, &listContents)
 	if err != nil || len(listContents) == 0 {
-		return []structures.ListContent{}, errors.New("No Content found")
+		Logger.Println("No Content found")
+		return []structures.ListContent{}, nil
 	}
 	for i, k := range keys {
 		listContents[i].ID = k.ID
