@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", function() {
         window.location.replace("/login.html");
     }
     loadLists();
-    fillConsumables();
+    fillConsumables(true);
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
     }
