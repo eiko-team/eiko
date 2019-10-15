@@ -458,6 +458,7 @@ hr {
 }
 
 .row-check {
+    cursor: pointer;
     width: 10%;
 }
 
@@ -483,6 +484,11 @@ hr {
     table-layout: fixed;
     width: 100%;
     white-space: nowrap;
+}
+
+.consumables .done {
+    text-decoration: line-through;
+    background-color:var(--grey-lighter);
 }
 
 td,
