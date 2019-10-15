@@ -18,8 +18,6 @@ function search(element) {
     }
 }
 
-var UUID = 1;
-
 function addPersonnal(value) {
     if (value === undefined) { return; }
     var consumables = localStorage.getItem("consumables");
@@ -27,10 +25,10 @@ function addPersonnal(value) {
     if (consumables !== null) {
         json = JSON.parse(consumables);
     }
-
+    var uuid = getNewUID();
     var consumable = {
-        uuid: UUID,
-        ID: UUID++,
+        uuid: uuid,
+        ID: uuid,
         ListID: getCookie("ListID"),
         Name: value,
         Done: false,
