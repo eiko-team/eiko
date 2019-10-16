@@ -237,6 +237,8 @@ func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 // content
 func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 	r *http.Request, ps httprouter.Params) {
+	misc.LogRequest(r)
+
 	w.Header().Set("Content-Type", "application/json")
 	token, err := r.Cookie("token")
 	if err != nil {
@@ -253,6 +255,8 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 
 	pageID, err := strconv.Atoi(ps.ByName(page.Name))
 	if err != nil {
+		Logger.Println("Accessing: %s with id: %d(%s)",
+			page.URL, pageID, ps.ByName(page.Name))
 		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_page_found\"}")
 		return
