@@ -4,6 +4,7 @@ function redirect() {
 }
 
 window.addEventListener("DOMContentLoaded", function() {
+    localStorage.clear();
     if (isTokenValid(getCookie("Token"))) {
         log("redirect from login");
         redirect();
