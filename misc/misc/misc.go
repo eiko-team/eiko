@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"strconv"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -89,4 +90,10 @@ func TokenToUser(tokenStr string) (structures.User, error) {
 func ValidateToken(token string) bool {
 	_, err := TokenToUser(token)
 	return err == nil
+}
+
+// Atoi is a wrapper arround strconv.Atoi
+func Atoi(value string) (int, error) {
+	i64, err := strconv.ParseInt(value, 10, 0)
+	return int(i64), err
 }

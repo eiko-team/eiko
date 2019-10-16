@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"eiko/api/consumables"
 	"eiko/api/global"
@@ -257,7 +256,7 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 		return
 	}
 
-	pageID, err := strconv.Atoi(ps.ByName(page.Name))
+	pageID, err := misc.Atoi(ps.ByName(page.Name))
 	if err != nil {
 		Logger.Printf("Accessing: %s with id: %d(%s), err = %v",
 			page.URL, pageID, ps.ByName(page.Name), err)

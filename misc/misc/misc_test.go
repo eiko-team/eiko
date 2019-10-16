@@ -1,15 +1,14 @@
 package misc_test
 
 import (
+	"eiko/misc/data"
+	"eiko/misc/misc"
+	"eiko/misc/structures"
 	"encoding/json"
 	"net/http"
 	"strings"
 	"testing"
 	"time"
-
-	"eiko/misc/data"
-	"eiko/misc/misc"
-	"eiko/misc/structures"
 )
 
 func TestParseJSON(t *testing.T) {
@@ -90,6 +89,41 @@ func TestToken(t *testing.T) {
 			}
 			if user.Email != got.Email {
 				t.Errorf("TokenToUser() = %v, want %v", got, user)
+			}
+		})
+	}
+}
+
+var (
+	MaxUint = ^uint(0)
+	MaxInt  = int(MaxUint >> 1)
+	MinInt  = -MaxInt - 1
+)
+
+func TestAtoi(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   string
+		want    int
+		wantErr bool
+	}{
+		{"zero", "0", 0, false},
+		{"neg one", "-1", -1, false},
+		{"max int", "9223372036854775807", MaxInt, false},
+		{"min int", "-9223372036854775808", MinInt, false},
+		{"NaN #1", "test", 0, true},
+		{"NaN #2", "0x64", 0, true},
+		{"datastore id#1", "5962535197259776", 5962535197259776, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := misc.Atoi(tt.value)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Atoi() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Atoi() = %v, want %v", got, tt.want)
 			}
 		})
 	}
