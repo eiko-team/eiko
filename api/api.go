@@ -119,9 +119,13 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	w.WriteHeader(200)
+	// WriteHeader MUST be called after Headers are set
+	w.Header().Set("Vary", "Accept-Encoding")
 	w.Header().Set("Content-Type", fmt.Sprintf("%s; charset=utf-8", file.CType))
-	fmt.Fprint(w, fileContent)
+	w.Header().Set("Cache-Control", "public, max-age=7776000")
+
+	w.WriteHeader(200)
+	fmt.Fprintln(w, fileContent)
 }
 
 // TemplatedFiles simple html file server
@@ -255,8 +259,8 @@ func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
 
 	pageID, err := strconv.Atoi(ps.ByName(page.Name))
 	if err != nil {
-		Logger.Println("Accessing: %s with id: %d(%s)",
-			page.URL, pageID, ps.ByName(page.Name))
+		Logger.Printf("Accessing: %s with id: %d(%s), err = %v",
+			page.URL, pageID, ps.ByName(page.Name), err)
 		w.WriteHeader(500)
 		fmt.Fprintln(w, "{\"error\":\"no_page_found\"}")
 		return
