@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
+    init();
     loadLists();
     fillConsumables(true);
     if (location.search !== "") {
