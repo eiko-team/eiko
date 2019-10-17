@@ -4,6 +4,22 @@ if ("serviceWorker" in navigator) {
     }
 }
 
+function showButton() {
+    var elems = document.querySelectorAll(".fixed-action-btn");
+    var mobile = mobileAndTabletcheck();
+    var addBtn = document.getElementById("add-item-floating")
+    if (mobile) {
+        addBtn.style.display = "";
+    } else {
+        document.getElementById("add-item").href = addBtn.href;
+    }
+    var instances = M.FloatingActionButton.init(elems, {
+        direction: "top",
+        hoverEnabled: !mobile,
+        toolbarEnabled: false
+    });
+}
+
 window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
@@ -14,8 +30,8 @@ window.addEventListener("DOMContentLoaded", function() {
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
     }
+    showButton();
 });
-
 
 window.addEventListener("keydown", function(e) {
     if ((e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) &&

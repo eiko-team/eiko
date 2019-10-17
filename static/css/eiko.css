@@ -606,3 +606,13 @@ th {
 .toast.rounded {
     border-radius: 14px;
 }
+
+svg{
+    width: 65%;
+    padding-top: 12%
+}
+
+svg path,
+svg rect {
+    fill: var(--white);
+}
