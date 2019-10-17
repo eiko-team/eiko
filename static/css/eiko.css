@@ -488,7 +488,7 @@ hr {
 
 .consumables .done {
     text-decoration: line-through;
-    background-color:var(--grey-lighter);
+    background-color: var(--grey-lighter);
 }
 
 td,
@@ -597,8 +597,10 @@ th {
 }
 
 .toast.rounded,
+.toast.rounded .material-icons,
 .btn-blue {
-    background-color: var(--complementary) !important ;
+    background-color: var(--complementary) !important;
+    color: var(--white);
 }
 
 .toast.rounded {
