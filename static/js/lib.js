@@ -7,7 +7,6 @@
  */
 function POST(url, body, successCallback = (e) => {},
     failCallback = (e) => {}) {
-    console.log("post:", "/api" + url, body);
     return fetch("/api" + url, {
             method: "POST",
             body: JSON.stringify(body),
@@ -85,6 +84,15 @@ function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
         var notification = new Notification(title, { icon, body });
         notification.onclick = (e) => { self.open(onClickURL); };
     }
+}
+
+/**
+ * Send a toast to the user
+ * @param {string} html content of the toast
+ */
+function toast(toast) {
+    toast.classes = "rounded";
+    M.toast(toast)
 }
 
 /**
@@ -352,7 +360,6 @@ function validateConsumable(consumableId) {
  * @param {object} consumable to display
  */
 function showConsumable(consumable) {
-    console.log("showConsumable", consumable)
     if (!"content" in document.createElement("template")) { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
@@ -442,7 +449,6 @@ function fillConsumables(fetch = false) {
         return a.ID - b.ID;
     });
     json.forEach(function(element) {
-        console.log(element, element.list_id, list.id)
         if (element.list_id === list.id) {
             hideConsumable(element.ID);
             if (element.Done) {
@@ -486,4 +492,72 @@ function goBackList(fragment = "") {
     } else {
         window.location.replace("/l/" + listID + fragment);
     }
+}
+
+function promiseNofity(notif){
+    new Promise(function(resolve, reject) {
+        setTimeout(function(e) { resolve() }, notif.when)
+    }).then(function(event) {
+        notify(notif.title, notif.body, notif.onClickURL, notif.icon);
+        var notifications = JSON.parse(localStorage.getItem("notifications"));
+        if (notifications === null) { return; }
+        notifications = notifications.filter(function(n) {
+            return n.uid !== notif.uid
+        })
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+    });
+}
+
+function registerNewNotification(when, title, body, onClickURL = "#",
+    icon = "/favicon.ico") {
+    var notifications = JSON.parse(localStorage.getItem("notifications"));
+    if (notifications === null) { notifications = []; }
+    var uid = getNewUID();
+    notifications.push({ when, title, body, onClickURL, icon, uid })
+    promiseNofity({ when, title, body, onClickURL, icon, uid })
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+}
+
+function registerNotifications() {
+    var notifications = JSON.parse(localStorage.getItem("notifications"));
+    if (notifications === null) { return; }
+    notifications.forEach(promiseNofity);
+}
+
+function toastMe(t){
+    var toasts = JSON.parse(localStorage.getItem("toasts"));
+    if (toasts === null) { return; }
+    toasts = toasts.filter(function(n) {
+        return n.uid !== t.uid
+    })
+    if (t.pagecount-- === 0) {
+        toast(t);
+    } else {
+        toasts.push(t);
+    }
+    localStorage.setItem("toasts", JSON.stringify(toasts));
+}
+
+function registerNewToast(pagecount, toast) {
+    var toasts = JSON.parse(localStorage.getItem("toasts"));
+    if (toasts === null) { toasts = []; }
+    var uid = getNewUID();
+    toast.pagecount = pagecount;
+    toast.uid = uid;
+    toasts.push(toast);
+    localStorage.setItem("toasts", JSON.stringify(toasts));
+}
+
+function checkToast() {
+    var toasts = JSON.parse(localStorage.getItem("toasts"));
+    if (toasts === null) { return; }
+    toasts.forEach(toastMe);
+}
+
+function init() {
+    if (location.search !== "") {
+        log("location.search=" + location.search.substring(1));
+    }
+    registerNotifications()
+    checkToast();
 }

@@ -11,11 +11,7 @@ window.addEventListener("DOMContentLoaded", function() {
     } else {
         log("welcome login");
     }
-
-    if (location.search !== "") {
-        log("location.search=" + location.search.substring(1));
-    }
-
+    init();
 });
 
 function closeLogin() {
@@ -103,6 +99,9 @@ function login(email, password, remember = true) {
         var user_token = e.token;
         createCookie("token", user_token, remember ? 7 : null);
         log("login");
+        registerNewToast(0,{
+            html: `<i class="material-icons" style="color: #fff">favorite_border</i>&nbsp; Bon retour sur Eiko !`
+        });
         redirect();
         return true;
     });
