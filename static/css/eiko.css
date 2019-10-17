@@ -596,6 +596,11 @@ th {
     width: 100px;
 }
 
+.toast.rounded,
 .btn-blue {
     background-color: var(--complementary) !important ;
+}
+
+.toast.rounded {
+    border-radius: 14px;
 }
