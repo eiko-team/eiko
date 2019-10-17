@@ -34,24 +34,6 @@ function GET(url, successCallback = (e) => {},
 }
 
 /**
- * Send a notification to the user if the user has granted permissions
- * It might be usefull to use Server-sent events
- * https://en.wikipedia.org/wiki/Server-sent_events
- * @param {string} title title of the notification
- * @param {string} body message inside the notification
- * @param {string} onClickURL the URL to redirect the user if there is a click
- * @param {string} icon icon to display in the notification
- */
-function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-    } else {
-        var notification = new Notification(title, { icon, body });
-        notification.onclick = (e) => { self.open(onClickURL); };
-    }
-}
-
-/**
  * update cookie value
  * @param {string} name name of the cookie to set
  * @param {string} value value to set the cookie to
@@ -68,14 +50,6 @@ function createCookie(name, value, days = null) {
 }
 
 /**
- * make a cookie invalid, thus deleting it
- * @param {string} name name of the cookie to delete
- */
-function deleteCookie(name) {
-    createCookie(name, "", -1);
-}
-
-/**
  * get cookie value
  * @param {string} name name of the cookie
  */
@@ -83,6 +57,42 @@ function getCookie(name) {
     var re = new RegExp(name + "=([^;]+)");
     var value = re.exec(document.cookie);
     return (value != null) ? unescape(value[1]) : null;
+}
+
+/**
+ * Send a notification to the user if the user has granted permissions
+ * It might be usefull to use Server-sent events
+ * https://en.wikipedia.org/wiki/Server-sent_events
+ * @param {string} title title of the notification
+ * @param {string} body message inside the notification
+ * @param {string} onClickURL the URL to redirect the user if there is a click
+ * @param {string} icon icon to display in the notification
+ */
+function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
+    if (Notification.permission !== "granted" &&
+        getCookie("notification") !== "no") {
+        var promise = Notification.requestPermission();
+        promise.then(function(event) {
+            // onFullfiled
+            notify(title, body, onClickURL, icon);
+            createCookie("notification", "yes");
+        }, function(event) {
+            // onRejected
+            M.toast({ html: 'We won\'t send any notifications to you' })
+            createCookie("notification", "no");
+        })
+    } else {
+        var notification = new Notification(title, { icon, body });
+        notification.onclick = (e) => { self.open(onClickURL); };
+    }
+}
+
+/**
+ * make a cookie invalid, thus deleting it
+ * @param {string} name name of the cookie to delete
+ */
+function deleteCookie(name) {
+    createCookie(name, "", -1);
 }
 
 /**
