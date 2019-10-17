@@ -100,7 +100,7 @@ function login(email, password, remember = true) {
         createCookie("token", user_token, remember ? 7 : null);
         log("login");
         registerNewToast(0,{
-            html: `<i class="material-icons" style="color: #fff">favorite_border</i>&nbsp; Bon retour sur Eiko !`
+            html: `<i class="material-icons">favorite_border</i>&nbsp; Bon retour sur Eiko !`
         });
         redirect();
         return true;
@@ -118,6 +118,9 @@ function register(email, password, remember = true) {
         var user_token = e.token;
         createCookie("token", user_token, remember ? 7 : null);
         log("register");
+        registerNewToast(0,{
+            html: `<i class="material-icons">stars</i>&nbsp; Bienvenue sur Eiko !`
+        });
         redirect();
     });
 }
