@@ -56,7 +56,7 @@ func TestGet400(t *testing.T) {
 		{"manifest", "GET", "/manifest.json", http.StatusOK, false, "application/json; charset=utf-8"},
 		{"js lib", "GET", "/js/lib.js", http.StatusOK, false, "application/javascript"},
 		{"js color", "GET", "/js/color.js", http.StatusOK, false, "application/javascript"},
-		{"json", "GET", "/json/autocomplete_data.json", http.StatusOK, false, "totoapplication/json"},
+		{"json", "GET", "/json/autocomplete_data.json", http.StatusOK, false, "application/json"},
 		{"not existing", "GET", "/blabla", 404, false, "text/plain; charset=utf-8"},
 		{"no path", "GET", "/manifest.json", 500, true, "application/json"},
 		{"no path", "GET", "/login.html", 500, true, "application/json"},
