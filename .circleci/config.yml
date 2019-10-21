@@ -21,7 +21,7 @@ jobs:
           command: make test-report
       - run:
           name: make test
-          command: make test-full
+          command: make test-full && make ARGS="-v" test
       - run:
           name: codecov
           command: make cover-race && bash <(curl -s https://codecov.io/bash)
