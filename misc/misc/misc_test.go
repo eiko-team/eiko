@@ -6,6 +6,7 @@ import (
 	"eiko/misc/structures"
 	"encoding/json"
 	"net/http"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -26,7 +27,13 @@ func TestParseJSON(t *testing.T) {
 		r, _ := http.NewRequest("POST", "/test",
 			strings.NewReader(string(body)))
 		var consumable structures.Consumable
-		misc.ParseJSON(r, &consumable)
+		if err := misc.ParseJSON(r, &consumable); err != nil {
+			t.Errorf("ParseJSON() = %+v", err)
+		}
+		/*		if reflect.DeepEqual(data.ConsumableTest, consumable) {
+					t.Errorf("ParseJSON(%+v) != %+v", consumable, data.ConsumableTest)
+				}
+		*/
 		// TODO assert deepequals data.ConsumableTest and consumable
 	})
 	t.Run("Bad Json", func(t *testing.T) {
@@ -35,7 +42,10 @@ func TestParseJSON(t *testing.T) {
 			strings.NewReader(body))
 		var consumable structures.Consumable
 		misc.ParseJSON(r, &consumable)
-		// TODO assert deepequals data.ConsumableTest and consumable
+		if reflect.DeepEqual(data.ConsumableTest, consumable) {
+			t.Errorf("ParseJSON(%+v) != %+v", consumable, data.ConsumableTest)
+		}
+
 	})
 }
 
