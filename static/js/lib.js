@@ -111,7 +111,9 @@ function log(msg) {
     POST("/log", { user_token: getCookie("token"), message: msg });
 }
 
-
+/**
+ * logout the user
+ */
 function logout() {
     log("logout");
     deleteCookie("token");
@@ -222,6 +224,11 @@ function loadLists() {
     });
 }
 
+/**
+ * replace a list id in the nav bar
+ * @param {object} list to replace
+ * @param {integer} list id to put in place
+ */
 function replaceListID(list, id) {
     var json = JSON.parse(localStorage.getItem("lists"));
     if (json === null) { json = []; }
@@ -236,8 +243,7 @@ function replaceListID(list, id) {
     elt.id = id;
     json.push(elt);
     localStorage.setItem("lists", JSON.stringify(json));
-    // TODO: replace list id on html
-    // var lists = document.getElementById("dropdown-lists");
+    document.getElementById(list.id).id = id;
 }
 
 /**
@@ -259,7 +265,7 @@ function createList(name = "Liste de course") {
 
 /**
  * Shares a list with a user
- * @param {interger} id of the list
+ * @param {integer} id of the list
  * @param {string} email of the user to share the list with
  */
 function shareList(id, email) {
@@ -268,7 +274,7 @@ function shareList(id, email) {
 
 /**
  * Delete a list
- * @param {interger} id of the list
+ * @param {integer} id of the list
  */
 function deleteList(id) {
     POST("/list/delete", { id });
@@ -313,6 +319,10 @@ function getCurrentListID() {
     return Number(listID);
 }
 
+/**
+ * replace a list id in the nav bar
+ * @param {integer} consumableId id of the consumable to remove
+ */
 function hideConsumable(consumableId) {
     if (consumableId === undefined) { return; }
     var consumables = document.querySelector("tbody");
@@ -329,6 +339,11 @@ function hideConsumable(consumableId) {
     consumables.removeChild(consumable);
 }
 
+/**
+ * returns the consumable associated to the consumableId
+ * @param {integer} consumableId id of the consumable to return
+ * @returns {object} consumable associated to the consumableId
+ */
 function idToConsumable(consumableId) {
     var consumables = localStorage.getItem("consumables");
     if (consumables === null) { return; }
@@ -337,6 +352,11 @@ function idToConsumable(consumableId) {
     })[0];
 }
 
+/**
+ * toggle a consumable to be done or not.
+ * set the localstorage
+ * @param {integer} consumableId id of the consumable to toggle
+ */
 function toggleDoneConsumable(consumableId) {
     var consumables = localStorage.getItem("consumables");
     var json = [];
@@ -365,11 +385,20 @@ function getNewUID() {
     return uid;
 }
 
+/**
+ * create and return a function to be called with a event listener
+ * and stores the consumableID inside.
+ * @param {integer} consumableId id of the consumable to validate and be stored
+ * in the function
+ * @returns {function} to be called from the event listener.
+ *
+ * @todo update the api
+ * @body we might add another function to the api
+ */
 function validateConsumable(consumableId) {
     return function(event) {
         toggleDoneConsumable(consumableId);
         fillConsumables();
-        // TODO: send update to api
     }
 }
 
@@ -405,6 +434,13 @@ function showConsumable(consumable) {
 
 var loadingGifTimeoutID = [];
 
+/**
+ * toggle loading gif depending on the status.
+ * uses loadingGifTimeoutID to keep track of timeout IDs.
+ * @param {boolean} status display status of the loading gif
+ * @param {integer} timeout timeout before showing the gif
+ * @param {string} id id the loading gif element
+ */
 function showLoadingGif(status = false, timout = 2000, id = "main") {
     if (status) {
         loadingGifTimeoutID.push(setTimeout(function(e) {
@@ -417,6 +453,10 @@ function showLoadingGif(status = false, timout = 2000, id = "main") {
     }
 }
 
+/**
+ * add a consumable to local storage
+ * @param {object} consumable consumable to add to local storage
+ */
 function addConsumableLocalStorage(consumable) {
     var consumables = localStorage.getItem("consumables");
     var json = [];
@@ -431,12 +471,19 @@ function addConsumableLocalStorage(consumable) {
     localStorage.setItem("consumables", JSON.stringify(json));
 }
 
+/**
+ * add a list of consumables to local storage and fill it to the page
+ * @param {object} consumables list of consumables to add to local storage
+ */
 function addConsumablesFromList(consumables) {
     if (consumables.error !== undefined) { return; }
     consumables.forEach(addConsumableLocalStorage);
     fillConsumables();
 }
 
+/**
+ * fetch all consumables from all lists starting with the current
+ */
 function fetchConsumables() {
     var current = getCurrentListID();
     POST("/list/getcontent", { ID: current }, addConsumablesFromList);
@@ -483,6 +530,9 @@ function fillConsumables(fetch = false) {
     }
 }
 
+/**
+ * set cookies with the user coordinates
+ */
 function getTargetPosition() {
     if (getCookie("posMode") === "local") {
         if (!navigator.geolocation) {
@@ -501,6 +551,10 @@ function getTargetPosition() {
     }
 }
 
+/**
+ * make te window location to the last list seen
+ * @param {string} fragment page fragment to target
+ */
 function goBackList(fragment = "") {
     // removing Events
     if (fragment.type !== undefined) { fragment = ""; }
@@ -512,6 +566,13 @@ function goBackList(fragment = "") {
     }
 }
 
+/**
+ * return a new promise to notify the user
+ * @param {object} notif notification to display to the user
+ * @param {integer} notif.when notification timeout before showing the
+ * notification.
+ * @return {promise} a new promise that will make a notification.
+ */
 function promiseNofity(notif) {
     new Promise(function(resolve, reject) {
         setTimeout(function(e) { resolve() }, notif.when)
@@ -526,6 +587,16 @@ function promiseNofity(notif) {
     });
 }
 
+/**
+ * register a notification to send to the user in time. it uses the local
+ * storage to store new notifications in case of window changing.
+ * @param {integer} when notification timeout before showing the notification.
+ * @param {string} title title of the notification.
+ * @param {string} body body of the notification.
+ * @param {string} onclickURL url to redirect to when the notification is
+ * clicked.
+ * @param {string} icon icon of the notification.
+ */
 function registerNewNotification(when, title, body, onClickURL = "#",
     icon = "/favicon.ico") {
     var notifications = JSON.parse(localStorage.getItem("notifications"));
@@ -536,12 +607,21 @@ function registerNewNotification(when, title, body, onClickURL = "#",
     localStorage.setItem("notifications", JSON.stringify(notifications));
 }
 
+/**
+ * register all previouslly registered notifications from local storage
+ */
 function registerNotifications() {
     var notifications = JSON.parse(localStorage.getItem("notifications"));
     if (notifications === null) { return; }
     notifications.forEach(promiseNofity);
 }
 
+/**
+ * send a toast to the user
+ * @param {object} t toast to send.
+ * @param {integer} t.uid unique identifier.
+ * @param {integer} t.pagecount number of page to wait before toasting the user.
+ */
 function toastMe(t) {
     var toasts = JSON.parse(localStorage.getItem("toasts"));
     if (toasts === null) { return; }
@@ -556,6 +636,11 @@ function toastMe(t) {
     localStorage.setItem("toasts", JSON.stringify(toasts));
 }
 
+/**
+ * register a toast
+ * @param {object} toast toast to send.
+ * @param {integer} pagecount number of page to wait before toasting the user.
+ */
 function registerNewToast(pagecount, toast) {
     var toasts = JSON.parse(localStorage.getItem("toasts"));
     if (toasts === null) { toasts = []; }
@@ -566,12 +651,18 @@ function registerNewToast(pagecount, toast) {
     localStorage.setItem("toasts", JSON.stringify(toasts));
 }
 
+/**
+ * call toastMe on each registered toast.
+ */
 function checkToast() {
     var toasts = JSON.parse(localStorage.getItem("toasts"));
     if (toasts === null) { return; }
     toasts.forEach(toastMe);
 }
 
+/**
+ * initialise the page load, register notifications and toasts
+ */
 function init() {
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
@@ -580,6 +671,10 @@ function init() {
     checkToast();
 }
 
+/**
+ * checks if the user is using a mobile or a tablet
+ * @return {boolean}
+ */
 function mobileAndTabletcheck() {
     var check = false;
     (function(a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera);
