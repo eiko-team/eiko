@@ -55,6 +55,7 @@ window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
     }
+    var elems = document.getElementById("search-input");
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
         elems.value = location.search.substring(3);
@@ -66,7 +67,6 @@ window.addEventListener("DOMContentLoaded", function() {
         addPersonnal(elems.value);
     });
     fillAutoComplete();
-    var elems = document.getElementById("search-input");
     elems.addEventListener("input", search(elems));
     elems.focus();
     elems.select();
