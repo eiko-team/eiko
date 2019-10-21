@@ -258,8 +258,12 @@ func (d Data) GetAllLists() ([]structures.List, error) {
 			Filter("__key__ =", k).
 			Limit(1)
 		keys, err := d.client.GetAll(d.ctx, q, &lists)
-		if err != nil || len(lists) == 0 {
-			return []structures.List{}, errors.New("Could no fetch list")
+		if err != nil {
+			Logger.Println(err)
+			return []structures.List{}, nil
+		}
+		if len(keys) == 0 {
+			continue
 		}
 		res = append(res, structures.List{
 			ID:   keys[0].ID,
