@@ -223,23 +223,18 @@ function loadLists() {
 }
 
 function replaceListID(list, id) {
-    console.log("replaceListID", list, id);
     var json = JSON.parse(localStorage.getItem("lists"));
     if (json === null) { json = []; }
     elt = json.filter(function(e) {
         return e.id === list.id
     });
-    console.log(json)
-    console.log("replaceListID", elt.length, elt);
     if (elt.length === 0) { return; }
     elt = elt[0];
     json = json.filter(function(e) {
         return e.id !== list.id
     });
-    console.log(json)
     elt.id = id;
     json.push(elt);
-    console.log(json)
     localStorage.setItem("lists", JSON.stringify(json));
     // TODO: replace list id on html
     // var lists = document.getElementById("dropdown-lists");
@@ -258,10 +253,7 @@ function createList(name = "Liste de course") {
     localStorage.setItem("lists", JSON.stringify(json));
     addlist(list);
     POST("/list/create", { name }, function(e) {
-        console.log(e)
         replaceListID(list, e.id);
-    }, function(e) {
-        console.log(e)
     });
 }
 
@@ -475,7 +467,6 @@ function fillConsumables(fetch = false) {
         return a.ID - b.ID;
     });
     json.forEach(function(element) {
-        console.log(element.list_id === list.id, element.list_id, list.id);
         if (element.list_id === list.id) {
             hideConsumable(element.ID);
             if (element.Done) {
