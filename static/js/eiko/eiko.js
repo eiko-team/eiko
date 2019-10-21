@@ -30,6 +30,8 @@ window.addEventListener("DOMContentLoaded", function() {
     if (location.search !== "") {
         log("location.search=" + location.search.substring(1));
     }
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {});
     showButton();
 });
 
@@ -57,7 +59,18 @@ for (var i = 0; i < dropdown.length; i++) {
     });
 }
 
+function createListModal() {
+    var list = document.getElementById("list_name");
+    var collaborators = document.getElementById("collab");
+    createList(list.value);
+    // TODO: goto list
+    // TODO: share list
+    list.value = "";
+    collaborators.value = "";
+}
+
 document.getElementById("logout-button").addEventListener("click", logout);
 document.getElementById("theme-selector").addEventListener("click", swapTheme);
 document.getElementById("open-nav").addEventListener("click", openNav);
 document.getElementById("nav-closebtn").addEventListener("click", closeNav);
+document.getElementById("list_create").addEventListener("click", createListModal);
