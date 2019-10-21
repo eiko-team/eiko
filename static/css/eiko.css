@@ -312,6 +312,16 @@ span.password {
 }
 
 .modal {
+    background-color: var(--grey-light-opaque);
+    color: var(--text-color);
+}
+
+.modal-content {
+    color: var(--text-color);
+    background-color: var(--white);
+}
+
+.own_modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -325,7 +335,7 @@ span.password {
     padding-top: 60px;
 }
 
-.modal-content {
+.own_modal-content {
     color: var(--text-color);
     background-color: var(--white);
     margin: 5% auto 15% auto;
