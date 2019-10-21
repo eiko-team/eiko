@@ -148,6 +148,70 @@ function setStyleByID(id, style) {
     document.getElementById(id).style = style;
 }
 
+
+/**
+ * returns the elt associated to the eltId in storageArea
+ * @param {integer} eltId id of the consumable to return
+ * @param {string} storageArea place inside the local storage
+ * @returns {object} consumable associated to the eltId
+ */
+function idToElt(eltId, storageArea) {
+    var consumables = JSON.parse(localStorage.getItem(storageArea));
+    if (consumables === null) { return; }
+    return consumables.filter(function(element) {
+        return element.ID === eltId;
+    })[0];
+}
+
+/**
+ * replace e1 by e2 in local storage
+ * @param {object} e1 elt to replace
+ * @param {integer} e1.ID id to replace, it is the only value of c1 used
+ * @param {object} e2 elt to take place
+ * @param {string} storageArea place inside the local storage
+ */
+function updateLocalStorage(e1, e2, storageArea) {
+    var json = JSON.parse(localStorage.getItem(storageArea));
+    if (json === null) {
+        json = [e2];
+        localStorage.setItem(storageArea, JSON.stringify(json));
+    }
+    // removing e1
+    json = json.filter(function(element) {
+        return element.ID !== e1.ID;
+    })
+    // pushing e2
+    json.push(e2);
+    localStorage.setItem(storageArea, JSON.stringify(json));
+}
+
+/**
+ * insert elt in local storage
+ * @param {object} elt elt to insert
+ * @param {string} storageArea place inside the local storage
+ */
+function insertLocalStorage(elt, storageArea) {
+    var json = JSON.parse(localStorage.getItem(storageArea));
+    if (json === null) { json = []; }
+    json = json.filter(function(e) { return e.ID !== elt.ID; });
+    json.push(elt);
+    localStorage.setItem(storageArea, JSON.stringify(json));
+}
+
+/**
+ * remove elt in local storage
+ * @param {object} elt elt to remove
+ * @param {string} storageArea place inside the local storage
+ */
+function removeLocalStorage(elt, storageArea) {
+    var notifications = JSON.parse(localStorage.getItem(storageArea));
+    if (notifications === null) { return; }
+    notifications = notifications.filter(function(n) {
+        return n.ID !== notif.ID
+    })
+    localStorage.setItem(storageArea, JSON.stringify(notifications));
+}
+
 /**
  * set the cookie "pass_score" with the score of the password to enable password
  * strenght display
@@ -225,41 +289,16 @@ function loadLists() {
 }
 
 /**
- * replace a list id in the nav bar
- * @param {object} list to replace
- * @param {integer} list id to put in place
- */
-function replaceListID(list, id) {
-    var json = JSON.parse(localStorage.getItem("lists"));
-    if (json === null) { json = []; }
-    elt = json.filter(function(e) {
-        return e.id === list.id
-    });
-    if (elt.length === 0) { return; }
-    elt = elt[0];
-    json = json.filter(function(e) {
-        return e.id !== list.id
-    });
-    elt.id = id;
-    json.push(elt);
-    localStorage.setItem("lists", JSON.stringify(json));
-    document.getElementById(list.id).id = id;
-}
-
-/**
  * create a list, sends it to the api and store it in local storage
  * @param {string} name of the list
  */
 function createList(name = "Liste de course") {
     log("createList=" + name);
     var list = { name, id: getNewUID() };
-    var json = JSON.parse(localStorage.getItem("lists"));
-    if (json !== null) { json = []; }
-    json.push(list);
-    localStorage.setItem("lists", JSON.stringify(json));
     addlist(list);
+    insertLocalStorage(list, "lists");
     POST("/list/create", { name }, function(e) {
-        replaceListID(list, e.id);
+        updateLocalStorage(list, e, "lists");
     });
 }
 
@@ -287,16 +326,7 @@ function deleteList(id) {
  */
 function getConsumables(list) {
     POST("/list/get", { list }, (e) => {
-        var consumables = localStorage.getItem("consumables");
-        var json = [];
-        if (consumables !== null) {
-            json = JSON.parse(consumables);
-        }
-        json = json.filter(function(element) {
-            return element.list_id !== list.ID;
-        })
-        e.forEach(json.push);
-        localStorage.setItem("consumables", JSON.stringify(json));
+        e.forEach(function(elt) { insertLocalStorage(elt, "consumables"); });
     });
 }
 
@@ -320,7 +350,17 @@ function getCurrentListID() {
 }
 
 /**
- * replace a list id in the nav bar
+ * hide all consimables of the page
+ */
+function hideAllConsumables() {
+    var consumables = document.querySelector("tbody");
+    while (consumables.firstChild) {
+        consumables.removeChild(consumables.firstChild);
+    }
+}
+
+/**
+ * hide a consimable in the list of the page
  * @param {integer} consumableId id of the consumable to remove
  */
 function hideConsumable(consumableId) {
@@ -340,49 +380,24 @@ function hideConsumable(consumableId) {
 }
 
 /**
- * returns the consumable associated to the consumableId
- * @param {integer} consumableId id of the consumable to return
- * @returns {object} consumable associated to the consumableId
- */
-function idToConsumable(consumableId) {
-    var consumables = localStorage.getItem("consumables");
-    if (consumables === null) { return; }
-    return JSON.parse(consumables).filter(function(element) {
-        return element.ID === consumableId;
-    })[0];
-}
-
-/**
  * toggle a consumable to be done or not.
  * set the localstorage
  * @param {integer} consumableId id of the consumable to toggle
  */
-function toggleDoneConsumable(consumableId) {
-    var consumables = localStorage.getItem("consumables");
-    var json = [];
-    if (consumables !== null) {
-        json = JSON.parse(consumables);
-    }
-    cons = json.filter(function(element) {
-        return element.ID === consumableId;
-    })
-    if (cons.length === 0) { return; }
-    cons = cons[0];
-    cons.Done = !cons.Done;
-    json = json.filter(function(element) {
-        return element.ID !== consumableId;
-    })
-    json.push(cons);
-    localStorage.setItem("consumables", JSON.stringify(json));
+function toggledoneConsumable(consumableId) {
+    c1 = idToElt(consumableId, "consumables");
+    c2 = c1;
+    c2.done = !c1.done;
+    updateLocalStorage(c1, c2, "consumables");
 }
 
 /**
  * create and return a new Unic IDentifier.
  */
 function getNewUID() {
-    var uid = Number(localStorage.getItem("UID")) + 1;
-    localStorage.setItem("UID", uid);
-    return uid;
+    var ID = Number(localStorage.getItem("UID")) + 1;
+    localStorage.setItem("UID", ID);
+    return ID;
 }
 
 /**
@@ -397,7 +412,7 @@ function getNewUID() {
  */
 function validateConsumable(consumableId) {
     return function(event) {
-        toggleDoneConsumable(consumableId);
+        toggledoneConsumable(consumableId);
         fillConsumables();
     }
 }
@@ -407,14 +422,15 @@ function validateConsumable(consumableId) {
  * @param {object} consumable to display
  */
 function showConsumable(consumable) {
-    if (!"content" in document.createElement("template")) { return; }
+    if (!"content" in document.createElement("template") ||
+        consumable.ID === undefined) { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll("td");
     var tr = clone.querySelector("tr");
     tr.id = consumable.ID
     td[0].addEventListener("click", validateConsumable(consumable.ID));
-    if (consumable.Done) {
+    if (consumable.done) {
         tr.classList.add("done");
         td[0].innerHTML = "<i class='material-icons'>radio_button_checked</i>";
     } else {
@@ -454,30 +470,12 @@ function showLoadingGif(status = false, timout = 2000, id = "main") {
 }
 
 /**
- * add a consumable to local storage
- * @param {object} consumable consumable to add to local storage
- */
-function addConsumableLocalStorage(consumable) {
-    var consumables = localStorage.getItem("consumables");
-    var json = [];
-    if (consumables !== null) {
-        json = JSON.parse(consumables);
-    }
-
-    json = json.filter(function(element) {
-        return element.ID !== consumable.ID;
-    });
-    json.push(consumable)
-    localStorage.setItem("consumables", JSON.stringify(json));
-}
-
-/**
  * add a list of consumables to local storage and fill it to the page
  * @param {object} consumables list of consumables to add to local storage
  */
 function addConsumablesFromList(consumables) {
     if (consumables.error !== undefined) { return; }
-    consumables.forEach(addConsumableLocalStorage);
+    consumables.forEach(function(elt) { insertLocalStorage(elt, "consumables") });
     fillConsumables();
 }
 
@@ -502,21 +500,18 @@ function fetchConsumables() {
  */
 function fillConsumables(fetch = false) {
     var list = { id: getCurrentListID() };
-    var consumables = localStorage.getItem("consumables");
-    var json = [];
-    if (consumables !== null) {
-        json = JSON.parse(consumables);
-    }
     if (list.id === 0) { return; };
+    var json = JSON.parse(localStorage.getItem("consumables"));
+    if (json === null) { json = []; }
     showLoadingGif(true);
     var done = [];
     json.sort(function(a, b) {
         return a.ID - b.ID;
     });
+    hideAllConsumables();
     json.forEach(function(element) {
         if (element.list_id === list.id) {
-            hideConsumable(element.ID);
-            if (element.Done) {
+            if (element.done) {
                 done.push(element);
             } else {
                 showConsumable(element);
@@ -575,15 +570,10 @@ function goBackList(fragment = "") {
  */
 function promiseNofity(notif) {
     new Promise(function(resolve, reject) {
-        setTimeout(function(e) { resolve() }, notif.when)
+        setTimeout(function(e) { resolve() }, notif.when);
     }).then(function(event) {
         notify(notif.title, notif.body, notif.onClickURL, notif.icon);
-        var notifications = JSON.parse(localStorage.getItem("notifications"));
-        if (notifications === null) { return; }
-        notifications = notifications.filter(function(n) {
-            return n.uid !== notif.uid
-        })
-        localStorage.setItem("notifications", JSON.stringify(notifications));
+        removeLocalStorage(notif, "notifications");
     });
 }
 
@@ -599,12 +589,10 @@ function promiseNofity(notif) {
  */
 function registerNewNotification(when, title, body, onClickURL = "#",
     icon = "/favicon.ico") {
-    var notifications = JSON.parse(localStorage.getItem("notifications"));
-    if (notifications === null) { notifications = []; }
-    var uid = getNewUID();
-    notifications.push({ when, title, body, onClickURL, icon, uid })
-    promiseNofity({ when, title, body, onClickURL, icon, uid })
-    localStorage.setItem("notifications", JSON.stringify(notifications));
+    var ID = getNewUID();
+    notification = { when, title, body, onClickURL, icon, ID };
+    promiseNofity(notification);
+    insertLocalStorage(notification, "notifications");
 }
 
 /**
@@ -619,21 +607,18 @@ function registerNotifications() {
 /**
  * send a toast to the user
  * @param {object} t toast to send.
- * @param {integer} t.uid unique identifier.
+ * @param {integer} t.ID unique identifier.
  * @param {integer} t.pagecount number of page to wait before toasting the user.
  */
 function toastMe(t) {
-    var toasts = JSON.parse(localStorage.getItem("toasts"));
-    if (toasts === null) { return; }
-    toasts = toasts.filter(function(n) {
-        return n.uid !== t.uid
-    })
-    if (t.pagecount-- === 0) {
-        toast(t);
+    var toast = idToElt(t.ID, "toasts");
+    oldToast = toast;
+    if (toast.pagecount-- === 0) {
+        toast(toast);
+        updateLocalStorage(oldToast, toast, "toast");
     } else {
-        toasts.push(t);
+        removeLocalStorage(toast, "toasts");
     }
-    localStorage.setItem("toasts", JSON.stringify(toasts));
 }
 
 /**
@@ -642,13 +627,9 @@ function toastMe(t) {
  * @param {integer} pagecount number of page to wait before toasting the user.
  */
 function registerNewToast(pagecount, toast) {
-    var toasts = JSON.parse(localStorage.getItem("toasts"));
-    if (toasts === null) { toasts = []; }
-    var uid = getNewUID();
     toast.pagecount = pagecount;
-    toast.uid = uid;
-    toasts.push(toast);
-    localStorage.setItem("toasts", JSON.stringify(toasts));
+    toast.ID = getNewUID();
+    insertLocalStorage(toast, "toasts");
 }
 
 /**

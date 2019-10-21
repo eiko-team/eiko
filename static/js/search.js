@@ -31,7 +31,7 @@ function addPersonnal(value) {
         mode: "personnal",
     }
 
-    addConsumableLocalStorage(consumable);
+    insertLocalStorage(consumable, "consumables");
     POST("/list/add/personnal", consumable, function(event) {
         var json = JSON.parse(localStorage.getItem("consumables"));
         if (json === null) { return; };
