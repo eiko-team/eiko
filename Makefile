@@ -105,6 +105,7 @@ create-dir:
 mini: mini-css
 mini: mini-html
 mini: mini-js
+mini: mini-json
 mini: mini-img
 
 mini-css:
@@ -123,7 +124,16 @@ mini-html:
 mini-js:
 	cp -r static/js static/min
 
+mini-json:
+	cp -r static/json static/min
+
 mini-img:
 	cp -r static/img static/min
+
+p: test
+p:
+	git push -v
+p: docker
+p: docker-pi
 
 .PHONY: clean all build cover test

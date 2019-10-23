@@ -167,7 +167,7 @@ type ListContent struct {
 	Name        string        `json:"name" firestore:"name"`
 	Done        bool          `json:"done" firestore:"done"`
 	Erased      bool          `json:"erased" firestore:"erased"`
-	// Mode is used to signifiy the mode of the consumable
+	// Mode is used to signify the mode of the consumable
 	// It's content should be:
 	// 	- "sample": for testing purpose
 	// 	- "consumable": for a "real" consumable

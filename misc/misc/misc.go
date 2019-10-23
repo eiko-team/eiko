@@ -92,7 +92,7 @@ func ValidateToken(token string) bool {
 	return err == nil
 }
 
-// Atoi is a wrapper arround strconv.Atoi
+// Atoi is a wrapper around strconv.Atoi
 func Atoi(value string) (int, error) {
 	i64, err := strconv.ParseInt(value, 10, 0)
 	return int(i64), err

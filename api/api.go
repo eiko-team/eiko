@@ -91,7 +91,8 @@ var (
 		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, ""},
 		{"js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}, ""},
-		{"json/manifest.json", "application/json", []string{"/manifest.json"}, ""},
+		{"json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}, ""},
+		{"json/autocomplete_data.json", "application/json", []string{"/json/autocomplete_data.json"}, ""},
 	}
 
 	// TFiles is an array of Templated files
@@ -192,7 +193,7 @@ func ServeFiles(r *httprouter.Router) {
 	} else {
 		fileType += "min/"
 	}
-	for _, tt := range []string{"img", "js", "css", "json"} {
+	for _, tt := range []string{"img", "js", "css"} {
 		ServeFilesCustom(r, "/"+tt, fileType+tt)
 	}
 }
