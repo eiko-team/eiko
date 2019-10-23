@@ -161,7 +161,7 @@ func TestAddPersonnal(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, _ := http.NewRequest("POST", "/list/get",
+			req, _ := http.NewRequest("POST", "/list/add/personnal",
 				strings.NewReader(tt.body))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := list.AddPersonnal(d, req)
@@ -176,6 +176,45 @@ func TestAddPersonnal(t *testing.T) {
 			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
 			if len(matchs) == 0 {
 				t.Errorf("AddPersonnal() = '%v', want %v", got, tt.want)
+			}
+			if data.StoreContent == tt.wantErr {
+				t.Errorf("StoreContent = %v, want = %v",
+					data.StoreContent, tt.wantErr)
+			}
+			data.StoreContent = false
+		})
+	}
+}
+
+func TestAddConsumable(t *testing.T) {
+	j, _ := json.Marshal(data.ListContentTest)
+	data.ID = data.IDTest
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+		body    string
+	}{
+		{"sanity", `{"done":true,"id":\d+}`, false, string(j)},
+		{"wrong json", `5.3.0`, true, "test"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req, _ := http.NewRequest("POST", "/list/add/consumable",
+				strings.NewReader(tt.body))
+			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
+			got, err := list.AddConsumable(d, req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AddConsumable() error = %v, wantErr %v",
+					err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				got = err.Error()
+			}
+			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
+			if len(matchs) == 0 {
+				t.Errorf("AddConsumable() = '%v', want %v", got, tt.want)
 			}
 			if data.StoreContent == tt.wantErr {
 				t.Errorf("StoreContent = %v, want = %v",
