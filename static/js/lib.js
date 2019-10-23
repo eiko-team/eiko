@@ -423,7 +423,7 @@ function validateConsumable(consumableId) {
  */
 function showConsumable(consumable) {
     if (!"content" in document.createElement("template") ||
-        consumable.ID === undefined) { return; }
+        consumable.ID === undefined || consumable.mode === "sample") { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll("td");
