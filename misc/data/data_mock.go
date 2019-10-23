@@ -85,7 +85,7 @@ var (
 			Litre: 21,
 		},
 	}
-	Consumables   []structures.Consumables
+	Consumables   = []structures.Consumables{}
 	ConsumablesRe = fmt.Sprintf("{\"consumable\":%s,\"store\":%s,\"stock\":%s}",
 		ConsumableRe, StoreRe, StockRe)
 	ConsumablesTest = []structures.Consumables{

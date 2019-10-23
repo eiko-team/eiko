@@ -46,20 +46,7 @@ func Get(d data.Data, r *http.Request) (string, error) {
 	if err != nil {
 		return "", errors.New("3.1.1")
 	}
-	res := `{"query":[`
-	if len(consu) > 0 {
-		j, err := json.Marshal(consu[0])
-		if err != nil {
-			return "", errors.New("3.1.2")
-		}
-		res += string(j)
-		for _, c := range consu[1:] {
-			res += string(j) + ","
-			j, err = json.Marshal(c)
-			if err != nil {
-				return "", errors.New("3.1.3")
-			}
-		}
-	}
-	return res + "]}", nil
+
+	j, err := json.Marshal(consu)
+	return string(j), err
 }
