@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 
+        "eiko/misc/misc"
 	"eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"
@@ -317,15 +318,12 @@ func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 }
 
 // CreateLink is used to CREATE a link in the datastore
-func (d Data) CreateLink(link structures.Link) (structures.Link, error) {
+func (d Data) CreateLink(link structures.Link) (string, error) {
         link.ID = 0
         key := datastore.IncompleteKey(d.list, nil)
         key, err := d.client.Put(d.ctx, key, &link)
-        if err != nil {
-            return structures.Link{}, err
-        }
         link.ID = key.ID
-        return link, err
+        return misc.IntToHex(key.ID), err
 }
 
 // StoreLink is used to STORE a link in the datastore

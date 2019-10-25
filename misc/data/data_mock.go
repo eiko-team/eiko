@@ -24,6 +24,8 @@ var (
 	GetAllLists     bool
 	GetListContent  bool
 	StoreContent    bool
+        CreateLink      bool
+        StoreLink       bool
 	Error           error
 	Error2          error
 	pass, _         = hash.Hash("pass")
@@ -116,6 +118,7 @@ var (
 	}
 	ID     = int64(0)
 	IDTest = int64(42)
+        ITH = string("test")
 )
 
 // Data container for all data relative variables
@@ -200,4 +203,16 @@ func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 	StoreContent = true
 	return ID, Error
+}
+
+// CreateLink is used to CREATE a link in the datastore
+func (d Data) CreateLink(link structures.Link) (string, error) {
+        CreateLink = true
+        return ITH, Error
+}
+
+// StoreLink is used to STORE a link in the datastore
+func (d Data) StoreLink(link structures.Link) error {
+        StoreLink = true
+        return Error
 }
