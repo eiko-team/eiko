@@ -318,8 +318,7 @@ func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 
 // StoreLink is used to store a link in the datastore
 func (d Data) StoreLink(link structures.Link) error {
-        q := datastore.NewQuery(d.Link)
-        key := datastore.IncompleteKey(d.Link, nil)
+        key := datastore.IncompleteKey(d.link, nil)
         _, err := d.client.Put(d.ctx, key, &link)
         return err
 }
