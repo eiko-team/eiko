@@ -3,6 +3,7 @@ package consumables
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -26,12 +27,12 @@ func Store(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.0.0")
 	}
 
-	err = d.StoreConsumable(i)
+	keyID, err := d.StoreConsumable(i)
 	if err != nil {
 		return "", errors.New("3.0.1")
 	}
 
-	return "{\"done\":\"true\"}", nil
+	return fmt.Sprintf(`{"done":true,"id":%d}`, keyID), err
 }
 
 // Get Get some consumable data

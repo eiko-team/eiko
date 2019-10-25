@@ -29,7 +29,7 @@ func TestStoreConsumable(t *testing.T) {
 		body    string
 		useData bool
 	}{
-		{"sanity", `{"done":"true"}`, false, "{\"consumable\":" + c + "}",
+		{"sanity", `{"done":true,"id":\d+}`, false, "{\"consumable\":" + c + "}",
 			true},
 		{"bad json", `3.0.0`, true, "}", false},
 		{"wrong data", `3.0.1`, true, "{\"consumable\":" + c + "}", true},
