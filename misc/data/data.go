@@ -316,7 +316,19 @@ func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 	return 0, err
 }
 
-// StoreLink is used to store a link in the datastore
+// CreateLink is used to CREATE a link in the datastore
+func (d Data) CreateLink(link structures.Link) (structures.Link, error) {
+        link.ID = 0
+        key := datastore.IncompleteKey(d.list, nil)
+        key, err := d.client.Put(d.ctx, key, &link)
+        if err != nil {
+            return structures.Link{}, err
+        }
+        link.ID = key.ID
+        return link, err
+}
+
+// StoreLink is used to STORE a link in the datastore
 func (d Data) StoreLink(link structures.Link) error {
         key := datastore.IncompleteKey(d.link, nil)
         _, err := d.client.Put(d.ctx, key, &link)
