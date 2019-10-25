@@ -97,3 +97,8 @@ func Atoi(value string) (int, error) {
 	i64, err := strconv.ParseInt(value, 10, 0)
 	return int(i64), err
 }
+
+// IntToHex converts an integer to its hexadecimal representation
+func IntToHex(i int) string {
+        return fmt.Sprintf("%x", i)
+    }
