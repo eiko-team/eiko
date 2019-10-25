@@ -99,6 +99,6 @@ func Atoi(value string) (int, error) {
 }
 
 // IntToHex converts an integer to its hexadecimal representation
-func IntToHex(i int) string {
+func IntToHex(i int64) string {
         return fmt.Sprintf("%x", i)
     }

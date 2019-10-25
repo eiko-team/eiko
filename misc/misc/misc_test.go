@@ -138,3 +138,29 @@ func TestAtoi(t *testing.T) {
 		})
 	}
 }
+
+func TestIntToHex(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   int64
+		want    string
+	}{
+		{"zero", 0, "0"},
+                {"one", 1, "1"},
+                {"fifteen", 15, "f"},
+                {"sixteen", 16, "10"},
+                {"255", 255, "ff"},
+                {"256", 256, "100"},
+                {"511", 511, "1ff"},
+                {"98754321", 98754321, "5e2df11"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got:= misc.IntToHex(tt.value)
+                        t.Logf("%s", got)
+			if got != tt.want {
+				t.Errorf("IntToHex() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
