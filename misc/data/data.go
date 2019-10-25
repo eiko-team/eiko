@@ -47,6 +47,8 @@ type Data struct {
 	list string
 	// listContent list content
 	listContent string
+        // link shortened link for lists
+        link string
 
 	// User the user making the request. Got from the cookie in the header
 	User structures.User
@@ -64,6 +66,7 @@ func InitData(projID string) Data {
 	d.list = "list"
 	d.listContent = "ListContent"
 	d.ctx = context.Background()
+        d.link = "Link"
 
 	var err error
 	d.client, err = datastore.NewClient(d.ctx, projID)
@@ -311,4 +314,12 @@ func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 		return key.ID, err
 	}
 	return 0, err
+}
+
+// StoreLink is used to store a link in the datastore
+func (d Data) StoreLink(link structures.Link) error {
+        q := datastore.NewQuery(d.Link).
+        key := datastore.IncompleteKey(d.Link, nil)
+        _, err := d.client.Put(d.ctx, key, &link)
+        return err
 }

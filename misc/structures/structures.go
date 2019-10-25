@@ -175,3 +175,11 @@ type ListContent struct {
 	// used. stock and store are also not used
 	Mode string `json:"mode"`
 }
+
+type Link struct {
+        ID          int64       // The integer ID used in the firestore.
+        ListID      int64       `json:"list_id" firestore:"list_id"`
+        Link        string      `json:"link" firestore:"link"`
+        expiration  time.Time   `json:"expiration" firestore:"expiration"`
+        // Can we add other fields not related to Consumables for more genericity ?
+}
