@@ -68,12 +68,7 @@ func GetListContent(d data.Data, r *http.Request) (string, error) {
 		Logger.Println(err)
 		return "", errors.New("5.2.1")
 	}
-
 	json, err := json.Marshal(content)
-	if err != nil {
-		return "", errors.New("5.2.2")
-	}
-
 	return string(json), err
 }
 
