@@ -90,7 +90,7 @@ func AddPersonnal(d data.Data, r *http.Request) (string, error) {
 	return fmt.Sprintf(`{"done":true,"id":%d}`, keyID), err
 }
 
-//  AddConsumable add a consumable item to a list
+// AddConsumable add a consumable item to a list
 func AddConsumable(d data.Data, r *http.Request) (string, error) {
 	var i structures.ListContent
 	err := misc.ParseJSON(r, &i)
