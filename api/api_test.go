@@ -101,7 +101,7 @@ func TestWrapperFunction(t *testing.T) {
 	fun := Functions[0]
 	t.Run("TestWrapperFunction without body", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest("POST", "/api"+fun.Path, nil)
+		r, _ := http.NewRequest("POST", "/api"+fun.Page.URL, nil)
 		router.ServeHTTP(w, r)
 		if w.Code != 500 {
 			t.Errorf("TestWrapperFunction = %d, want %d",
@@ -111,7 +111,7 @@ func TestWrapperFunction(t *testing.T) {
 	t.Run("TestWrapperFunction with body", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		body := "{\"message\":\"message\"}"
-		r, _ := http.NewRequest("POST", "/api"+fun.Path,
+		r, _ := http.NewRequest("POST", "/api"+fun.Page.URL,
 			strings.NewReader(body))
 		router.ServeHTTP(w, r)
 		if w.Code != http.StatusOK {
@@ -138,7 +138,7 @@ func TestWrapperFunctionCookie(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := httptest.NewRecorder()
-			r, _ := http.NewRequest("POST", "/api"+fun.Path, nil)
+			r, _ := http.NewRequest("POST", "/api"+fun.Page.URL, nil)
 			if tt.token != "" {
 				r.Header.Set("Cookie", "token="+tt.token)
 			}
@@ -156,59 +156,6 @@ func TestWrapperFunctionCookie(t *testing.T) {
 					body, err)
 			}
 
-		})
-	}
-}
-
-func TestWrapperFunctionCookieParam(t *testing.T) {
-	router := InitAPI()
-
-	tests := []struct {
-		name  string
-		token string
-		code  int
-		url   string
-		err   string
-	}{
-		{"good token", token, 200, "/l/424242", ""},
-		{"no token", "", 500, "/l/424242", "{\"error\":\"no_token_found\"}\n"},
-		{"invalid token", " ", 500, "/l/424242", "{\"error\":\"token_invalid\"}\n"},
-		{"no id", token, 301, "/l/", "<a href=\"/l\">Moved Permanently</a>.\n\n"},
-		{"wrong id", token, 500, "/l/test", "{\"error\":\"no_page_found\"}\n"},
-		{"wrong url", token, 404, "/l", "404 page not found\n"},
-		{"wrong data", token, 500, "/l/424242", "{\"error\":\"no_list_found\"}\n"},
-		{"wrong path", token, 500, "/l/424242", "{\"error\":\"invalid_file\"}\n"},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			Path = os.Getenv("STATIC_PWD")
-			if tt.name == "wrong data" {
-				data.Error = data.ErrTest
-			}
-			if tt.name == "wrong path" {
-				Path = ""
-			}
-			if tt.err == "" {
-				data.Error = nil
-			}
-			w := httptest.NewRecorder()
-			r, _ := http.NewRequest("GET", tt.url, nil)
-			if tt.token != "" {
-				r.Header.Set("Cookie", "token="+tt.token)
-			}
-			misc.LogRequest(r)
-			router.ServeHTTP(w, r)
-			if w.Code != tt.code {
-				t.Errorf("WrapperFunctionCookie = %d, want %d",
-					w.Code, tt.code)
-			}
-
-			body := w.Body.String()
-			if (body == tt.err) != (tt.err != "") {
-				t.Errorf("WrapperFunctionCookie = '%s', want '%s'",
-					body, tt.err)
-			}
-			data.Error = nil
 		})
 	}
 }

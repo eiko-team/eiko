@@ -24,9 +24,13 @@ import (
 type Func struct {
 	// Function is the function wrapped
 	Function func(data.Data, *http.Request) (string, error)
+	// Page TODO
+	Page Page
+}
 
-	// Path is the path on with you want to call the function from the api
-	Path string
+// NewFunc return a new Func struct
+func NewFunc(function func(data.Data, *http.Request) (string, error), path string) Func {
+	return Func{function, Page{URL: path}}
 }
 
 // File is used to link the special file path with the URL to serve
@@ -51,6 +55,24 @@ type Page struct {
 	Name string
 	// URL of the GET router
 	URL string
+	//FPath Static file path
+	FPath string
+	// Argument TODO
+	Argument string
+	// Function is the function wrapped
+	Function func(data.Data, *http.Request) (string, error)
+}
+
+// NewPage return a new Page struct
+func NewPage(function func(data.Data, *http.Request) (string, error), title, url, fpath string) Page {
+	return Page{Title: title,
+		ID:       0,
+		Name:     misc.SplitString(url, ":", 2)[1],
+		URL:      url,
+		FPath:    fpath,
+		Argument: "",
+		Function: function,
+	}
 }
 
 var (
@@ -65,24 +87,24 @@ var (
 
 	// FunctionsWithToken List all api functions that does require a token
 	FunctionsWithToken = []Func{
-		{Function: umanagement.UpdateToken, Path: "/updatetoken"},
-		{Function: umanagement.Delete, Path: "/delete"},
-		{Function: store.AddStore, Path: "/store/add"},
-		{Function: store.GetStore, Path: "/store/get"},
-		{Function: consumables.Store, Path: "/consumable/add"},
-		{Function: consumables.Get, Path: "/consumable/get"},
-		{Function: list.AddList, Path: "/list/create"},
-		{Function: list.GetLists, Path: "/list/getall"},
-		{Function: list.GetListContent, Path: "/list/getcontent"},
-		{Function: list.AddPersonnal, Path: "/list/add/personnal"},
+		NewFunc(umanagement.UpdateToken, "/updatetoken"),
+		NewFunc(umanagement.Delete, "/delete"),
+		NewFunc(store.AddStore, "/store/add"),
+		NewFunc(store.GetStore, "/store/get"),
+		NewFunc(consumables.Store, "/consumable/add"),
+		NewFunc(consumables.Get, "/consumable/get"),
+		NewFunc(list.AddList, "/list/create"),
+		NewFunc(list.GetLists, "/list/getall"),
+		NewFunc(list.GetListContent, "/list/getcontent"),
+		NewFunc(list.AddPersonnal, "/list/add/personnal"),
 	}
 	// Functions List all api functions that does not require a token
 	Functions = []Func{
-		{Function: global.Log, Path: "/log"},
-		{Function: umanagement.Login, Path: "/login"},
-		{Function: umanagement.Register, Path: "/register"},
-		{Function: verify.Email, Path: "/verify/email"},
-		{Function: verify.Password, Path: "/verify/password"},
+		NewFunc(global.Log, "/log"),
+		NewFunc(umanagement.Login, "/login"),
+		NewFunc(umanagement.Register, "/register"),
+		NewFunc(verify.Email, "/verify/email"),
+		NewFunc(verify.Password, "/verify/password"),
 	}
 
 	// SFiles is stored informations on special files
@@ -97,12 +119,7 @@ var (
 
 	// TFiles is an array of Templated files
 	TFiles = []File{
-		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html"}, "Acceuil"},
-	}
-
-	// FunctionsWithParam slice of Page
-	FunctionsWithParam = []Page{
-		{"", 0, "id", "/l/:id"},
+		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html", "/l/:id"}, "Acceuil"},
 	}
 )
 
@@ -193,7 +210,7 @@ func ServeFiles(r *httprouter.Router) {
 	} else {
 		fileType += "min/"
 	}
-	for _, tt := range []string{"img", "js", "css"} {
+	for _, tt := range []string{"img", "js", "css", "fonts"} {
 		ServeFilesCustom(r, "/"+tt, fileType+tt)
 	}
 }
@@ -237,81 +254,15 @@ func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 	fun.WrapperFunction(w, r, nil)
 }
 
-// WrapperFunctionCookieParam return to the user the full page with dinamic
-// content
-func (page Page) WrapperFunctionCookieParam(w http.ResponseWriter,
-	r *http.Request, ps httprouter.Params) {
-	misc.LogRequest(r)
-
-	w.Header().Set("Content-Type", "application/json")
-	token, err := r.Cookie("token")
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"no_token_found\"}")
-		return
-	}
-	D.User, err = misc.TokenToUser(token.Value)
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"token_invalid\"}")
-		return
-	}
-
-	pageID, err := misc.Atoi(ps.ByName(page.Name))
-	if err != nil {
-		Logger.Printf("Accessing: %s with id: %d(%s), err = %v",
-			page.URL, pageID, ps.ByName(page.Name), err)
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"no_page_found\"}")
-		return
-	}
-	page.ID = int64(pageID)
-
-	list, err := D.GetList(page.ID)
-	if err != nil {
-		Logger.Printf("%+v", err)
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"no_list_found\"}")
-		return
-	}
-	page.Title = list.Name
-
-	file, err := files.GetFileContent(Path + "/static/html/eiko.html")
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
-		return
-	}
-
-	h, err := template.New("webpage").Parse(file)
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"parse_failed\"}")
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(200)
-	err = h.Execute(w, page)
-	if err != nil {
-		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"could_not_exec\"}")
-		return
-	}
-}
-
 // InitAPI Execute the api and return the bdd configured.
 func InitAPI() *httprouter.Router {
 	r := httprouter.New()
 	ServeFiles(r)
 	for _, tt := range Functions {
-		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
+		r.POST(fmt.Sprintf("/api%s", tt.Page.URL), tt.WrapperFunction)
 	}
 	for _, tt := range FunctionsWithToken {
-		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunctionCookie)
-	}
-	for _, tt := range FunctionsWithParam {
-		r.GET(tt.URL, tt.WrapperFunctionCookieParam)
+		r.POST(fmt.Sprintf("/api%s", tt.Page.URL), tt.WrapperFunctionCookie)
 	}
 	return r
 }
