@@ -8,6 +8,7 @@ import (
 	"net/http/httputil"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -96,4 +97,14 @@ func ValidateToken(token string) bool {
 func Atoi(value string) (int, error) {
 	i64, err := strconv.ParseInt(value, 10, 0)
 	return int(i64), err
+}
+
+// SplitString return the string s splited with the separator sep and the size
+// of result is at least lenRes.
+func SplitString(s, sep string, lenRes int) []string {
+	var res []string
+	for res = strings.Split(s, sep); len(res) < lenRes; {
+		res = append(res, "")
+	}
+	return res
 }
