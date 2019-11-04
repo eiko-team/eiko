@@ -81,12 +81,12 @@ func TestGetConsumables(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.name == "simple" {
 				data.Consumables = []structures.Consumables{
-					structures.Consumables{
+					{
 						Consumable: data.ConsumableTest,
 						Store:      data.StoreTest,
 						Stock:      structures.Stock{},
 					},
-					structures.Consumables{
+					{
 						Consumable: data.ConsumableTest,
 						Store:      data.StoreTest,
 						Stock:      structures.Stock{},
