@@ -101,7 +101,7 @@ func TestWrapperFunction(t *testing.T) {
 	fun := Functions[0]
 	t.Run("TestWrapperFunction without body", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest("POST", "/api"+fun.Page.URL, nil)
+		r, _ := http.NewRequest("POST", "/api"+fun.Path, nil)
 		router.ServeHTTP(w, r)
 		if w.Code != 500 {
 			t.Errorf("TestWrapperFunction = %d, want %d",
@@ -111,7 +111,7 @@ func TestWrapperFunction(t *testing.T) {
 	t.Run("TestWrapperFunction with body", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		body := "{\"message\":\"message\"}"
-		r, _ := http.NewRequest("POST", "/api"+fun.Page.URL,
+		r, _ := http.NewRequest("POST", "/api"+fun.Path,
 			strings.NewReader(body))
 		router.ServeHTTP(w, r)
 		if w.Code != http.StatusOK {
@@ -138,7 +138,7 @@ func TestWrapperFunctionCookie(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := httptest.NewRecorder()
-			r, _ := http.NewRequest("POST", "/api"+fun.Page.URL, nil)
+			r, _ := http.NewRequest("POST", "/api"+fun.Path, nil)
 			if tt.token != "" {
 				r.Header.Set("Cookie", "token="+tt.token)
 			}

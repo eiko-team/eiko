@@ -24,13 +24,13 @@ import (
 type Func struct {
 	// Function is the function wrapped
 	Function func(data.Data, *http.Request) (string, error)
-	// Page TODO
-	Page Page
+	// Path is the path on with you want to call the function from the api
+	Path string
 }
 
 // NewFunc return a new Func struct
 func NewFunc(function func(data.Data, *http.Request) (string, error), path string) Func {
-	return Func{function, Page{URL: path}}
+	return Func{function, path}
 }
 
 // File is used to link the special file path with the URL to serve
@@ -43,36 +43,6 @@ type File struct {
 	URL []string
 	// Title page title
 	Title string
-}
-
-// Page Page struct to contain most elements on a page
-type Page struct {
-	// Title page title
-	Title string
-	// ID List id
-	ID int64
-	// Name of the parameter
-	Name string
-	// URL of the GET router
-	URL string
-	//FPath Static file path
-	FPath string
-	// Argument TODO
-	Argument string
-	// Function is the function wrapped
-	Function func(data.Data, *http.Request) (string, error)
-}
-
-// NewPage return a new Page struct
-func NewPage(function func(data.Data, *http.Request) (string, error), title, url, fpath string) Page {
-	return Page{Title: title,
-		ID:       0,
-		Name:     misc.SplitString(url, ":", 2)[1],
-		URL:      url,
-		FPath:    fpath,
-		Argument: "",
-		Function: function,
-	}
 }
 
 var (
@@ -259,10 +229,10 @@ func InitAPI() *httprouter.Router {
 	r := httprouter.New()
 	ServeFiles(r)
 	for _, tt := range Functions {
-		r.POST(fmt.Sprintf("/api%s", tt.Page.URL), tt.WrapperFunction)
+		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunction)
 	}
 	for _, tt := range FunctionsWithToken {
-		r.POST(fmt.Sprintf("/api%s", tt.Page.URL), tt.WrapperFunctionCookie)
+		r.POST(fmt.Sprintf("/api%s", tt.Path), tt.WrapperFunctionCookie)
 	}
 	return r
 }
