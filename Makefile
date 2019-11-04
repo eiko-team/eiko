@@ -24,12 +24,16 @@ HTML_MIN_ARGS = --collapse-whitespace \
 
 all: build-go-light
 all: lint
+all: fmt
 all: vet
 all: test
 all: clean
 
 lint:
 	golint ./...
+
+fmt:
+	./scripts/gofmt.sh
 
 build-go-light:
 	$(GO) build -o $(BIN)
