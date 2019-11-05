@@ -1,8 +1,9 @@
 package sanity_test
 
 import (
-	"eiko/src"
 	"testing"
+
+	"github.com/eiko-team/eiko/src"
 )
 
 func TestAbs(t *testing.T) {

@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/structures"
 
-	"eiko/misc/hash"
-	"eiko/misc/structures"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 var (

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"eiko/misc/data"
-	"eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
 
 	"github.com/julienschmidt/httprouter"
 )

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"eiko/misc/hash"
-	"eiko/misc/structures"
+	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 var (

@@ -1,15 +1,16 @@
 package misc_test
 
 import (
-	"eiko/misc/data"
-	"eiko/misc/misc"
-	"eiko/misc/structures"
 	"encoding/json"
 	"net/http"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 func TestParseJSON(t *testing.T) {

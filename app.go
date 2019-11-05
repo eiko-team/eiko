@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"eiko/api"
+	"github.com/eiko-team/eiko/api"
 )
 
 // Config server configuration struct

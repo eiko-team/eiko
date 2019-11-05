@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"eiko/misc/files"
+	"github.com/eiko-team/eiko/misc/files"
 )
 
 func TestGetFileContent(t *testing.T) {

@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"eiko/misc/data"
-	"eiko/misc/misc"
-	"eiko/misc/structures"
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 var (

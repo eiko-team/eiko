@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"eiko/api/verify"
-	"eiko/misc/data"
-	"eiko/misc/misc"
+	"github.com/eiko-team/eiko/api/verify"
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
 )
 
 var (
