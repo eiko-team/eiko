@@ -29,11 +29,14 @@ func Log(d data.Data, r *http.Request) (string, error) {
 	user, _ := misc.TokenToUser(i.Token)
 
 	Logger.Printf("%v", i)
+	remoteAddr := misc.SplitString(r.RemoteAddr, ":", 2)
 
 	err = d.Log(structures.Log{
 		Email:   user.Email,
 		Log:     i.Log,
 		Created: time.Now(),
+		IP:      remoteAddr[0],
+		Port:    remoteAddr[1],
 	})
 	if err != nil {
 		return "", errors.New("3.0.1")
