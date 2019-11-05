@@ -8,6 +8,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/eikoapp/eiko?logo=docker)](https://hub.docker.com/r/eikoapp/eiko/)
 [![discord](https://img.shields.io/discord/621015347918536724?logo=discord)](https://discord.gg/NxuCWQs)
 [![tipeee](https://img.shields.io/badge/tipeee-Tip!-green)](https://tipeee.com/eiko-app)
+[![Godoc](https://img.shields.io/badge/godoc-eiko-blue?logo=go)](https://godoc.org/github.com/eiko-team/eiko)
 
 eiko web app
 
