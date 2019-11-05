@@ -12,7 +12,7 @@ function fromCache(request) {
                 return Promise.reject("no-match");
             }
             // see https://bugs.chromium.org/p/chromium/issues/detail?id=823392
-            if (e.request.cache === 'only-if-cached' && e.request.mode !== 'same-origin') { return }
+            if (e.request.cache === "only-if-cached" && e.request.mode !== "same-origin") { return }
             return matching;
         });
     });
@@ -86,10 +86,14 @@ self.addEventListener("fetch", function(event) {
     ));
 });
 
-// for a 'add to home screen'
+// for a "add to home screen"
 self.addEventListener("beforeinstallprompt", function(e) {
     // showInstallPromotion();
     log("beforeinstallprompt");
+    // Stash the event so it can be triggered later.
+    window.deferredPrompt = event;
+    // Remove the "hidden" class from the install button container
+    document.getElementById("divInstall").classList.toggle("hidden", false);
 });
 
 // log is the user has installed the app
