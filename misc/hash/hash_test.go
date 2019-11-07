@@ -22,9 +22,6 @@ func ExampleHash() {
 
 	CompareHash(hash, pass)       // true
 	CompareHash(hash, "not pass") // false
-
-	// Output:
-	// $2a$10$[...]
 }
 
 func ExampleCompareHash() {
@@ -38,16 +35,13 @@ func ExampleCompareHash() {
 
 	CompareHash(hash, pass)       // true
 	CompareHash(hash, "not pass") // false
-
-	// Output:
-	// $2a$10$[...]
 }
 
 func ExampleGenerateKey() {
 	fmt.Println(GenerateKey(10))
 
 	// Output:
-	// [...] // random string with a length of 10 char
+	// &[l8+P$w\B
 }
 
 func TestHashExample(t *testing.T) {
