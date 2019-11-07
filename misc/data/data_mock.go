@@ -164,7 +164,7 @@ func (d Data) StoreStore(store structures.Store) error {
 }
 
 // StoreConsumable is used to store a log in the datastore
-func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
+func (d Data) StoreConsumable(consumable interface{}) (int64, error) {
 	StoreConsumable = true
 	return ID, Error
 }
