@@ -37,11 +37,14 @@ func TestParseJSON(t *testing.T) {
 		// TODO assert deepequals data.ConsumableTest and consumable
 	})
 	t.Run("Bad Json", func(t *testing.T) {
-		body := "toto"
+		body := "xoto"
 		r, _ := http.NewRequest("POST", "/test",
 			strings.NewReader(body))
 		var consumable structures.Consumable
-		misc.ParseJSON(r, &consumable)
+		err := misc.ParseJSON(r, &consumable)
+		if err == nil {
+			t.Errorf("ParseJSON(%+v) != %v", consumable, true)
+		}
 		if reflect.DeepEqual(data.ConsumableTest, consumable) {
 			t.Errorf("ParseJSON(%+v) != %+v", consumable, data.ConsumableTest)
 		}
@@ -135,6 +138,57 @@ func TestAtoi(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("Atoi() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+type struct1 struct {
+	Name    string `json:"name" firestore:"Name"`
+	Address string `json:"address" firestore:"Address"`
+	Country string `json:"country" firestore:"Country"`
+}
+
+type struct2WithInt struct {
+	Name string `json:"name" firestore:"Name"`
+	Code int    `json:"code" firestore:"Code"`
+}
+
+var (
+	s1 = struct1{"test name", "test address", "test country"}
+	s2 = struct2WithInt{"test name", 10}
+)
+
+func TestParseStruct(t *testing.T) {
+	tests := []struct {
+		name    string
+		mode    int
+		wantErr bool
+	}{
+		{"only strings", 1, false},
+		{"strings and int", 2, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var body interface{}
+			switch tt.mode {
+			case 1:
+				body = s1
+			case 2:
+				body = s2
+			}
+			j, _ := json.Marshal(body)
+			req, _ := http.NewRequest("POST", "/",
+				strings.NewReader(string(j)))
+			i, err := misc.ParseStruct(req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ParseStruct() = '%v', want '%v'", err, tt.wantErr)
+			}
+			t.Logf("%T %T", i, body)
+			// TODO: write proper test to check the content of the returned
+			// struct
+			// if !reflect.DeepEqual(i, body) {
+			// 	t.Errorf("ParseStruct() = '%+v', want '%+v'", i, body)
+			// }
 		})
 	}
 }

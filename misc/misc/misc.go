@@ -3,13 +3,17 @@ package misc
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"os"
+	"reflect"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/Ompluscator/dynamic-struct"
 	jwt "github.com/dgrijalva/jwt-go"
 
 	"eiko/misc/hash"
@@ -34,13 +38,60 @@ func ParseJSON(r *http.Request, v interface{}) error {
 	if r == nil || r.Body == nil {
 		return fmt.Errorf("No Body")
 	}
-	decoder := json.NewDecoder(r.Body)
+
 	defer r.Body.Close()
-	err := decoder.Decode(v)
-	if err != nil {
-		Logger.Printf("\033[31mError\033[0m: '%s'\n", err.Error())
+	return json.NewDecoder(r.Body).Decode(v)
+}
+
+// ParseStruct generic function to parse request body, extract it's content,
+// create a struct, fill it and return it
+func ParseStruct(r *http.Request) (interface{}, error) {
+	if r == nil || r.Body == nil {
+		return nil, fmt.Errorf("No Body")
 	}
-	return err
+
+	// mapping request's body to map
+	body, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	bodyMap := make(map[string]interface{})
+	err = json.Unmarshal(body, &bodyMap)
+	if err != nil {
+		return nil, err
+	}
+
+	// creating new struct
+	s := dynamicstruct.NewStruct()
+	for key, value := range bodyMap {
+		json := strings.ToLower(key)
+		firestore := strings.Title(json)
+		tag := fmt.Sprintf(`json:"%s" firestore:"%s"`, json, firestore)
+		switch t := reflect.ValueOf(value); t.Kind() {
+		case reflect.Int:
+			v, err := Atoi(value.(string))
+			if err != nil {
+				return nil, err
+			}
+			s.AddField(firestore, v, tag)
+		case reflect.String:
+			s.AddField(firestore, value, tag)
+		}
+	}
+	i := s.Build().New()
+	req, err := http.NewRequest("POST", "/",
+		strings.NewReader(string(body)))
+	if err != nil {
+		return nil, err
+	}
+	err = ParseJSON(req, &i)
+	if err != nil {
+		return nil, err
+	}
+	Logger.Printf("%+v", i)
+	return i, nil
 }
 
 // LogRequest logs a *http.Request using the Logger
