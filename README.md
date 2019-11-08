@@ -42,6 +42,12 @@ make cover
 $BROWSER test.html
 ```
 
+### Self hosted doc in html
+```bash
+godoc -http ":8080"
+$BROWSER http://127.0.0.1:8080/pkg/github.com/eiko-team/eiko/
+```
+
 ## Docker compose
 .env file content:
 ```
