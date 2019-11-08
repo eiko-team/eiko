@@ -48,42 +48,37 @@ var (
 	StockRe        = `{"ID":\d+,"pack_quantity":\d+,"nb_packs":\d+,"pack_price":\d+,"available":[a-z]+,"store_key":\d+,"consumable_key":\d+,"geohash":\d+}`
 	StockTest      = structures.Stock{}
 	Consumable     = structures.Consumable{}
-	ConsumableRe   = `{"name":"[a-zA-Z0-9 ]+","Compagny":"[a-zA-Z0-9 ]+","characteristics":{"global_interest":{"boycott":[a-z]+,"ecological_impact":"[a-zA-Z0-9 ]+","social_impact":"[a-zA-Z0-9 ]+"},"health":{"Additive":\["([a-zA-Z0-9 ]+",?)+\],"allergen":\["([a-zA-Z0-9 ]+",?)+\],"nutrition":{"energie":\d+,"fat":\d+,"fibres":\d+,"glucides":\d+,"lipides":\d+,"proteins":\d+,"salt":\d+,"saturated_fat":\d+,"sugar_glucides":\d+}}},"pictures":{"back":"\S+","bar_code":"\S+","composition":"\S+","front":"\S+"},"quantity":{"kg":\d+,"litre":\d+},"ID":\d+}`
+	ConsumableRe   = `{"ID":\d+,"name":"[a-zA-Z 0-9,_]+","compagny":"[a-zA-Z 0-9,_]+","manifacturing":"[a-zA-Z 0-9,_]+","Created":"0001-01-01T00:00:00Z","Creator":\d+,"NewVersion":\d+,"Source":"[a-zA-Z 0-9,_]*","code":\[("[a-zA-Z 0-9,_-]+",?)*\],"categories":\[("[a-zA-Z 0-9,_-]+",?)*\],"tags":\[("[a-zA-Z 0-9,_-]+",?)*\],"packaging":\[("[a-zA-Z 0-9,_-]+",?)*\],"energie":\d+,"fat":\d+,"fiber":\d+,"glucides":\d+,"lipides":\d+,"proteins":\d+,"sodium":\d+,"saturated_fat":\d+,"sugar_glucides":\d+,"energy":\d+,"alcool":\d+,"additive":\[("[a-zA-Z 0-9,_-]+",?)*\],"ingredient":\[("[a-zA-Z 0-9,_-]+",?)*\],"vitamins":\[("[a-zA-Z 0-9,_-]+",?)*\],"allergen":\[("[a-zA-Z 0-9,_-]+",?)*\],"nutri_score":"[a-z]","back":"url","composition":"url","front":"url","grammes":\d+,"mililitre":\d+,"label":\[("[a-zA-Z 0-9,_-]+",?)*\]}`
 	ConsumableTest = structures.Consumable{
-		Name:    "Simple Name",
-		Company: "Simple Compagny Name",
-		Characteristics: structures.Characteristics{
-			GlobalInterest: structures.GlobalInterest{
-				Boycott:          false,
-				EcologicalImpact: "Yes",
-				SocialImpact:     "Inexistant",
-			},
-			Health: structures.Health{
-				Additive: []string{"E404"},
-				Allergen: []string{"glutten"},
-				Nutrition: structures.Nutrition{
-					Energie:       9001,
-					Fat:           9001,
-					Fibres:        9001,
-					Glucides:      9001,
-					Lipides:       9001,
-					Proteins:      9001,
-					Salt:          9001,
-					SaturatedFat:  9001,
-					SugarGlucides: 9001,
-				},
-			},
-		},
-		Pictures: structures.Pictures{
-			Back:        "url",
-			BarCode:     "url",
-			Composition: "url",
-			Front:       "url",
-		},
-		Quantity: structures.Quantity{
-			Kg:    42,
-			Litre: 21,
-		},
+		Name:          "Simple Name",
+		Company:       "Simple Compagny Name",
+		Additive:      []string{"E404"},
+		Allergen:      []string{"glutten"},
+		Energie:       9001,
+		Fat:           9001,
+		Fiber:         9001,
+		Glucides:      9001,
+		Lipides:       9001,
+		Proteins:      9001,
+		Sodium:        9001,
+		SaturatedFat:  9001,
+		SugarGlucides: 9001,
+		Energy:        9001,
+		Alcool:        9001,
+		Back:          "url",
+		Composition:   "url",
+		Front:         "url",
+		Manufacturing: "1 rue du pont, 75001 Paris",
+		Code:          []string{"code-13", "0001006530676", "000100653067x", "00010065306xx", "0001006530xxx", "000100653xxxx", "00010065xxxxx", "0001006xxxxxx", "000100xxxxxxx", "00010xxxxxxxx", "0001xxxxxxxxx", "000xxxxxxxxxx", "00xxxxxxxxxxx", "0xxxxxxxxxxxx"},
+		Categories:    []string{"Conserves"},
+		Tags:          []string{"paste", "vegetarien", "terre", "soybean"},
+		Packaging:     []string{},
+		Ingredient:    []string{"WATER", "SOYBEANS", "RICE", "SALT", "ALCOHOL"},
+		Vitamins:      []string{"B12"},
+		NutriScore:    "a",
+		Grammes:       0,
+		MLitre:        1000,
+		Label:         []string{"AOC"},
 	}
 	Consumables   = []structures.Consumables{}
 	ConsumablesRe = fmt.Sprintf("{\"consumable\":%s,\"store\":%s,\"stock\":%s}",
