@@ -142,7 +142,7 @@ func TestWrapperFunctionCookie(t *testing.T) {
 			if tt.token != "" {
 				r.Header.Set("Cookie", "token="+tt.token)
 			}
-			misc.LogRequest(r)
+			t.Log(misc.DumpRequest(r))
 			router.ServeHTTP(w, r)
 			if w.Code != tt.code {
 				t.Errorf("WrapperFunctionCookie = %d, want %d",
@@ -196,7 +196,7 @@ func TestWrapperFunctionCookieParam(t *testing.T) {
 			if tt.token != "" {
 				r.Header.Set("Cookie", "token="+tt.token)
 			}
-			misc.LogRequest(r)
+			t.Log(misc.DumpRequest(r))
 			router.ServeHTTP(w, r)
 			if w.Code != tt.code {
 				t.Errorf("WrapperFunctionCookie = %d, want %d",
