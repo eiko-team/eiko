@@ -128,11 +128,10 @@ func (d Data) StoreStore(store structures.Store) error {
 }
 
 // StoreConsumable is used to store a consumable in the datastore
-func (d Data) StoreConsumable(consumable structures.Consumable) error {
-	consumable.ID = 0
+func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
 	key := datastore.IncompleteKey(d.consumables, nil)
-	_, err := d.client.Put(d.ctx, key, &consumable)
-	return err
+	key, err := d.client.Put(d.ctx, key, &consumable)
+	return key.ID, err
 }
 
 func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structures.Stock, error) {

@@ -4,8 +4,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/eiko-team/eiko)](https://goreportcard.com/report/github.com/eiko-team/eiko)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/13cbb61d7e734f16a8f0494e0a13a993)](https://www.codacy.com/manual/tomMoulard/eiko?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=eiko-team/eiko&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/eiko-team/eiko/branch/master/graph/badge.svg)](https://codecov.io/gh/eiko-team/eiko)
-![Docker Pulls](https://img.shields.io/docker/pulls/eikoapp/eiko)
-![Docker Stars](https://img.shields.io/docker/stars/eikoapp/eiko)
+[![Docker Pulls](https://img.shields.io/docker/pulls/eikoapp/eiko?logo=docker)](https://hub.docker.com/r/eikoapp/eiko/)
+[![Docker Stars](https://img.shields.io/docker/stars/eikoapp/eiko?logo=docker)](https://hub.docker.com/r/eikoapp/eiko/)
+[![discord](https://img.shields.io/discord/621015347918536724?logo=discord)](https://discord.gg/NxuCWQs)
+[![tipeee](https://img.shields.io/badge/tipeee-Tip!-green)](https://tipeee.com/eiko-app)
+[![Godoc](https://img.shields.io/badge/godoc-eiko-blue?logo=go)](https://godoc.org/github.com/eiko-team/eiko)
 
 eiko web app
 

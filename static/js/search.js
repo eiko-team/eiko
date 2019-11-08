@@ -7,9 +7,9 @@ function search(element) {
         getTargetPosition();
         POST("/consumable/get", {
             query: element.value,
-            latitude: getCookie("posLat"),
-            longitude: getCookie("posLon"),
-            accuracy: getCookie("posAcc")
+            latitude: Number(getCookie("posLat")),
+            longitude: Number(getCookie("posLon")),
+            accuracy: Number(getCookie("posAcc"))
         }, function(e) {
             e.forEach(displaySearchResult);
             showLoadingGif(false)

@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -9,6 +10,39 @@ var (
 	pass    = "pass"
 	hash, _ = Hash(pass)
 )
+
+func ExampleHash() {
+	pass := "pass"
+	hash, err := Hash(pass)
+	if err != nil {
+		// Use a better handler
+		panic(err)
+	}
+	fmt.Println(hash)
+
+	CompareHash(hash, pass)       // true
+	CompareHash(hash, "not pass") // false
+}
+
+func ExampleCompareHash() {
+	pass := "pass"
+	hash, err := Hash(pass)
+	if err != nil {
+		// Use a better handler
+		panic(err)
+	}
+	fmt.Println(hash)
+
+	CompareHash(hash, pass)       // true
+	CompareHash(hash, "not pass") // false
+}
+
+func ExampleGenerateKey() {
+	fmt.Println(GenerateKey(10))
+
+	// Output:
+	// &[l8+P$w\B
+}
 
 func TestHashExample(t *testing.T) {
 	pass := "pass"

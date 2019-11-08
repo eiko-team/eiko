@@ -2,6 +2,7 @@ package misc_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"reflect"
 	"strings"
@@ -12,6 +13,42 @@ import (
 	"github.com/eiko-team/eiko/misc/misc"
 	"github.com/eiko-team/eiko/misc/structures"
 )
+
+func ExampleParseJSON() {
+	type Example struct {
+		Name string `json:"name"`
+	}
+
+	req, _ := http.NewRequest("POST", "/test",
+		strings.NewReader(`{"name":"test"}`))
+
+	var example Example
+	misc.ParseJSON(req, &example)
+
+	fmt.Printf("%+v", example)
+
+	// Output:
+	// {Name:test}
+}
+
+func ExampleParseJSON_error() {
+	type Example struct {
+		Name string `json:"name"`
+	}
+
+	req, _ := http.NewRequest("POST", "/test",
+		strings.NewReader(`bad Json`))
+
+	var example Example
+	err := misc.ParseJSON(req, &example)
+
+	fmt.Printf("%+v\n", example)
+	fmt.Printf("%s", err.Error())
+
+	// Output:
+	// {Name:}
+	// invalid character 'b' looking for beginning of value
+}
 
 func TestParseJSON(t *testing.T) {
 	t.Run("no request", func(t *testing.T) {
@@ -38,16 +75,60 @@ func TestParseJSON(t *testing.T) {
 		// TODO assert deepequals data.ConsumableTest and consumable
 	})
 	t.Run("Bad Json", func(t *testing.T) {
-		body := "toto"
+		body := "xoto"
 		r, _ := http.NewRequest("POST", "/test",
 			strings.NewReader(body))
 		var consumable structures.Consumable
-		misc.ParseJSON(r, &consumable)
+		err := misc.ParseJSON(r, &consumable)
+		if err == nil {
+			t.Errorf("ParseJSON(%+v) != %v", consumable, true)
+		}
 		if reflect.DeepEqual(data.ConsumableTest, consumable) {
 			t.Errorf("ParseJSON(%+v) != %+v", consumable, data.ConsumableTest)
 		}
 
 	})
+}
+
+func ExampleDumpRequest() {
+	r, _ := http.NewRequest("GET", "/index.html", nil)
+
+	fmt.Println(misc.DumpRequest(r))
+
+	// Output:
+	// GET /index.html HTTP/1.1
+}
+
+func TestDumpRequest(t *testing.T) {
+	test := []struct {
+		name string
+		mode string
+		url  string
+		body string
+	}{
+		{"sanity", "GET", "/api/test", ""},
+		{"GET with body", "GET", "/api/test", "this is the body"},
+		{"POST with body", "POST", "/api/test", "this is the body"},
+		{"DELETE with body", "DELETE", "/api/test", "this is the body"},
+		{"UPDATE with body", "UPDATE", "/api/test", "this is the body"},
+	}
+	for _, tt := range test {
+		t.Run(tt.name, func(t *testing.T) {
+			r, _ := http.NewRequest(tt.mode, tt.url,
+				strings.NewReader(tt.body))
+			got := misc.DumpRequest(r)
+			want := fmt.Sprintf("%s %s HTTP/1.1\r\n\r\n%s", tt.mode, tt.url, tt.body)
+			if got != want {
+				t.Errorf("DumpRequest() = '%s' != '%s'", want, got)
+			}
+		})
+	}
+}
+
+func ExampleLogRequest() {
+	r, _ := http.NewRequest("GET", "/index.html", nil)
+
+	misc.LogRequest(r) // Misc: 2000/01/01 00:00:00 misc.go:56: GET /index.html HTTP/1.1
 }
 
 func TestLogRequest(t *testing.T) {
@@ -110,6 +191,20 @@ var (
 	MaxInt  = int(MaxUint >> 1)
 	MinInt  = -MaxInt - 1
 )
+
+func ExampleAtoi() {
+	fmt.Println(misc.Atoi("42"))
+
+	// Output:
+	// 42 <nil>
+}
+
+func ExampleAtoi_error() {
+	fmt.Println(misc.Atoi("test"))
+
+	// Output:
+	// 0 strconv.ParseInt: parsing "test": invalid syntax
+}
 
 func TestAtoi(t *testing.T) {
 	tests := []struct {

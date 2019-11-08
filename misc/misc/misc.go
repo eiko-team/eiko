@@ -35,13 +35,18 @@ func ParseJSON(r *http.Request, v interface{}) error {
 	if r == nil || r.Body == nil {
 		return fmt.Errorf("No Body")
 	}
-	decoder := json.NewDecoder(r.Body)
+
 	defer r.Body.Close()
-	err := decoder.Decode(v)
+	return json.NewDecoder(r.Body).Decode(v)
+}
+
+// DumpRequest return the request in a string format
+func DumpRequest(r *http.Request) string {
+	requestDump, err := httputil.DumpRequest(r, true)
 	if err != nil {
-		Logger.Printf("\033[31mError\033[0m: '%s'\n", err.Error())
+		Logger.Println(err)
 	}
-	return err
+	return string(requestDump)
 }
 
 // LogRequest logs a *http.Request using the Logger
@@ -49,12 +54,7 @@ func LogRequest(r *http.Request) {
 	if r == nil {
 		return
 	}
-
-	requestDump, err := httputil.DumpRequest(r, true)
-	if err != nil {
-		Logger.Println(err)
-	}
-	Logger.Println(fmt.Sprintf("%q", requestDump))
+	Logger.Println(DumpRequest(r))
 }
 
 // UserToToken convert the user information to a valid token

@@ -29,7 +29,7 @@ func TestStoreConsumable(t *testing.T) {
 		body    string
 		useData bool
 	}{
-		{"sanity", `{"done":"true"}`, false, "{\"consumable\":" + c + "}",
+		{"sanity", `{"done":true,"id":\d+}`, false, "{\"consumable\":" + c + "}",
 			true},
 		{"bad json", `3.0.0`, true, "}", false},
 		{"wrong data", `3.0.1`, true, "{\"consumable\":" + c + "}", true},
@@ -41,6 +41,7 @@ func TestStoreConsumable(t *testing.T) {
 			}
 			req, _ := http.NewRequest("POST", "/consumable/add",
 				strings.NewReader(tt.body))
+			t.Log(misc.DumpRequest(req))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := consumables.Store(d, req)
 			if (err != nil) != tt.wantErr {
@@ -71,9 +72,9 @@ func TestGetConsumables(t *testing.T) {
 		wantErr bool
 		useData bool
 	}{
-		{"sanity", `{"query":\[\]}`, "{\"query\":\"query\"}", false, true},
+		{"sanity", `\[\]`, "{\"query\":\"query\"}", false, true},
 		{"wrong json in body", `3.1.0`, "}", true, false},
-		{"simple", fmt.Sprintf(`{"query":\[(%s,?)+\]}`, data.ConsumablesRe),
+		{"simple", fmt.Sprintf(`\[(%s,?)+\]`, data.ConsumablesRe),
 			"{\"query\":\"query\"}", false, true},
 		{"no data", `3.1.1`, "{\"query\":\"query\"}", true, true},
 	}
@@ -107,10 +108,12 @@ func TestGetConsumables(t *testing.T) {
 			if tt.wantErr {
 				got = err.Error()
 			}
-			t.Logf("%+v", got)
+			t.Logf("test: '%+v'", tt)
+			t.Logf("got: '%+v'", got)
 			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
 			if len(matchs) == 0 {
-				t.Errorf("Get() = '%v', want %v", got, tt.want)
+				t.Errorf("Get() = '%v', want something like: '%v'",
+					got, tt.want)
 			}
 			if data.GetConsumables != tt.useData {
 				t.Errorf("Data was no stored")

@@ -85,7 +85,7 @@ var (
 			Litre: 21,
 		},
 	}
-	Consumables   []structures.Consumables
+	Consumables   = []structures.Consumables{}
 	ConsumablesRe = fmt.Sprintf("{\"consumable\":%s,\"store\":%s,\"stock\":%s}",
 		ConsumableRe, StoreRe, StockRe)
 	ConsumablesTest = []structures.Consumables{
@@ -164,9 +164,9 @@ func (d Data) StoreStore(store structures.Store) error {
 }
 
 // StoreConsumable is used to store a log in the datastore
-func (d Data) StoreConsumable(consumable structures.Consumable) error {
+func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
 	StoreConsumable = true
-	return Error
+	return ID, Error
 }
 
 // GetConsumables is used to store a log in the datastore
