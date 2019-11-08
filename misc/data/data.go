@@ -128,7 +128,7 @@ func (d Data) StoreStore(store structures.Store) error {
 }
 
 // StoreConsumable is used to store a consumable in the datastore
-func (d Data) StoreConsumable(consumable interface{}) (int64, error) {
+func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
 	key := datastore.IncompleteKey(d.consumables, nil)
 	key, err := d.client.Put(d.ctx, key, &consumable)
 	return key.ID, err

@@ -157,38 +157,3 @@ var (
 	s1 = struct1{"test name", "test address", "test country"}
 	s2 = struct2WithInt{"test name", 10}
 )
-
-func TestParseStruct(t *testing.T) {
-	tests := []struct {
-		name    string
-		mode    int
-		wantErr bool
-	}{
-		{"only strings", 1, false},
-		{"strings and int", 2, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var body interface{}
-			switch tt.mode {
-			case 1:
-				body = s1
-			case 2:
-				body = s2
-			}
-			j, _ := json.Marshal(body)
-			req, _ := http.NewRequest("POST", "/",
-				strings.NewReader(string(j)))
-			i, err := misc.ParseStruct(req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ParseStruct() = '%v', want '%v'", err, tt.wantErr)
-			}
-			t.Logf("%T %T", i, body)
-			// TODO: write proper test to check the content of the returned
-			// struct
-			// if !reflect.DeepEqual(i, body) {
-			// 	t.Errorf("ParseStruct() = '%+v', want '%+v'", i, body)
-			// }
-		})
-	}
-}

@@ -21,8 +21,10 @@ var (
 
 // Store Stores consumable data
 func Store(d data.Data, r *http.Request) (string, error) {
-	i, err := misc.ParseStruct(r)
+	var i structures.Consumable
+	err := misc.ParseJSON(r, &i)
 	if err != nil {
+		Logger.Println(err)
 		return "", errors.New("3.0.0")
 	}
 
