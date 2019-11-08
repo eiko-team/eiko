@@ -41,7 +41,7 @@ func TestStoreConsumable(t *testing.T) {
 			}
 			req, _ := http.NewRequest("POST", "/consumable/add",
 				strings.NewReader(tt.body))
-			misc.LogRequest(req)
+			t.Log(misc.DumpRequest(r))
 			req.Header.Set("Cookie", fmt.Sprintf("token=%s", token))
 			got, err := consumables.Store(d, req)
 			if (err != nil) != tt.wantErr {
