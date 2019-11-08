@@ -3,13 +3,13 @@ jobs:
   build:
     docker:
       - image: eikoapp/test-docker:latest
-    working_directory: /root/go/src/eiko
+    working_directory: /root/go/src/github.com/eiko-team/eiko
     steps:
       - checkout
       - run:
           name: Setup custom environment variables
           command: |
-            echo 'export STATIC_PWD="/root/go/src/eiko"' >> $BASH_ENV
+            echo 'export STATIC_PWD="/root/go/src/github.com/eiko-team/eiko"' >> $BASH_ENV
       - run:
           name: make all
           command: make all

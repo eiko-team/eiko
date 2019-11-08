@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"eiko/misc/structures"
+	"github.com/eiko-team/eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"
 	// https://blog.nobugware.com/post/2015/leveldb_geohash_golang/

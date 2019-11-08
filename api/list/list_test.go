@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"eiko/api/list"
-	"eiko/misc/data"
-	"eiko/misc/misc"
+	"github.com/eiko-team/eiko/api/list"
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
 )
 
 var (

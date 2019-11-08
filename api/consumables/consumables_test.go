@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"eiko/api/consumables"
-	"eiko/misc/data"
-	"eiko/misc/misc"
-	"eiko/misc/structures"
+	"github.com/eiko-team/eiko/api/consumables"
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 var (
@@ -82,12 +82,12 @@ func TestGetConsumables(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.name == "simple" {
 				data.Consumables = []structures.Consumables{
-					structures.Consumables{
+					{
 						Consumable: data.ConsumableTest,
 						Store:      data.StoreTest,
 						Stock:      structures.Stock{},
 					},
-					structures.Consumables{
+					{
 						Consumable: data.ConsumableTest,
 						Store:      data.StoreTest,
 						Stock:      structures.Stock{},

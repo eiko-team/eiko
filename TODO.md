@@ -1,0 +1,42 @@
+# Test's TODO
+
+ - [X] Code of conduct
+ - [X] readme
+ - [ ] directives de contributions
+ - [X] Tests API
+ - [X] Tests static files
+ - [ ] Fix POST function and cookies
+ - [ ] cache datastore api calls
+ - [ ] [canonical link](https://developers.google.com/web/tools/lighthouse/audits/canonical)
+ - [ ] API
+     - [ ] /delete: delete account
+     - [X] /updatetoken: update token with token
+     - [X] /verify: verify some stuff like email, password or token
+     - [ ] Store
+         - [X] /store/add
+         - [ ] /store/update
+         - [ ] /store/score
+         - [ ] /store/delete
+         - [X] /store/get
+     - [ ] Consumable
+         - [X] /consumable/add
+         - [ ] /consumable/stock/add
+         - [ ] /consumable/stock/update
+         - [ ] /consumable/stock/delete
+         - [ ] /consumable/update
+         - [ ] /consumable/delete
+         - [X] /consumable/get
+     - [ ] lists
+         - [X] /list/create
+         - [ ] /list/delete
+         - [X] /list/getall
+         - [X] /list/getcontent
+         - [ ] /list/share
+         - [ ] /list/add/consumable
+         - [X] /list/add/personnal
+         - [X] /l/:id
+
+# UX
+ - [ ] User upload count
+ - [ ] /search/?q=... check for the right q=
+ - [ ] listOwner.Score += 1 when loading it's content to know how much the list is used to know the prefered list of the user. When login in, display the most used or the last one ?

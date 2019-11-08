@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"eiko/misc/hash"
-	"eiko/misc/structures"
+	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 var (
@@ -89,7 +89,7 @@ var (
 	ConsumablesRe = fmt.Sprintf("{\"consumable\":%s,\"store\":%s,\"stock\":%s}",
 		ConsumableRe, StoreRe, StockRe)
 	ConsumablesTest = []structures.Consumables{
-		structures.Consumables{
+		{
 			Consumable: ConsumableTest,
 			Store:      StoreTest,
 			Stock:      structures.Stock{},

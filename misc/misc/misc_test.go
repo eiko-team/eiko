@@ -1,9 +1,6 @@
 package misc_test
 
 import (
-	"eiko/misc/data"
-	"eiko/misc/misc"
-	"eiko/misc/structures"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,6 +8,10 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 )
 
 func ExampleParseJSON() {
@@ -229,6 +230,29 @@ func TestAtoi(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("Atoi() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSplitString(t *testing.T) {
+	tests := []struct {
+		name   string
+		s      string
+		sep    string
+		lenRes int
+	}{
+		{"sanity", "tototata", " ", 10},
+		{"url", "/api/test/:id", ":", 1},
+		{"short lenRes", "/api/test/:id", ":", 0},
+		{"long split", "a.b.c.d.e.f.g.h.i.j.k.l.m.o", ".", 13},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := misc.SplitString(tt.s, tt.sep, tt.lenRes)
+			t.Logf("%v -> %q(%d)", tt, got, len(got))
+			if len(got) < tt.lenRes {
+				t.Errorf("SplitString(%q) = %q, want %d", tt, got, tt.lenRes)
 			}
 		})
 	}

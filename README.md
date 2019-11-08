@@ -33,8 +33,8 @@ gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME
 
 ## Compilation and local building
 ```bash
-git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/eiko
-cd $GOPATH/src/eiko
+git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/github.com/eiko-team/eiko
+cd $GOPATH/src/github.com/eiko-team/eiko
 get get ./...
 make up
 ```

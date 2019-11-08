@@ -18,6 +18,8 @@ type Log struct {
 	Email   string    `firestore:"email"`
 	Log     string    `firestore:"log"`
 	Created time.Time `firestore:"created"`
+	IP      string    `firestore:"ip"`
+	Port    string    `firestore:"port"`
 	ID      int64     // The integer ID used in the firestore.
 }
 
