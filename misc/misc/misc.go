@@ -3,7 +3,6 @@ package misc
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/structures"
 
 	jwt "github.com/dgrijalva/jwt-go"

@@ -5,9 +5,9 @@ package data
 import (
 	"context"
 	"errors"
-	"log"
 	"os"
 
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"

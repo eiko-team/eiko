@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	// "html/template"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/eiko-team/eiko/api"
+	"github.com/eiko-team/eiko/misc/log"
 )
 
 // Config server configuration struct

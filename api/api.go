@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/eiko-team/eiko/api/verify"
 	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/files"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
 
 	"github.com/julienschmidt/httprouter"
