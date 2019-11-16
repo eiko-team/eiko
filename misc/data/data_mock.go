@@ -48,17 +48,15 @@ var (
 	StockRe        = `{"ID":\d+,"pack_quantity":\d+,"nb_packs":\d+,"pack_price":\d+,"available":[a-z]+,"store_key":\d+,"consumable_key":\d+,"geohash":\d+}`
 	StockTest      = structures.Stock{}
 	Consumable     = structures.Consumable{}
-	ConsumableRe   = `{"ID":\d+,"name":"[a-zA-Z 0-9,_]+","compagny":"[a-zA-Z 0-9,_]+","manifacturing":"[a-zA-Z 0-9,_]+","Created":"0001-01-01T00:00:00Z","Creator":\d+,"NewVersion":\d+,"Source":"[a-zA-Z 0-9,_]*","code":\[("[a-zA-Z 0-9,_-]+",?)*\],"categories":\[("[a-zA-Z 0-9,_-]+",?)*\],"tags":\[("[a-zA-Z 0-9,_-]+",?)*\],"packaging":\[("[a-zA-Z 0-9,_-]+",?)*\],"energie":\d+,"fat":\d+,"fiber":\d+,"glucides":\d+,"lipides":\d+,"proteins":\d+,"sodium":\d+,"saturated_fat":\d+,"sugar_glucides":\d+,"energy":\d+,"alcool":\d+,"additive":\[("[a-zA-Z 0-9,_-]+",?)*\],"ingredient":\[("[a-zA-Z 0-9,_-]+",?)*\],"vitamins":\[("[a-zA-Z 0-9,_-]+",?)*\],"allergen":\[("[a-zA-Z 0-9,_-]+",?)*\],"nutri_score":"[a-z]","back":"url","composition":"url","front":"url","grammes":\d+,"mililitre":\d+,"label":\[("[a-zA-Z 0-9,_-]+",?)*\]}`
+	ConsumableRe   = `{"ID":\d+,"name":"[a-zA-Z 0-9,_]+","compagny":"[a-zA-Z 0-9,_]+","manifacturing":"[a-zA-Z 0-9,_]+","Created":"0001-01-01T00:00:00Z","Creator":\d+,"NewVersion":\d+,"Source":"[a-zA-Z 0-9,_]*","code":\[("[a-zA-Z 0-9,_-]+",?)*\],"categories":\[("[a-zA-Z 0-9,_-]+",?)*\],"tags":\[("[a-zA-Z 0-9,_-]+",?)*\],"packaging":\[("[a-zA-Z 0-9,_-]+",?)*\],"fat":\d+,"fiber":\d+,"glucides":\d+,"proteins":\d+,"sodium":\d+,"saturated_fat":\d+,"sugar_glucides":\d+,"energy":\d+,"alcool":\d+,"additive":\[("[a-zA-Z 0-9,_-]+",?)*\],"ingredient":\[("[a-zA-Z 0-9,_-]+",?)*\],"vitamins":\[("[a-zA-Z 0-9,_-]+",?)*\],"allergen":\[("[a-zA-Z 0-9,_-]+",?)*\],"nutri_score":"[a-z]","back":"url","composition":"url","front":"url","grammes":\d+,"mililitre":\d+,"label":\[("[a-zA-Z 0-9,_-]+",?)*\]}`
 	ConsumableTest = structures.Consumable{
 		Name:          "Simple Name",
 		Company:       "Simple Compagny Name",
 		Additive:      []string{"E404"},
 		Allergen:      []string{"glutten"},
-		Energie:       9001,
 		Fat:           9001,
 		Fiber:         9001,
 		Glucides:      9001,
-		Lipides:       9001,
 		Proteins:      9001,
 		Sodium:        9001,
 		SaturatedFat:  9001,
