@@ -72,11 +72,9 @@ type Consumable struct {
 	Tags          []string `json:"tags"`
 	Packaging     []string `json:"packaging"`
 	// Nutrition facts on the consumable
-	Energie       float64 `json:"energie"`
 	Fat           float64 `json:"fat"`
 	Fiber         float64 `json:"fiber"`
 	Glucides      float64 `json:"glucides"`
-	Lipides       float64 `json:"lipides"`
 	Proteins      float64 `json:"proteins"`
 	Sodium        float64 `json:"sodium"`
 	SaturatedFat  float64 `json:"saturated_fat"`
