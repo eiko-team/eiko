@@ -26,7 +26,7 @@ func Log(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.0.0")
 	}
 
-	user, _ := misc.TokenToUser(i.Token)
+	user, _ := misc.TokenToUser(d, i.Token)
 
 	Logger.Printf("%v", i)
 	remoteAddr := misc.SplitString(r.RemoteAddr, ":", 2)

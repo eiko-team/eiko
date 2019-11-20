@@ -214,7 +214,7 @@ func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	D.User, err = misc.TokenToUser(token.Value)
+	D.User, err = misc.TokenToUser(D, token.Value)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Header().Set("Content-Type", "application/json")

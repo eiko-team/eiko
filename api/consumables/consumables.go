@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/log"
@@ -26,6 +27,10 @@ func Store(d data.Data, r *http.Request) (string, error) {
 	if err != nil {
 		return "", errors.New("3.0.0")
 	}
+
+	i.Created = time.Now()
+	i.Creator = d.User.ID
+	i.Source = "API"
 
 	keyID, err := d.StoreConsumable(i)
 	if err != nil {

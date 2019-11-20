@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/hash"
 	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/structures"
@@ -68,7 +69,7 @@ func UserToToken(u structures.User) (string, error) {
 }
 
 // TokenToUser convert the Token to user's information
-func TokenToUser(tokenStr string) (structures.User, error) {
+func TokenToUser(d data.Data, tokenStr string) (structures.User, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Bad method: %v", token.Header["alg"])
@@ -80,16 +81,14 @@ func TokenToUser(tokenStr string) (structures.User, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return structures.User{
-			Email: claims["email"].(string),
-		}, nil
+		return d.GetUser(claims["email"].(string))
 	}
 	return structures.User{}, err
 }
 
 // ValidateToken check if the token is valid
-func ValidateToken(token string) bool {
-	_, err := TokenToUser(token)
+func ValidateToken(d data.Data, token string) bool {
+	_, err := TokenToUser(d, token)
 	return err == nil
 }
 
