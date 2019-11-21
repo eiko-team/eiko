@@ -258,3 +258,64 @@ func TestSplitString(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizeName(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		val  string
+		want string
+	}{
+		{"sanity", "sanity", "sanity"},
+		{"simple", "SanitY", "sanity"},
+		{"with space", "San%20itY", "san ity"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := misc.NormalizeName(tt.val); got != tt.want {
+				t.Errorf("NormalizeName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNormalizeConsumable(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		c    structures.Consumable
+		want structures.Consumable
+	}{
+		{"sanity", structures.Consumable{Name: "Test"},
+			structures.Consumable{Name: "test"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := misc.NormalizeConsumable(tt.c); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NormalizeConsumable() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNormalizeQuery(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		q    structures.Query
+		want structures.Query
+	}{
+		{"sanity", structures.Query{Query: "Sample", Limit: 0},
+			structures.Query{Query: "sample", Limit: 20}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := misc.NormalizeQuery(tt.q); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NormalizeQuery() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

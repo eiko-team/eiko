@@ -1,4 +1,4 @@
-package api
+package api //import "github.com/eiko-team/eiko/api"
 
 import (
 	"fmt"

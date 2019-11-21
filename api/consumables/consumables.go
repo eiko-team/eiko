@@ -32,7 +32,7 @@ func Store(d data.Data, r *http.Request) (string, error) {
 	i.Creator = d.User.ID
 	i.Source = "API"
 
-	keyID, err := d.StoreConsumable(i)
+	keyID, err := d.StoreConsumable(misc.NormalizeConsumable(i))
 	if err != nil {
 		return "", errors.New("3.0.1")
 	}
@@ -48,8 +48,9 @@ func Get(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.1.0")
 	}
 
-	consu, err := d.GetConsumables(i)
+	consu, err := d.GetConsumablesTmp(misc.NormalizeQuery(i))
 	if err != nil {
+		Logger.Println(err)
 		return "", errors.New("3.1.1")
 	}
 

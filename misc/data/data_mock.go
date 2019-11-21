@@ -162,6 +162,11 @@ func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
 	return ID, Error
 }
 
+func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumables, error) {
+	GetConsumables = true
+	return Consumables, Error
+}
+
 // GetConsumables is used to store a log in the datastore
 func (d Data) GetConsumables(consumable structures.Query) ([]structures.Consumables, error) {
 	GetConsumables = true

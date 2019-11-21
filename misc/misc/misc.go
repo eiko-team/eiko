@@ -107,3 +107,20 @@ func SplitString(s, sep string, lenRes int) []string {
 	}
 	return res
 }
+
+func NormalizeName(name string) string {
+	return strings.ToLower(strings.Replace(name, "%20", " ", -1))
+}
+
+func NormalizeConsumable(c structures.Consumable) structures.Consumable {
+	c.Name = NormalizeName(c.Name)
+	return c
+}
+
+func NormalizeQuery(q structures.Query) structures.Query {
+	q.Query = NormalizeName(q.Query)
+	if q.Limit < 1 || q.Limit > 20 {
+		q.Limit = 20
+	}
+	return q
+}
