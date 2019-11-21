@@ -150,6 +150,8 @@ func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structu
 	return res, nil
 }
 
+// GetConsumablesTmp is used to find some consumables in the datastore but for
+// testing purposes only
 func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumables, error) {
 	Logger.Println(query)
 	var res []structures.Consumables
@@ -171,7 +173,7 @@ func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumable
 
 }
 
-// GetConsumables is used to store a log in the datastore
+// GetConsumables is used to find some consumables in the datastore
 func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, error) {
 	geo := geohash.EncodeInt(query.Latitude, query.Longitude)
 	stocks1, err := d.fetchStock(geo, "geohash <", "geohash", query.Limit)

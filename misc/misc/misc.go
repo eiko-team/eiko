@@ -108,15 +108,18 @@ func SplitString(s, sep string, lenRes int) []string {
 	return res
 }
 
+// NormalizeName is used to normalize a name
 func NormalizeName(name string) string {
 	return strings.ToLower(strings.Replace(name, "%20", " ", -1))
 }
 
+// NormalizeConsumable is used to normalize a consumable
 func NormalizeConsumable(c structures.Consumable) structures.Consumable {
 	c.Name = NormalizeName(c.Name)
 	return c
 }
 
+// NormalizeQuery is used to normalize a query
 func NormalizeQuery(q structures.Query) structures.Query {
 	q.Query = NormalizeName(q.Query)
 	if q.Limit < 1 || q.Limit > 20 {
