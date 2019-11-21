@@ -1,9 +1,8 @@
-package api
+package api //import "github.com/eiko-team/eiko/api"
 
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/eiko-team/eiko/api/verify"
 	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/files"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
 
 	"github.com/julienschmidt/httprouter"
@@ -214,7 +214,7 @@ func (fun Func) WrapperFunctionCookie(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	D.User, err = misc.TokenToUser(token.Value)
+	D.User, err = misc.TokenToUser(D, token.Value)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Header().Set("Content-Type", "application/json")

@@ -56,61 +56,46 @@ type Store struct {
 	ID         int64  // The integer ID used in the firestore.
 }
 
-// GlobalInterest is the global interest of a consumable
-type GlobalInterest struct {
-	Boycott          bool   `json:"boycott"`
-	EcologicalImpact string `json:"ecological_impact"`
-	SocialImpact     string `json:"social_impact"`
-}
-
-// Nutrition Nutrition facts on the consumable
-type Nutrition struct {
-	Energie       float64 `json:"energie"`
-	Fat           float64 `json:"fat"`
-	Fibres        float64 `json:"fibres"`
-	Glucides      float64 `json:"glucides"`
-	Lipides       float64 `json:"lipides"`
-	Proteins      float64 `json:"proteins"`
-	Salt          float64 `json:"salt"`
-	SaturatedFat  float64 `json:"saturated_fat"`
-	SugarGlucides float64 `json:"sugar_glucides"`
-}
-
-// Health Health status of a consumable
-type Health struct {
-	Additive  []string  `json:"Additive"`
-	Allergen  []string  `json:"allergen"`
-	Nutrition Nutrition `json:"nutrition"`
-}
-
-// Characteristics Characteristics of a consumable
-type Characteristics struct {
-	GlobalInterest GlobalInterest `json:"global_interest"`
-	Health         Health         `json:"health"`
-}
-
-// Pictures all Pictures needed for a consumable
-type Pictures struct {
-	Back        string `json:"back"`
-	BarCode     string `json:"bar_code"`
-	Composition string `json:"composition"`
-	Front       string `json:"front"`
-}
-
-// Quantity Quantity of the product in a pack
-type Quantity struct {
-	Kg    int `json:"kg"`
-	Litre int `json:"litre"`
-}
-
 // Consumable struct used to parse /consumable/...
 type Consumable struct {
-	Name            string          `json:"name"`
-	Company         string          `json:"Compagny"`
-	Characteristics Characteristics `json:"characteristics"`
-	Pictures        Pictures        `json:"pictures"`
-	Quantity        Quantity        `json:"quantity"`
-	ID              int64           // The integer ID used in the firestore.
+	// The integer ID used in the firestore.
+	ID            int64
+	Name          string `json:"name"`
+	Company       string `json:"compagny"`
+	Manufacturing string `json:"manifacturing"`
+	Created       time.Time
+	Creator       int64
+	NewVersion    int64
+	Source        string
+	Code          []string `json:"code"`
+	Categories    []string `json:"categories"`
+	Tags          []string `json:"tags"`
+	Packaging     []string `json:"packaging"`
+	// Nutrition facts on the consumable
+	Fat           float64 `json:"fat"`
+	Fiber         float64 `json:"fiber"`
+	Glucides      float64 `json:"glucides"`
+	Proteins      float64 `json:"proteins"`
+	Sodium        float64 `json:"sodium"`
+	SaturatedFat  float64 `json:"saturated_fat"`
+	SugarGlucides float64 `json:"sugar_glucides"`
+	Energy        float64 `json:"energy"`
+	Alcool        float64 `json:"alcool"`
+	// Health status of the consumable
+	Additive   []string `json:"additive"`
+	Ingredient []string `json:"ingredient"`
+	Vitamins   []string `json:"vitamins"`
+	Allergen   []string `json:"allergen"`
+	NutriScore string   `json:"nutri_score"`
+	// all Pictures needed for the consumable
+	Back        string `json:"back"`
+	Composition string `json:"composition"`
+	Front       string `json:"front"`
+	// Quantity of the product in a pack
+	Grammes int `json:"grammes"`
+	MLitre  int `json:"mililitre"`
+	// Quality of the product
+	Label []string `json:"label"`
 }
 
 // Stock Stock of a product in a store

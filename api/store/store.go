@@ -3,11 +3,11 @@ package store
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
 	"github.com/eiko-team/eiko/misc/structures"
 )

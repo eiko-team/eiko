@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/eiko-team/eiko/misc/data"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
 	"github.com/eiko-team/eiko/misc/structures"
 )
@@ -27,7 +28,11 @@ func Store(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.0.0")
 	}
 
-	keyID, err := d.StoreConsumable(i)
+	i.Created = time.Now()
+	i.Creator = d.User.ID
+	i.Source = "API"
+
+	keyID, err := d.StoreConsumable(misc.NormalizeConsumable(i))
 	if err != nil {
 		return "", errors.New("3.0.1")
 	}
@@ -43,8 +48,9 @@ func Get(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("3.1.0")
 	}
 
-	consu, err := d.GetConsumables(i)
+	consu, err := d.GetConsumablesTmp(misc.NormalizeQuery(i))
 	if err != nil {
+		Logger.Println(err)
 		return "", errors.New("3.1.1")
 	}
 

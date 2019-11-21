@@ -3,13 +3,13 @@ package umanagement
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
 	"github.com/eiko-team/eiko/misc/structures"
 )

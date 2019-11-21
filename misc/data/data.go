@@ -5,9 +5,9 @@ package data
 import (
 	"context"
 	"errors"
-	"log"
 	"os"
 
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"
@@ -150,18 +150,37 @@ func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structu
 	return res, nil
 }
 
-// GetConsumables is used to store a log in the datastore
+// GetConsumablesTmp is used to find some consumables in the datastore but for
+// testing purposes only
+func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumables, error) {
+	Logger.Println(query)
+	var res []structures.Consumables
+	var consumable []structures.Consumable
+	q := datastore.NewQuery(d.consumables).
+		Filter("name = ", query.Query+"*").
+		Limit(1)
+	keys, err := d.client.GetAll(d.ctx, q, &consumable)
+	if err != nil {
+		return nil, err
+	}
+	for i, c := range consumable {
+		c.ID = keys[i].ID
+		res = append(res, structures.Consumables{
+			Consumable: c,
+		})
+	}
+	return res, nil
+
+}
+
+// GetConsumables is used to find some consumables in the datastore
 func (d Data) GetConsumables(query structures.Query) ([]structures.Consumables, error) {
 	geo := geohash.EncodeInt(query.Latitude, query.Longitude)
-	limit := query.Limit
-	if limit > 20 {
-		limit = 20
-	}
-	stocks1, err := d.fetchStock(geo, "geohash <", "geohash", limit)
+	stocks1, err := d.fetchStock(geo, "geohash <", "geohash", query.Limit)
 	if err != nil {
 		return []structures.Consumables{}, err
 	}
-	stocks2, err := d.fetchStock(geo, "geohash >", "-geohash", limit)
+	stocks2, err := d.fetchStock(geo, "geohash >", "-geohash", query.Limit)
 	if err != nil {
 		return []structures.Consumables{}, err
 	}

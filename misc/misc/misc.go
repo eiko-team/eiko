@@ -3,7 +3,6 @@ package misc
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -11,7 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/eiko-team/eiko/misc/data"
 	"github.com/eiko-team/eiko/misc/hash"
+	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/structures"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -68,7 +69,7 @@ func UserToToken(u structures.User) (string, error) {
 }
 
 // TokenToUser convert the Token to user's information
-func TokenToUser(tokenStr string) (structures.User, error) {
+func TokenToUser(d data.Data, tokenStr string) (structures.User, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Bad method: %v", token.Header["alg"])
@@ -80,16 +81,14 @@ func TokenToUser(tokenStr string) (structures.User, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return structures.User{
-			Email: claims["email"].(string),
-		}, nil
+		return d.GetUser(claims["email"].(string))
 	}
 	return structures.User{}, err
 }
 
 // ValidateToken check if the token is valid
-func ValidateToken(token string) bool {
-	_, err := TokenToUser(token)
+func ValidateToken(d data.Data, token string) bool {
+	_, err := TokenToUser(d, token)
 	return err == nil
 }
 
@@ -107,4 +106,24 @@ func SplitString(s, sep string, lenRes int) []string {
 		res = append(res, "")
 	}
 	return res
+}
+
+// NormalizeName is used to normalize a name
+func NormalizeName(name string) string {
+	return strings.ToLower(strings.Replace(name, "%20", " ", -1))
+}
+
+// NormalizeConsumable is used to normalize a consumable
+func NormalizeConsumable(c structures.Consumable) structures.Consumable {
+	c.Name = NormalizeName(c.Name)
+	return c
+}
+
+// NormalizeQuery is used to normalize a query
+func NormalizeQuery(q structures.Query) structures.Query {
+	q.Query = NormalizeName(q.Query)
+	if q.Limit < 1 || q.Limit > 20 {
+		q.Limit = 20
+	}
+	return q
 }
