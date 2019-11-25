@@ -207,7 +207,7 @@ function removeLocalStorage(elt, storageArea) {
     var notifications = JSON.parse(localStorage.getItem(storageArea));
     if (notifications === null) { return; }
     notifications = notifications.filter(function(n) {
-        return n.ID !== notif.ID
+        return n.ID !== elt.ID
     })
     localStorage.setItem(storageArea, JSON.stringify(notifications));
 }
@@ -611,13 +611,13 @@ function registerNotifications() {
  * @param {integer} t.pagecount number of page to wait before toasting the user.
  */
 function toastMe(t) {
-    var toast = idToElt(t.ID, "toasts");
-    oldToast = toast;
+    var tt = idToElt(t.ID, "toasts");
+    oldToast = tt;
     if (toast.pagecount-- === 0) {
-        toast(toast);
-        updateLocalStorage(oldToast, toast, "toast");
+        toast(tt);
+        updateLocalStorage(oldToast, tt, "toast");
     } else {
-        removeLocalStorage(toast, "toasts");
+        removeLocalStorage(tt, "toasts");
     }
 }
 
