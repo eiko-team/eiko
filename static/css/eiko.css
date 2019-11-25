@@ -133,7 +133,7 @@ body {
     text-decoration: none;
 }
 
-#search-mynavbar {
+.mynavbar .right {
     float: right;
 }
 
