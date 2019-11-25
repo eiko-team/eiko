@@ -16,3 +16,6 @@ coverage.txt
 
 # minimified files
 static/min
+
+# Go mod trash file
+go.sum

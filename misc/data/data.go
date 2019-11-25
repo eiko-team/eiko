@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/eiko-team/eiko/misc/log"
+	"github.com/eiko-team/eiko/misc/research"
 	"github.com/eiko-team/eiko/misc/structures"
 
 	"cloud.google.com/go/datastore"
@@ -50,6 +51,9 @@ type Data struct {
 
 	// User the user making the request. Got from the cookie in the header
 	User structures.User
+
+	// rs search engine
+	rs research.Research
 }
 
 // InitData return an initialised Data struct
@@ -70,6 +74,8 @@ func InitData(projID string) Data {
 	if err != nil {
 		Logger.Fatalf("Could not create datastore client: %v", err)
 	}
+
+	d.rs = research.InitReseach()
 
 	return d
 }
@@ -129,8 +135,18 @@ func (d Data) StoreStore(store structures.Store) error {
 
 // StoreConsumable is used to store a consumable in the datastore
 func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
+	// TODO Check if the consumable is not already in the database before
+	// adding it
+	// BODY we can do something like: if the consumable is not in the db, push
+	// it. If the condumable is in the db, check is there are changes and if
+	// there is, create an update of the product
 	key := datastore.IncompleteKey(d.consumables, nil)
 	key, err := d.client.Put(d.ctx, key, &consumable)
+	if err != nil {
+		return key.ID, err
+	}
+	consumable.ID = key.ID
+	err = d.rs.StoreConsumable(consumable)
 	return key.ID, err
 }
 
@@ -150,27 +166,38 @@ func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structu
 	return res, nil
 }
 
+// getOneConsumable return the last version of this consumable
+func (d Data) getOneConsumable(id int64) (structures.Consumable, error) {
+	var consumable []structures.Consumable
+	q := datastore.NewQuery(d.consumables).
+		Filter("__key__ =", datastore.IDKey(d.consumables, id, nil)).
+		Limit(1)
+	keys, err := d.client.GetAll(d.ctx, q, &consumable)
+	if err != nil || len(consumable) == 0 {
+		return structures.Consumable{}, errors.New("Could no fetch consumable")
+	}
+	consumable[0].ID = keys[0].ID
+	return consumable[0], nil
+}
+
 // GetConsumablesTmp is used to find some consumables in the datastore but for
 // testing purposes only
 func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumables, error) {
 	Logger.Println(query)
-	var res []structures.Consumables
-	var consumable []structures.Consumable
-	q := datastore.NewQuery(d.consumables).
-		Filter("name = ", query.Query+"*").
-		Limit(1)
-	keys, err := d.client.GetAll(d.ctx, q, &consumable)
+	IDs, err := d.rs.SearchConsumable(query.Query)
 	if err != nil {
 		return nil, err
 	}
-	for i, c := range consumable {
-		c.ID = keys[i].ID
-		res = append(res, structures.Consumables{
-			Consumable: c,
-		})
+
+	res := make([]structures.Consumables, len(IDs))
+	for i, id := range IDs {
+		c, err := d.getOneConsumable(id)
+		if err != nil {
+			return nil, err
+		}
+		res[i] = structures.Consumables{Consumable: c}
 	}
 	return res, nil
-
 }
 
 // GetConsumables is used to find some consumables in the datastore

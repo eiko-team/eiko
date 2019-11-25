@@ -243,7 +243,7 @@ func ExecuteAPI() *httprouter.Router {
 	projIDStr := "PROJECT_ID"
 	projID := os.Getenv(projIDStr)
 	if projID == "" {
-		Logger.Fatal(fmt.Sprintf("please set: '%s'", projIDStr))
+		Logger.Fatalf("please set: '%s'", projIDStr)
 	}
 
 	D = data.InitData(projID)

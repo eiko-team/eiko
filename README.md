@@ -13,7 +13,7 @@
 eiko web app
 
 # Installation
-> Prerequirement: have golang>=1.10.4 install on your machine
+> Prerequirement: have golang>=1.13 .4 install on your machine
 
 You need to have a services account for the google Datastore
 
@@ -57,7 +57,16 @@ $BROWSER http://127.0.0.1:8080/pkg/github.com/eiko-team/eiko/
 PROJECT_ID=
 CREDENTIALS=CREDENTIALS.json
 SALT=
+SEARCH_APP_ID=
+SEARCH_API_KEY=
 ```
+
+Where:
+ - `PROJECT_ID`: the GCP(Google Cloud Platform) Project id
+ - `CREDENTIALS`: the GCP Credential file
+ - `SALT`: Salt to generate password hash
+ - `SEARCH_APP_ID`: Algolia application ID
+ - `SEARCH_API_KEY`: Algolia API Key
 
 ```
   eiko:
@@ -65,6 +74,8 @@ SALT=
     restart: always
     environment:
       - 'PROJECT_ID=${PROJECT_ID}'
+      - 'SEARCH_API_KEY=${SEARCH_API_KEY}'
+      - 'SEARCH_APP_ID=${SEARCH_APP_ID}'
       - 'PORT=80'
       - 'STATIC_PWD=/srv'
       - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
