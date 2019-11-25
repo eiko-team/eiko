@@ -74,6 +74,8 @@ Where:
     restart: always
     environment:
       - 'PROJECT_ID=${PROJECT_ID}'
+      - 'SEARCH_API_KEY=${SEARCH_API_KEY}'
+      - 'SEARCH_APP_ID=${SEARCH_APP_ID}'
       - 'PORT=80'
       - 'STATIC_PWD=/srv'
       - 'GOOGLE_APPLICATION_CREDENTIALS=/srv/${CREDENTIALS}'
