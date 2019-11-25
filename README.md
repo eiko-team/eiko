@@ -13,7 +13,7 @@
 eiko web app
 
 # Installation
-> Prerequirement: have golang>=1.10.4 install on your machine
+> Prerequirement: have golang>=1.13.4 install on your machine
 
 You need to have a services account for the google Datastore
 
