@@ -1,0 +1,13 @@
+{{ define "nav" }}
+<ul class="mynavbar">
+    {{ if eq .Title "Acceuil" }}
+    <li><a class="nav-menu" id="open-nav"><i class="material-icons">menu</i></a></li>
+    <li><a class="nav-menu" id="nav-name" href="#">{{.Title}} - Eiko</a></li>
+    <li class="right"><a class="nav-menu" id="open-settings"><i class="material-icons">more_vert</i></a></li>
+    {{ else }}
+    <li><a class="nav-menu" id="nav-back"><i class="material-icons">arrow_back_ios</i></a></li>
+    <li><a class="nav-menu" id="nav-name">Eiko</a></li>
+    <li class="right"><a class="nav-menu" href="/search/"><i class="material-icons">search</i></a></li>
+    {{ end }}
+</ul>
+{{ end }}

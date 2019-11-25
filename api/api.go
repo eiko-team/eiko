@@ -79,8 +79,6 @@ var (
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
-		{"html/login.html", "text/html", []string{"/login.html"}, ""},
-		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, ""},
 		{"js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}, ""},
 		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}, ""},
 		{"json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}, ""},
@@ -90,6 +88,8 @@ var (
 	// TFiles is an array of Templated files
 	TFiles = []File{
 		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html", "/l/:id"}, "Acceuil"},
+		{"html/login.html", "text/html", []string{"/login.html"}, "Connexion"},
+		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, "Recherche"},
 	}
 )
 
@@ -116,32 +116,40 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 }
 
 // TemplatedFiles simple html file server
-func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
-	_ httprouter.Params) {
+func (file File) TemplatedFilesWrapped(w http.ResponseWriter,
+	r *http.Request) error {
 	misc.LogRequest(r)
+	templates, err := template.New("webpage").
+		ParseGlob(Path + "/static/html/partial/*.html")
+	if err != nil {
+		return fmt.Errorf("{\"error\":\"partial_parse\"}")
+	}
 
 	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
-		return
+		return fmt.Errorf("{\"error\":\"invalid_file\"}")
 	}
 
-	h, err := template.New("webpage").Parse(fileContent)
+	h, err := templates.Parse(fileContent)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, "{\"error\":\"parse_failed\"}")
-		return
+		return fmt.Errorf("{\"error\":\"parse_failed\"}")
 	}
 
 	w.Header().Set("Content-Type", file.CType)
 	err = h.Execute(w, file)
 	if err != nil {
+		return fmt.Errorf("{\"error\":\"could_not_exec\"}")
+	}
+	return nil
+}
+
+func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+
+	if err := file.TemplatedFilesWrapped(w, r); err != nil {
 		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"could_not_exec\"}")
-		return
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprintln(w)
 	}
 }
 

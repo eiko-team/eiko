@@ -1,0 +1,16 @@
+{{ define "sidenav" }}
+    <div id="mySidenav" class="mysidenav">
+        <a id="nav-closebtn" class="nav-nav"><i class="material-icons">close</i></a>
+        <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
+        <a class="nav-nav" id="theme-selector"><i class="material-icons">highlight</i>Theme</a>
+        <button class="dropdown-btn"><i class="material-icons">list</i>Mes Listes
+            <i class="material-icons">keyboard_arrow_down</i>
+            <i class="material-icons">add</i>
+        </button>
+        <ul class="dropdown-container" id="dropdown-lists">
+            <li><a href="#"><i class="material-icons">home</i>Accueil liste</a></li>
+            <li><a class="waves-effect waves-light modal-trigger" href="#modal_create_list"><i class="material-icons">add</i>Ajouter Liste de courses</a></a></li>
+        </ul>
+        <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
+    </div>
+{{ end }}

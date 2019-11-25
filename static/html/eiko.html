@@ -1,70 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Eiko - {{.Title}}</title>
-    <meta name="author" content="Eiko's Team">
-    <meta name="description" content="Eiko, une plateforme qui centralise les alternatives de consommation pour trouver moins cher, plus sain ou plus écolo. Transforme ta consomation en vote !">
-    <meta name="keywords" content="Eiko, independance, collaboratif, consommation, alternatives, santé, économique, écologique, vote, transformation, plateforme, PWA, particulier, recommendation, astuces, gratuit, freemium, confiance, communauté, collaboration, alimentaire, course">
-    <meta name="viewport" content="width=device-width, initial-scale=1 minimal-ui">
-    <!-- Disable tap highlight on IE -->
-    <meta name="msapplication-tap-highlight" content="no">
-    <!-- Progressive Web App -->
-    <meta name="theme-color" content="#FF9800">
-    <link rel="manifest" href="/manifest.json">
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="/img/EIKO.png">
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Eiko">
-    <link rel="apple-touch-icon" href="/img/EIKO.png">
-    <link rel="apple-touch-icon-precomposed" href="/img/EIKO.png">
-    <link rel="mask-icon" href="/img/EIKO.png" color="#FF9800">
-    <!-- Tile color for Windows -->
-    <meta name="msapplication-TileImage" content="/img/EIKO.png">
-    <meta name="msapplication-TileColor" content="#FF9800">
-    <meta name="msapplication-navbutton-color" content="#FF9800">
-    <link rel="icon" sizes="192x192" href="/img/EIKO.ico">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <!-- Material Design Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Facebook look -->
-    <meta property="og:description" content="Eiko, une plateforme qui centralise les alternatives de consommation pour trouver moins cher, plus sain ou plus écolo. Transforme ta consomation en vote !">
-    <meta property="og:title" content="Eiko">
-    <meta property="og:image" content="img/Eiko.png">
-    <!-- Twitter look -->
-    <meta name="twitter:title" content="Eiko">
-    <meta name="twitter:url" content="Eiko">
-    <link rel="stylesheet" type="text/css" href="/css/color.css">
-    <link rel="stylesheet" type="text/css" href="/css/eiko.css">
-    <!-- https://materializecss.com/getting-started.html -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-</head>
+{{ template "head" . }}
+{{ template "beautiful" . }}
+{{ template "headEnd" . }}
 
 <body>
-    <ul class="mynavbar">
-        <li><a class="nav-menu" id="open-nav"><i class="material-icons">menu</i></a></li>
-        <li><a href="#" class="nav-menu" id="nav-name">{{.Title}} - Eiko</a></li>
-        <li id="search-mynavbar"><a href="/search/" class="nav-menu"><i class="material-icons">search</i></a></li>
-    </ul>
-    <div id="mySidenav" class="mysidenav">
-        <a id="nav-closebtn" class="nav-nav"><i class="material-icons">close</i></a>
-        <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
-        <a class="nav-nav" id="theme-selector"><i class="material-icons">highlight</i>Theme</a>
-        <button class="dropdown-btn"><i class="material-icons">list</i>Mes Listes
-            <i class="material-icons">keyboard_arrow_down</i>
-            <i class="material-icons">add</i>
-        </button>
-        <ul class="dropdown-container" id="dropdown-lists">
-            <li><a href="#"><i class="material-icons">home</i>Accueil liste</a></li>
-            <li><a class="waves-effect waves-light modal-trigger" href="#modal_create_list"><i class="material-icons">add</i>Ajouter Liste de courses</a></a></li>
-        </ul>
-        <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
-    </div>
+    {{ template "nav" . }}
+    {{ template "sidenav" . }}
     <div class="content" id="content">
         <div class="progress" id="main-loading-gif" style="display: none">
             <div class="indeterminate"></div>
@@ -110,16 +50,7 @@
             </ul>
         </div>
     </div>
-    <template id="consumable" class="hoverable">
-        <tr>
-            <td class="row-check"><i class="material-icons">radio_button_unchecked</i></td>
-            <td class="row-name"></td>
-            <td class="row-indicator"><span class="dot" id="indic1"></span></td>
-            <td class="row-indicator"><span class="dot" id="indic2"></span></td>
-            <td class="row-indicator"><span class="dot" id="indic3"></span></td>
-            <td class="row-price"></td>
-        </tr>
-    </template>
+    {{ template "templateConsumable" . }}
     <div id="modal_create_list" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>Créer une nouvelle liste</h4>
@@ -145,14 +76,7 @@
             <a id="list_create" class="modal-close waves-effect waves-light btn-flat">Créer la liste</a>
         </div>
     </div>
-    <noscript>
-        Turn on JavaScript to access this site content.
-    </noscript>
 </body>
-<script type="text/javascript" src="/js/lib.js"></script>
-<script type="text/javascript" src="/js/color.js"></script>
+{{ template "js" . }}
 <script type="text/javascript" src="/js/eiko/eiko.js"></script>
-<!-- https://materializecss.com/getting-started.html -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-</html>
+{{ template "end" . }}
