@@ -16,6 +16,7 @@ import (
 	"github.com/eiko-team/eiko/misc/files"
 	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -43,6 +44,18 @@ type File struct {
 	URL []string
 	// Title page title
 	Title string
+	//  User Current user
+	User structures.User
+}
+
+// NewFile return a new File struct
+func NewFile(path, ct, title string, url []string) File {
+	return File{path, ct, url, title, structures.User{}}
+}
+
+// NewSFile return a new spacial File struct
+func NewSFile(path, ct string, url []string) File {
+	return File{path, ct, url, "", structures.User{}}
 }
 
 var (
@@ -79,17 +92,17 @@ var (
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
-		{"js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}, ""},
-		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}, ""},
-		{"json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}, ""},
-		{"json/autocomplete_data.json", "application/json", []string{"/json/autocomplete_data.json"}, ""},
+		NewSFile("js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}),
+		NewSFile("img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}),
+		NewSFile("json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}),
+		NewSFile("json/autocomplete_data.json", "application/json", []string{"/json/autocomplete_data.json"}),
 	}
 
 	// TFiles is an array of Templated files
 	TFiles = []File{
-		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html", "/l/:id"}, "Acceuil"},
-		{"html/login.html", "text/html", []string{"/login.html"}, "Connexion"},
-		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, "Recherche"},
+		NewFile("html/eiko.html", "text/html", "Acceuil", []string{"/eiko.html", "/", "/index.html", "/l/:id"}),
+		NewFile("html/login.html", "text/html", "Connexion", []string{"/login.html"}),
+		NewFile("html/search.html", "text/html", "Recherche", []string{"/search/", "/search.html"}),
 	}
 )
 
@@ -134,6 +147,8 @@ func (file File) TemplatedFilesWrapped(w http.ResponseWriter,
 	if err != nil {
 		return fmt.Errorf("{\"error\":\"parse_failed\"}")
 	}
+
+	file.User = D.User
 
 	w.Header().Set("Content-Type", file.CType)
 	err = h.Execute(w, file)
