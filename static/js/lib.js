@@ -77,7 +77,7 @@ function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
             createCookie("notification", "yes");
         }, function(event) {
             // onRejected
-            M.toast({ html: 'We won\'t send any notifications to you' })
+            M.toast({ html: "We won\'t send any notifications to you" })
             createCookie("notification", "no");
         })
     } else {
@@ -224,22 +224,6 @@ function checkPassword(password) {
 }
 
 /**
- * open thena bar
- */
-function openNav() {
-    log("openNav");
-    setStyleByID("mySidenav", "display: block;");
-}
-
-/**
- * close thena bar
- */
-function closeNav() {
-    log("closeNav");
-    setStyleByID("mySidenav", "display: none;");
-}
-
-/**
  * add a list in the nav bar
  * @param {object} list to add
  */
@@ -247,12 +231,12 @@ function addlist(list) {
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
     li.id = list.id
-    li.innerHTML = `<i class="material-icons">remove</i>${list.name}`;
+    li.innerHTML = `<a><i class="material-icons">list_alt</i>${list.name}</a>`;
     li.addEventListener("click", function(event) {
         createCookie("ListID", list.id);
         window.location.replace("/l/" + list.id);
     });
-    var lists = document.getElementById("dropdown-lists");
+    var lists = document.getElementById("collapsible-lists");
     var last = lists.children[lists.children.length - 1];
     lists.appendChild(li);
     lists.appendChild(last);
@@ -262,13 +246,11 @@ function addlist(list) {
  * Removes all lists from sidenav
  */
 function removeLists() {
-    var lists = document.getElementById("dropdown-lists");
-    var first = lists.children[0];
+    var lists = document.getElementById("collapsible-lists");
     var last = lists.children[lists.children.length - 1];
     while (lists.firstChild) {
         lists.removeChild(lists.firstChild);
     }
-    lists.appendChild(first);
     lists.appendChild(last);
 }
 
@@ -341,7 +323,7 @@ function getCurrentListID() {
     }
     var elts = document.URL.split("/");
     listID = elts[elts.length - 1];
-    var fragmentIndex = listID.indexOf('#');
+    var fragmentIndex = listID.indexOf("#");
     if (fragmentIndex !== -1) {
         listID = listID.substring(0, fragmentIndex);
     }
