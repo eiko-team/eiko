@@ -1,16 +1,42 @@
 {{ define "sidenav" }}
-    <div id="mySidenav" class="mysidenav">
-        <a id="nav-closebtn" class="nav-nav"><i class="material-icons">close</i></a>
-        <a href="#" class="nav-nav"><i class="material-icons">person</i>Profile</a>
-        <a class="nav-nav" id="theme-selector"><i class="material-icons">highlight</i>Theme</a>
-        <button class="dropdown-btn"><i class="material-icons">list</i>Mes Listes
-            <i class="material-icons">keyboard_arrow_down</i>
-            <i class="material-icons">add</i>
-        </button>
-        <ul class="dropdown-container" id="dropdown-lists">
-            <li><a href="#"><i class="material-icons">home</i>Accueil liste</a></li>
-            <li><a class="waves-effect waves-light modal-trigger" href="#modal_create_list"><i class="material-icons">add</i>Ajouter Liste de courses</a></a></li>
+<ul id="slide-out" class="sidenav sidenav-fixed">
+    <li class="background">
+        <div class="user-view">
+            <div class="background"></div>
+            <a><img class="circle" src="/img/bob.png"></a>
+            <span class="email">{{ .User.Email }}</span>
+        </div>
+    </li>
+    <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+            <li>
+                <a class="collapsible-header waves-effect waves-light" id="list-collapsible">
+                    <!-- <i class="material-icons">list</i> -->
+                    <i class="material-icons">keyboard_arrow_down</i>
+                    Mes Listes
+                </a>
+                <div class="collapsible-body">
+                    <ul id="collapsible-lists">
+                        <li><a class="waves-effect waves-light modal-trigger" href="#modal_create_list"><i class="material-icons">add</i>Ajouter une Liste de courses</a></a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
-        <a class="nav-nav" id="logout-button"><i class="material-icons">exit_to_app</i>Logout</a>
-    </div>
+    </li>
+    <li><div class="divider"></div></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">search</i>Recherche</a></li>
+    <li><a class="nav-nav waves-effect waves-light hide-on-large-only" href="/search"><i class="material-icons">search</i>Je Scan</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Mon Espace</a></li>
+    <li><a class="nav-nav waves-effect waves-light color-main" id="premium"><i class="material-icons">whatshot</i>Mes Options Premium</a></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">photo_camera</i>Cartes de Fidélité</a></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">stars</i>Mes Favoris</a></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">people</i>Mes Amis</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Paramètres</a></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">settings_applications</i>Mes Critères</a></li>
+    <li><a class="nav-nav waves-effect waves-light" id="theme-selector"><i class="material-icons">highlight</i>Thème</a></li>
+    <li><a class="nav-nav waves-effect waves-light" href="/search"><i class="material-icons">flag</i>A propos</a></li>
+    <li><a class="nav-nav waves-effect waves-light" id="logout-button"><i class="material-icons">exit_to_app</i>Déconnexion</a></li>
+</ul>
 {{ end }}
