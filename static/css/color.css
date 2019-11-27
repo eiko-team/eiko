@@ -6,8 +6,8 @@
 }
 
 html {
-    --main: rgba(255, 182, 75, 1);
-    --light: rgba(255, 199, 117, 1);
+    --main: rgba(229, 122, 34, 1);
+    --light: rgba(255, 158, 64, 1);
     --dark: rgba(255, 152, 0, 1);
     --grey-lighter: #ccc;
     --grey-light: #424242;
@@ -17,17 +17,20 @@ html {
     --grey-dark: #212121;
     --white: white;
     --complementary: rgba(38, 153, 251, 1);
+    --blue-dark: rgba(0, 57, 203, 1);
+    --blue-light: rgba(118, 143, 255, 1);
+    --blue-lighter: rgba(118, 143, 255, 0.2);
     --red: rgb(254, 54, 54, 0.7);
     --green: rgb(0, 191, 45, 0.7);
     --black: rgba(66, 66, 66, 1);
     --orange: rgba(255, 152, 0, 0.7);
-    --text-color: var(--black);
+    --text-color: var(--white);
     /* Text color on main background*/
     --text-color-dark: white;
     /* Text color on dark background*/
     --text-color-light: white;
     /* Text color on light background*/
-    --text-color-white: var(--black);
+    --text-color-white: rgba(74, 84, 109, 1);
     /* Text color on white background*/
     --text-color-black: white;
     /* Text color on black background*/
@@ -48,6 +51,9 @@ html[data-theme="dark"] {
     --grey-dark: #212121;
     --white: black;
     --complementary: rgba(38, 153, 251, 1);
+    --blue-dark: rgba(0, 57, 203, 1);
+    --blue-light: rgba(118, 143, 255, 1);
+    --blue-lighter: rgba(118, 143, 255, 0.2);
     --red: rgb(254, 54, 54, 0.7);
     --green: rgb(0, 191, 45, 0.7);
     --black: rgba(66, 66, 66, 1);
@@ -70,30 +76,31 @@ html[data-theme="dark"] {
 
 /* setTheme("high-contrast"); */
 html[data-theme="high-contrast"] {
-    --main: black;
-    --light: black;
-    --dark: black;
-    --grey-lighter: white;
-    --grey-light: white;
-    --grey-light-opaque: white;
-    --grey-dark: white;
-    --white: black;
-    --red: black;
-    --green: white;
-    --black: white;
-    --orange: white;
-    --text-color: white;
-    /* Text color on main background*/
-    --text-color-dark: black;
-    /* Text color on dark background*/
-    --text-color-light: black;
-    /* Text color on light background*/
-    --text-color-white: black;
-    /* Text color on white background*/
-    --text-color-black: black;
-    /* Text color on black background*/
     --background: black;
+    --black: white;
+    --blue-dark: white;
+    --blue-light: white;
+    --blue-lighter: white;
+    --complementary: white;
+    --dark: white;
+    --green: white;
+    --grey-dark: white;
+    --grey-light-opaque-2x: black;
+    --grey-light-opaque: black;
+    --grey-light: white;
+    --grey-lighter: white;
+    --grey: black;
+    --light: black;
+    --main: black;
+    --orange: white;
     --popup-shadow: 0 0 5px white, 0 0 5px white;
+    --red: black;
+    --text-color-black: white;
+    --text-color-dark: white;
+    --text-color-light: white;
+    --text-color-white: black;
+    --text-color: white;
+    --white: black;
 }
 
 html.color-theme-in-transition,
