@@ -128,7 +128,7 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	fmt.Fprintln(w, fileContent)
 }
 
-// TemplatedFiles simple html file server
+// TemplatedFilesWrapped simple html file server
 func (file File) TemplatedFilesWrapped(w http.ResponseWriter,
 	r *http.Request) error {
 	misc.LogRequest(r)
@@ -158,6 +158,7 @@ func (file File) TemplatedFilesWrapped(w http.ResponseWriter,
 	return nil
 }
 
+// TemplatedFiles simple html file server (wapper for TemplatedFilesWrapped)
 func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
 	_ httprouter.Params) {
 
