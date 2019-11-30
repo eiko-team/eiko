@@ -1,5 +1,45 @@
-function displaySearchResult(consumable) {}
-function clearSearchResult(consumable) {}
+function createImage(consumable) {
+    let img = document.createElement("img");
+    let src = "/img/default-product.jpg";
+    if (consumable.front !== "") {
+        src = consumable.front;
+    }
+    img.src = src;
+    img.alt = consumable.name;
+    img.title = consumable.name;
+    img.classList.add("materialboxed");
+    img.setAttribute("data-caption", consumable.name);
+    // TODO Materialbox: Make init workding
+    M.Materialbox.init([img], {});
+    return img
+}
+
+function displaySearchResult(consumable) {
+    if (!"content" in document.createElement("template") ||
+        consumable === undefined || consumable.consumable.mode === "sample" ||
+        consumable.consumable.name === "") { return; }
+    var template = document.querySelector("#consumable");
+    var clone = document.importNode(template.content, true);
+    var td = clone.querySelectorAll(".col-item");
+    var row = clone.querySelector(".row");
+    row.id = consumable.consumable.ID
+    td[0].style.display = "none";
+    td[1].appendChild(createImage(consumable.consumable))
+    td[2].textContent = consumable.consumable.name;
+    if (document.querySelector("#consumables").childElementCount !== 0) {
+        var template1 = document.querySelector("#separator");
+        var clone1 = document.importNode(template1.content, true);
+        document.querySelector("#consumables").appendChild(clone1);
+    }
+    document.querySelector("#consumables").appendChild(clone);
+}
+
+function clearSearchResult() {
+    var lists = document.querySelector("#consumables");
+    while (lists.firstChild) {
+        lists.removeChild(lists.firstChild);
+    }
+}
 
 function search(element) {
     return function(e) {
@@ -11,6 +51,7 @@ function search(element) {
             longitude: Number(getCookie("posLon")),
             accuracy: Number(getCookie("posAcc"))
         }, function(e) {
+            clearSearchResult();
             e.forEach(displaySearchResult);
             showLoadingGif(false)
         }, function(e) {
