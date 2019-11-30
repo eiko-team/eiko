@@ -224,14 +224,25 @@ function checkPassword(password) {
 }
 
 /**
+ * build a string with a icon inside
+ * @param {string} icon name
+ * @param {string} before texte to add before
+ * @param {string} after texte to add after
+ */
+function icon(icon, before = "", after = "") {
+    return before + "<i class='material-icons'>" + icon + "</i>" + after;
+}
+
+/**
  * add a list in the nav bar
  * @param {object} list to add
  */
 function addlist(list) {
+    // truncate
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
     li.id = list.id
-    li.innerHTML = `<a><i class="material-icons">list_alt</i>${list.name}</a>`;
+    li.innerHTML = icon("list_alt", `<a class="truncate">`, `${list.name}</a>`);
     li.addEventListener("click", function(event) {
         createCookie("ListID", list.id);
         window.location.replace("/l/" + list.id);
@@ -335,7 +346,7 @@ function getCurrentListID() {
  * hide all consimables of the page
  */
 function hideAllConsumables() {
-    var consumables = document.querySelector("tbody");
+    var consumables = document.querySelector("#consumables");
     while (consumables.firstChild) {
         consumables.removeChild(consumables.firstChild);
     }
@@ -408,26 +419,35 @@ function showConsumable(consumable) {
         consumable.ID === undefined || consumable.mode === "sample") { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
-    var td = clone.querySelectorAll("td");
-    var tr = clone.querySelector("tr");
-    tr.id = consumable.ID
+    var td = clone.querySelectorAll(".col-item");
+    var row = clone.querySelector(".row");
+    row.id = consumable.ID
     td[0].addEventListener("click", validateConsumable(consumable.ID));
+    td[1].style.display = "none";
     if (consumable.done) {
-        tr.classList.add("done");
-        td[0].innerHTML = "<i class='material-icons'>radio_button_checked</i>";
+        row.classList.add("done");
+        td[0].innerHTML = icon("radio_button_checked");
     } else {
-        td[0].innerHTML = "<i class='material-icons'>radio_button_unchecked</i>";
+        td[0].innerHTML = icon("radio_button_unchecked");
     }
     if (consumable.mode === "personnal") {
-        td[1].textContent = consumable.name;
+        td[2].textContent = consumable.name;
     } else {
-        td[1].textContent = consumable.consumable.name;
-        td[2].firstElementChild.classList.add("dot-green")
-        td[3].firstElementChild.classList.add("dot-green")
-        td[4].firstElementChild.classList.add("dot-green")
-        // td[5].textContent = consumable.stock.pack_price / 100 + "€";
+        td[2].textContent = consumable.consumable.name;
+        var indicators = clone.querySelector(".col-indicator")
+            .querySelectorAll(".dot");
+        indicators[0].classList.add("dot-green")
+        indicators[1].classList.add("dot-green")
+        indicators[2].classList.add("dot-green")
+        td[4].innerHTML = icon("keyboard_arrow_down",
+            consumable.stock.pack_price / 100 + "€");
     }
-    document.querySelector("tbody").appendChild(clone);
+    if (document.querySelector("#consumables").childElementCount !== 0) {
+        var template1 = document.querySelector("#separator");
+        var clone1 = document.importNode(template1.content, true);
+        document.querySelector("#consumables").appendChild(clone1);
+    }
+    document.querySelector("#consumables").appendChild(clone);
 }
 
 var loadingGifTimeoutID = [];
