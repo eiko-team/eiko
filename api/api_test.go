@@ -48,7 +48,7 @@ func TestGet400(t *testing.T) {
 	}{
 		{"root", "GET", "/", http.StatusOK, false, "text/html"},
 		{"index", "GET", "/index.html", http.StatusOK, false, "text/html"},
-		{"login", "GET", "/login.html", http.StatusOK, false, "text/html; charset=utf-8"},
+		{"login", "GET", "/login.html", http.StatusOK, false, "text/html"},
 		{"app", "GET", "/eiko.html", http.StatusOK, false, "text/html"},
 		{"service_worker", "GET", "/eiko-sw.js", http.StatusOK, false, "application/javascript; charset=utf-8"},
 		{"favicon_Eiko", "GET", "/EIKO.ico", http.StatusOK, false, "image/vnd.microsoft.icon; charset=utf-8"},
@@ -60,8 +60,8 @@ func TestGet400(t *testing.T) {
 		{"json manifest", "GET", "/json/manifest.json", http.StatusOK, false, "application/json; charset=utf-8"},
 		{"not existing", "GET", "/blabla", 404, false, "text/plain; charset=utf-8"},
 		{"no path", "GET", "/manifest.json", 500, true, "application/json"},
-		{"no path", "GET", "/login.html", 500, true, "application/json"},
-		{"no path", "GET", "/index.html", 500, true, "application/json"},
+		{"no path", "GET", "/login.html", 500, false, "application/json"},
+		{"no path", "GET", "/index.html", 500, false, "application/json"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
