@@ -1,12 +1,25 @@
+{{ define "list" }}
+<div id="consumables"></div>
+{{ end }}
 {{ define "templateConsumable" }}
 <template id="consumable" class="hoverable">
-    <tr>
-        <td class="row-check"><i class="material-icons">radio_button_unchecked</i></td>
-        <td class="row-name"></td>
-        <td class="row-indicator"><span class="dot" id="indic1"></span></td>
-        <td class="row-indicator"><span class="dot" id="indic2"></span></td>
-        <td class="row-indicator"><span class="dot" id="indic3"></span></td>
-        <td class="row-price"></td>
-    </tr>
+    <div class="row">
+        <div class="col s12">
+            <div class="col s2 m1 l1 offset-m2 offset-l2 col-item col-check"><i class="material-icons">radio_button_unchecked</i></div>
+            <div class="col s3 m3 l3 col-item col-img"></div>
+            <div class="col s5 m4 l5 col-item col-name"></div>
+            <div class="col s2 m1 l1 col-item col-indicator">
+                <span class="dot indic1"></span>
+                <span class="dot indic2"></span>
+                <span class="dot indic3"></span></div>
+            <div class="col s3 m2 l1 col-item col-price"></div>
+        </div>
+    </div>
+</template>
+{{ end }}
+{{ define "templateSeparator" }}
+<template id="separator">
+    <hr class="separator">
+    </div>
 </template>
 {{ end }}
