@@ -6,7 +6,7 @@
 
 .material-icons {
     vertical-align: middle;
-    color: var(--black);
+    color: var(--text-color);
 }
 
 body {
@@ -78,7 +78,26 @@ footer {
     padding-left: 300px;
 }
 
+
+hr.separator {
+    border: 0;
+    margin: 10px 20% 10px 20% !important;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+}
+
+@media only screen and (max-width: 601px) {
+
+    /*small screen size*/
+    hr.separator {
+        margin-left: 9% !important;
+        margin-right: 9% !important;
+    }
+}
+
 @media only screen and (max-width : 992px) {
+
+    /*medium screen size*/
     html {
         font-size: 14px;
     }
@@ -150,7 +169,7 @@ button[disabled] {
 
 .container {
     padding: 16px;
-    color: var(--text-color);
+    color: var(--text-color-white);
     background-color: var(--background);
 }
 
@@ -321,33 +340,39 @@ hr {
     padding: 0;
 }
 
-.row-check {
+.col-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-price,
+.col-check {
     cursor: pointer;
     width: 10%;
 }
 
-.row-name {
-    width: 50%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.row-indicator {
-    width: 5%;
-}
-
-.row-price {
-    width: 20%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.col-price i,
+.col-check i {
+    color: var(--text-color-white);
 }
 
 .consumables {
-    table-layout: fixed;
     width: 100%;
     white-space: nowrap;
+}
+
+.col-item {
+    /*border-left: 5px solid blue;*/
+    /*border-bottom: 1px solid var(--grey-light-opaque);*/
+}
+
+.col-img img {
+    width:150px;
+    height:150px;
+    border-radius:5%;
+    overflow:hidden;
+    object-fit: cover;
 }
 
 .consumables .done {
@@ -362,8 +387,8 @@ th {
 }
 
 .dot {
-    height: 10px;
-    width: 10px;
+    height: 5px;
+    width: 5px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -484,12 +509,9 @@ svg rect {
 .color-main,
 .color-main i {
     color: var(--main) !important;
-    /*-webkit-text-stroke: 1px var(--dark);*/
-    /*text-shadow: 0px 1px 1px var(--dark);*/
 }
 
 .color-main:hover {
-    /*color: var(--black) !important;*/
     background-color: var(--black) !important;
     box-shadow: var(--shadow);
 }
@@ -498,7 +520,6 @@ svg rect {
     position: fixed;
     bottom: 0;
     width: 100%;
-    /*height: 60px;*/
 }
 
 .tab a,
@@ -548,4 +569,8 @@ restricted to 400px */
 
 .sidenav li>a {
     color: var(--text-color-white);
+}
+
+#consumables .row {
+    margin-bottom: 5px !important;
 }
