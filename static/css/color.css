@@ -16,7 +16,6 @@ html {
     --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: white;
-    --complementary: rgba(38, 153, 251, 1);
     --blue-dark: rgba(0, 57, 203, 1);
     --blue-light: rgba(118, 143, 255, 1);
     --blue-lighter: rgba(118, 143, 255, 0.2);
@@ -50,7 +49,6 @@ html[data-theme="dark"] {
     --grey-light-opaque-2x: rgba(66, 66, 66, 0.6);
     --grey-dark: #212121;
     --white: black;
-    --complementary: rgba(38, 153, 251, 1);
     --blue-dark: rgba(0, 57, 203, 1);
     --blue-light: rgba(118, 143, 255, 1);
     --blue-lighter: rgba(118, 143, 255, 0.2);
@@ -81,7 +79,6 @@ html[data-theme="high-contrast"] {
     --blue-dark: white;
     --blue-light: white;
     --blue-lighter: white;
-    --complementary: white;
     --dark: white;
     --green: white;
     --grey-dark: white;
