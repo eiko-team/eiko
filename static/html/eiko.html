@@ -8,31 +8,18 @@
     <main>
         {{ template "nav" . }}
         <div class="content" id="content">
-            <div class="progress" id="main-loading-gif" style="display: none">
-                <div class="indeterminate"></div>
-            </div>
+            {{ template "loading" . }}
             <div id="liste" class="col s12">
-                <table class="consumables">
-                    <thead>
-                        <tr>
-                            <th class="row-check"></th>
-                            <th class="row-name"></th>
-                            <th class="row-indicator"><i class="material-icons">home</i></th>
-                            <th class="row-indicator"><i class="material-icons">eco</i></th>
-                            <th class="row-indicator"><i class="material-icons">euro_symbol</i></th>
-                            <th class="row-price"></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                {{ template "list" . }}
             </div>
             <div id="produit" class="col s12 red">TODO</div>
             <div id="alternatives" class="col s12 green">TODO</div>
-        {{ template "action" . }}
+            {{ template "action" . }}
         </div>
         {{ template "tab" . }}
     </main>
     {{ template "templateConsumable" . }}
+    {{ template "templateSeparator" . }}
     <div id="modal_create_list" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4>Créer une nouvelle liste</h4>
