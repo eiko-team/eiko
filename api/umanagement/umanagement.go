@@ -90,11 +90,11 @@ func Delete(d data.Data, r *http.Request) (string, error) {
 	return "{\"done\":\"true\"}", nil
 }
 
-// UpdateToken delete an account
+// UpdateToken update a token
 func UpdateToken(d data.Data, r *http.Request) (string, error) {
 	token, err := misc.UserToToken(d.User)
 	if err != nil {
-		return "", errors.New("1.3.3")
+		return "", errors.New("1.2.O")
 	}
 	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
 }
