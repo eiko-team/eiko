@@ -8,17 +8,30 @@
         {{ template "nav" . }}
         <div class="content" id="content">
             <div class="row">
-                <div class="progress" id="main-loading-gif" style="display: none">
-                    <div class="indeterminate"></div>
+                <div class="col s0 m3 l4"></div>
+                <div class="input-field col s9 m5 l3">
+                    <i class="material-icons prefix">search</i>
+                    <input type="text" id="search-input" class="autocomplete">
+                    <label for="search-input" id="search-input-label">Rechercher un produit</label>
                 </div>
+                <div class="col s1 m1 l1">
+                    <a id="add-item" class="btn-blue btn btn-floating waves-effect waves-light">
+                        <i class="material-icons">add</i>
+                    </a>
+                </div>
+                <div class="col s0 m3 l4"></div>
             </div>
-            <table class="consumables">
-                <tbody></tbody>
-            </table>
+            <div class="row">
+                {{ template "loading" . }}
+            </div>
+            <div id="liste" class="col s12">
+                {{ template "list" . }}
+            </div>
             {{ template "footer" . }}
         </div>
     </main>
     {{ template "templateConsumable" . }}
+    {{ template "templateSeparator" . }}
 </body>
 {{ template "js" . }}
 <script type="text/javascript" src="/js/search.js"></script>
