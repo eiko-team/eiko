@@ -20,6 +20,31 @@ function showButton() {
     });
 }
 
+
+function initSidenav() {
+    var sidenav = document.querySelectorAll(".sidenav");
+    if (sidenav.length === 0) { return; }
+    M.Sidenav.init(sidenav, {});
+    M.Collapsible.init(document.querySelectorAll(".collapsible"), {
+        onOpenStart: function() {
+            document
+                .getElementById("list-collapsible")
+                .getElementsByClassName("material-icons")[0]
+                .innerText = "keyboard_arrow_up";
+        },
+        onCloseStart: function() {
+            document
+                .getElementById("list-collapsible")
+                .getElementsByClassName("material-icons")[0]
+                .innerText = "keyboard_arrow_down";
+        }
+    });
+}
+
+function initNavbar() {
+    M.Tabs.init(document.querySelectorAll(".tabs"), { swipeable: true });
+}
+
 window.addEventListener("DOMContentLoaded", function() {
     if (!isTokenValid(getCookie("Token"))) {
         window.location.replace("/login.html");
@@ -33,16 +58,9 @@ window.addEventListener("DOMContentLoaded", function() {
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems, {});
     showButton();
+    initSidenav();
+    initNavbar();
 });
-
-window.addEventListener("keydown", function(e) {
-    if ((e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) &&
-        (e.target.nodeName === "BODY")) {
-        closeNav();
-        e.preventDefault();
-        return false;
-    }
-}, true);
 
 var dropdown = document.getElementsByClassName("dropdown-btn");
 for (var i = 0; i < dropdown.length; i++) {
@@ -71,6 +89,4 @@ function createListModal() {
 
 document.getElementById("logout-button").addEventListener("click", logout);
 document.getElementById("theme-selector").addEventListener("click", swapTheme);
-document.getElementById("open-nav").addEventListener("click", openNav);
-document.getElementById("nav-closebtn").addEventListener("click", closeNav);
 document.getElementById("list_create").addEventListener("click", createListModal);

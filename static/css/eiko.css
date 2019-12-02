@@ -6,118 +6,52 @@
 
 .material-icons {
     vertical-align: middle;
-    color: var(--black);
-}
-
-img {
-    mix-blend-mode: multiply;
+    color: var(--text-color);
 }
 
 body {
     margin: 0;
     padding: 0;
     background-color: var(--background);
-    color: var(--black);
+    color: var(--text-color-white);
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 @media print {
+
     .mynavbar,
-    .mysidenav {
+    .sidenav.sidenav-fixed {
         display: none;
     }
 }
 
-/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-.dropdown-container {
-    display: none;
+.dark-background {
+    background-color: var(--dark);
+}
+
+.background {
+    background-color: var(--main);
+}
+
+.sidenav {
     color: var(--text-color);
-    background-color: var(--main);
-    padding-left: 8px;
-    text-overflow: ellipsis
-}
-
-.mysidenav {
-    display: none;
-    height: 100%;
-    width: 42%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    color: var(--text-color);
-    background-color: var(--main);
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    box-shadow: var(--shadow);
-}
-
-@media screen and (max-width: 450px) {
-    .mysidenav {
-        width: 95%;
-    }
-
-}
-
-.dropdown-container,
-.mysidenav button,
-.mysidenav a {
-    cursor: pointer;
-    padding: 8px 8px 8px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: var(--text-color);
-    display: block;
-    transition: 0.3s;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-}
-
-.dropdown-container {
-    display: none;
-    padding-left: 68px;
-    background-color: var(--main);
-}
-
-.mysidenav button {
-    background-color: var(--main);
-}
-
-.mysidenav #nav-closebtn {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    right: 16px;
-    font-size: 36px;
-    padding: 8px 8px 8px 8px;
-}
-
-.mysidenav ul {
-    list-style: none;
-}
-
-@media screen and (max-height: 450px) {
-    .mysidenav {
-        padding-top: 15px;
-    }
-
-    .mysidenav a {
-        font-size: 18px;
-    }
 }
 
 .mynavbar {
-    box-shadow: var(--shadow);
+    /*box-shadow: var(--shadow);*/
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     color: var(--text-color);
     background-color: var(--main);
-    width: 100%
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
 }
 
 .mynavbar li {
@@ -133,8 +67,49 @@ body {
     text-decoration: none;
 }
 
-#search-mynavbar {
+.mynavbar .right {
     float: right;
+}
+
+html {
+    font-size: 20px;
+}
+
+header,
+main,
+footer {
+    padding-left: 300px;
+}
+
+
+hr.separator {
+    border: 0;
+    margin: 10px 20% 10px 20% !important;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+}
+
+@media only screen and (max-width: 601px) {
+
+    /*small screen size*/
+    hr.separator {
+        margin-left: 9% !important;
+        margin-right: 9% !important;
+    }
+}
+
+@media only screen and (max-width : 992px) {
+
+    /*medium screen size*/
+    html {
+        font-size: 14px;
+    }
+
+    header,
+    main,
+    footer {
+        padding-left: 0;
+    }
 }
 
 #nav-name {
@@ -145,7 +120,8 @@ body {
 .mysidenav button:hover,
 li a:hover:not(#nav-name) {
     color: var(--text-color);
-    background-color: var(--dark);
+    background-color: var(--light);
+    box-shadow: var(--shadow);
 }
 
 /* Full-width input fields */
@@ -196,7 +172,7 @@ button[disabled] {
 
 .container {
     padding: 16px;
-    color: var(--text-color);
+    color: var(--text-color-white);
     background-color: var(--background);
 }
 
@@ -355,6 +331,8 @@ meter[value="4"]::-moz-meter-bar {
 
 .content {
     padding: 10px;
+    padding-top: 70px;
+    bottom: 0px;
 }
 
 hr {
@@ -366,33 +344,39 @@ hr {
     padding: 0;
 }
 
-.row-check {
+.col-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col-price,
+.col-check {
     cursor: pointer;
     width: 10%;
 }
 
-.row-name {
-    width: 50%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.row-indicator {
-    width: 5%;
-}
-
-.row-price {
-    width: 20%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.col-price i,
+.col-check i {
+    color: var(--text-color-white);
 }
 
 .consumables {
-    table-layout: fixed;
     width: 100%;
     white-space: nowrap;
+}
+
+.col-item {
+    /*border-left: 5px solid blue;*/
+    /*border-bottom: 1px solid var(--grey-light-opaque);*/
+}
+
+.col-img img {
+    width:150px;
+    height:150px;
+    border-radius:5%;
+    overflow:hidden;
+    object-fit: cover;
 }
 
 .consumables .done {
@@ -407,8 +391,8 @@ th {
 }
 
 .dot {
-    height: 10px;
-    width: 10px;
+    height: 5px;
+    width: 5px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -508,7 +492,7 @@ th {
 .toast.rounded,
 .toast.rounded .material-icons,
 .btn-blue {
-    background-color: var(--complementary) !important;
+    background-color: var(--blue-dark) !important;
     color: var(--white);
 }
 
@@ -516,7 +500,7 @@ th {
     border-radius: 14px;
 }
 
-svg{
+svg {
     width: 65%;
     padding-top: 12%
 }
@@ -524,4 +508,73 @@ svg{
 svg path,
 svg rect {
     fill: var(--white);
+}
+
+.color-main,
+.color-main i {
+    color: var(--main) !important;
+}
+
+.color-main:hover {
+    background-color: var(--black) !important;
+    box-shadow: var(--shadow);
+}
+
+#tabs {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.tab a,
+.tab a i {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: var(--blue-dark) !important;
+}
+
+.indicator {
+    background-color: var(--main) !important;
+}
+
+.tabs .tab a.active i {
+    color: var(--main) !important;
+}
+
+.fixed-action-btn {
+    bottom: 60px;
+}
+
+/* The following two are to set the height of the tab to auto otherwise it is
+restricted to 400px */
+.tabs-content.carousel.carousel-slider .carousel-item.active {
+    position: relative;
+}
+
+.tabs-content.carousel.carousel-slider {
+    height: auto !important;
+}
+
+.subbar {
+    z-index: 1;
+    color: var(--light);
+    background-color: var(--light);
+    height: 10px;
+    position: relative;
+    margin-top: 50px;
+    width: 100%;
+}
+
+.sidenav .user-view .name,
+.sidenav .user-view .email,
+.sidenav li>a {
+    font-size: inherit;
+}
+
+.sidenav li>a {
+    color: var(--text-color-white);
+}
+
+#consumables .row {
+    margin-bottom: 5px !important;
 }

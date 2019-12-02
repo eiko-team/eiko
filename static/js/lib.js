@@ -77,7 +77,7 @@ function notify(title, body, onClickURL = "#", icon = "/favicon.ico") {
             createCookie("notification", "yes");
         }, function(event) {
             // onRejected
-            M.toast({ html: 'We won\'t send any notifications to you' })
+            M.toast({ html: "We won\'t send any notifications to you" })
             createCookie("notification", "no");
         })
     } else {
@@ -207,7 +207,7 @@ function removeLocalStorage(elt, storageArea) {
     var notifications = JSON.parse(localStorage.getItem(storageArea));
     if (notifications === null) { return; }
     notifications = notifications.filter(function(n) {
-        return n.ID !== notif.ID
+        return n.ID !== elt.ID
     })
     localStorage.setItem(storageArea, JSON.stringify(notifications));
 }
@@ -224,19 +224,13 @@ function checkPassword(password) {
 }
 
 /**
- * open thena bar
+ * build a string with a icon inside
+ * @param {string} icon name
+ * @param {string} before texte to add before
+ * @param {string} after texte to add after
  */
-function openNav() {
-    log("openNav");
-    setStyleByID("mySidenav", "display: block;");
-}
-
-/**
- * close thena bar
- */
-function closeNav() {
-    log("closeNav");
-    setStyleByID("mySidenav", "display: none;");
+function icon(icon, before = "", after = "") {
+    return before + "<i class='material-icons'>" + icon + "</i>" + after;
 }
 
 /**
@@ -244,15 +238,16 @@ function closeNav() {
  * @param {object} list to add
  */
 function addlist(list) {
+    // truncate
     let li = document.createElement("li");
     var uri = encodeURI(`/l/${list.id}`);
     li.id = list.id
-    li.innerHTML = `<i class="material-icons">remove</i>${list.name}`;
+    li.innerHTML = icon("list_alt", `<a class="truncate">`, `${list.name}</a>`);
     li.addEventListener("click", function(event) {
         createCookie("ListID", list.id);
         window.location.replace("/l/" + list.id);
     });
-    var lists = document.getElementById("dropdown-lists");
+    var lists = document.getElementById("collapsible-lists");
     var last = lists.children[lists.children.length - 1];
     lists.appendChild(li);
     lists.appendChild(last);
@@ -262,13 +257,11 @@ function addlist(list) {
  * Removes all lists from sidenav
  */
 function removeLists() {
-    var lists = document.getElementById("dropdown-lists");
-    var first = lists.children[0];
+    var lists = document.getElementById("collapsible-lists");
     var last = lists.children[lists.children.length - 1];
     while (lists.firstChild) {
         lists.removeChild(lists.firstChild);
     }
-    lists.appendChild(first);
     lists.appendChild(last);
 }
 
@@ -341,7 +334,7 @@ function getCurrentListID() {
     }
     var elts = document.URL.split("/");
     listID = elts[elts.length - 1];
-    var fragmentIndex = listID.indexOf('#');
+    var fragmentIndex = listID.indexOf("#");
     if (fragmentIndex !== -1) {
         listID = listID.substring(0, fragmentIndex);
     }
@@ -353,7 +346,7 @@ function getCurrentListID() {
  * hide all consimables of the page
  */
 function hideAllConsumables() {
-    var consumables = document.querySelector("tbody");
+    var consumables = document.querySelector("#consumables");
     while (consumables.firstChild) {
         consumables.removeChild(consumables.firstChild);
     }
@@ -426,26 +419,35 @@ function showConsumable(consumable) {
         consumable.ID === undefined || consumable.mode === "sample") { return; }
     var template = document.querySelector("#consumable");
     var clone = document.importNode(template.content, true);
-    var td = clone.querySelectorAll("td");
-    var tr = clone.querySelector("tr");
-    tr.id = consumable.ID
+    var td = clone.querySelectorAll(".col-item");
+    var row = clone.querySelector(".row");
+    row.id = consumable.ID
     td[0].addEventListener("click", validateConsumable(consumable.ID));
+    td[1].style.display = "none";
     if (consumable.done) {
-        tr.classList.add("done");
-        td[0].innerHTML = "<i class='material-icons'>radio_button_checked</i>";
+        row.classList.add("done");
+        td[0].innerHTML = icon("radio_button_checked");
     } else {
-        td[0].innerHTML = "<i class='material-icons'>radio_button_unchecked</i>";
+        td[0].innerHTML = icon("radio_button_unchecked");
     }
     if (consumable.mode === "personnal") {
-        td[1].textContent = consumable.name;
+        td[2].textContent = consumable.name;
     } else {
-        td[1].textContent = consumable.consumable.name;
-        td[2].firstElementChild.classList.add("dot-green")
-        td[3].firstElementChild.classList.add("dot-green")
-        td[4].firstElementChild.classList.add("dot-green")
-        // td[5].textContent = consumable.stock.pack_price / 100 + "€";
+        td[2].textContent = consumable.consumable.name;
+        var indicators = clone.querySelector(".col-indicator")
+            .querySelectorAll(".dot");
+        indicators[0].classList.add("dot-green")
+        indicators[1].classList.add("dot-green")
+        indicators[2].classList.add("dot-green")
+        td[4].innerHTML = icon("keyboard_arrow_down",
+            consumable.stock.pack_price / 100 + "€");
     }
-    document.querySelector("tbody").appendChild(clone);
+    if (document.querySelector("#consumables").childElementCount !== 0) {
+        var template1 = document.querySelector("#separator");
+        var clone1 = document.importNode(template1.content, true);
+        document.querySelector("#consumables").appendChild(clone1);
+    }
+    document.querySelector("#consumables").appendChild(clone);
 }
 
 var loadingGifTimeoutID = [];
@@ -611,13 +613,13 @@ function registerNotifications() {
  * @param {integer} t.pagecount number of page to wait before toasting the user.
  */
 function toastMe(t) {
-    var toast = idToElt(t.ID, "toasts");
-    oldToast = toast;
+    var tt = idToElt(t.ID, "toasts");
+    oldToast = tt;
     if (toast.pagecount-- === 0) {
-        toast(toast);
-        updateLocalStorage(oldToast, toast, "toast");
+        toast(tt);
+        updateLocalStorage(oldToast, tt, "toast");
     } else {
-        removeLocalStorage(toast, "toasts");
+        removeLocalStorage(tt, "toasts");
     }
 }
 

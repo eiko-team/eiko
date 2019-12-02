@@ -16,6 +16,7 @@ import (
 	"github.com/eiko-team/eiko/misc/files"
 	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/misc"
+	"github.com/eiko-team/eiko/misc/structures"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -43,6 +44,18 @@ type File struct {
 	URL []string
 	// Title page title
 	Title string
+	//  User Current user
+	User structures.User
+}
+
+// NewFile return a new File struct
+func NewFile(path, ct, title string, url []string) File {
+	return File{path, ct, url, title, structures.User{}}
+}
+
+// NewSFile return a new spacial File struct
+func NewSFile(path, ct string, url []string) File {
+	return File{path, ct, url, "", structures.User{}}
 }
 
 var (
@@ -79,17 +92,17 @@ var (
 
 	// SFiles is stored informations on special files
 	SFiles = []File{
-		{"html/login.html", "text/html", []string{"/login.html"}, ""},
-		{"html/search.html", "text/html", []string{"/search/", "/search.html"}, ""},
-		{"js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}, ""},
-		{"img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}, ""},
-		{"json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}, ""},
-		{"json/autocomplete_data.json", "application/json", []string{"/json/autocomplete_data.json"}, ""},
+		NewSFile("js/eiko/eiko-sw.js", "application/javascript", []string{"/eiko-sw.js"}),
+		NewSFile("img/EIKO.ico", "image/vnd.microsoft.icon", []string{"/favicon.ico", "/EIKO.ico"}),
+		NewSFile("json/manifest.json", "application/json", []string{"/manifest.json", "/json/manifest.json"}),
+		NewSFile("json/autocomplete_data.json", "application/json", []string{"/json/autocomplete_data.json"}),
 	}
 
 	// TFiles is an array of Templated files
 	TFiles = []File{
-		{"html/eiko.html", "text/html", []string{"/eiko.html", "/", "/index.html", "/l/:id"}, "Acceuil"},
+		NewFile("html/eiko.html", "text/html", "Acceuil", []string{"/eiko.html", "/", "/index.html", "/l/:id"}),
+		NewFile("html/login.html", "text/html", "Connexion", []string{"/login.html"}),
+		NewFile("html/search.html", "text/html", "Recherche", []string{"/search/", "/search.html"}),
 	}
 )
 
@@ -115,33 +128,44 @@ func (file File) SpecialFiles(w http.ResponseWriter, r *http.Request,
 	fmt.Fprintln(w, fileContent)
 }
 
-// TemplatedFiles simple html file server
-func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
-	_ httprouter.Params) {
+// TemplatedFilesWrapped simple html file server
+func (file File) TemplatedFilesWrapped(w http.ResponseWriter,
+	r *http.Request) error {
 	misc.LogRequest(r)
+	templates, err := template.New("webpage").
+		ParseGlob(Path + "/static/html/partial/*.html")
+	if err != nil {
+		return fmt.Errorf("{\"error\":\"partial_parse\"}")
+	}
 
 	fileContent, err := files.GetFileContent(Path + "/static/" + file.Path)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, "{\"error\":\"invalid_file\"}")
-		return
+		return fmt.Errorf("{\"error\":\"invalid_file\"}")
 	}
 
-	h, err := template.New("webpage").Parse(fileContent)
+	h, err := templates.Parse(fileContent)
 	if err != nil {
-		w.WriteHeader(500)
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, "{\"error\":\"parse_failed\"}")
-		return
+		return fmt.Errorf("{\"error\":\"parse_failed\"}")
 	}
+
+	file.User = D.User
 
 	w.Header().Set("Content-Type", file.CType)
 	err = h.Execute(w, file)
 	if err != nil {
+		return fmt.Errorf("{\"error\":\"could_not_exec\"}")
+	}
+	return nil
+}
+
+// TemplatedFiles simple html file server (wapper for TemplatedFilesWrapped)
+func (file File) TemplatedFiles(w http.ResponseWriter, r *http.Request,
+	_ httprouter.Params) {
+
+	if err := file.TemplatedFilesWrapped(w, r); err != nil {
 		w.WriteHeader(500)
-		fmt.Fprintln(w, "{\"error\":\"could_not_exec\"}")
-		return
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprintln(w)
 	}
 }
 
