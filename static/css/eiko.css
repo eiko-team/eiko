@@ -48,7 +48,10 @@ body {
     overflow: hidden;
     color: var(--text-color);
     background-color: var(--main);
-    width: 100%
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
 }
 
 .mynavbar li {
@@ -328,6 +331,7 @@ meter[value="4"]::-moz-meter-bar {
 
 .content {
     padding: 10px;
+    padding-top: 70px;
     bottom: 0px;
 }
 
