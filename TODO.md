@@ -37,6 +37,7 @@
          - [X] /l/:id
 
 # UX
+ - [ ] Pin navbar on top
  - [ ] User upload count
- - [ ] /search/?q=... check for the right q=
+ - [X] /search/?q=... check for the right q=
  - [ ] listOwner.Score += 1 when loading it's content to know how much the list is used to know the prefered list of the user. When login in, display the most used or the last one ?
