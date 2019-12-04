@@ -53,7 +53,11 @@ type Store struct {
 	Zip        string `json:"zip" firestore:"Zip"`
 	UserRating int    `json:"user_rating" firestore:"created"`
 	GeoHash    int    `json:"geohash" firestore:"geohash"`
-	ID         int64  // The integer ID used in the firestore.
+	// score averall score of the store, used to give a feeback score
+	Score int `json:"score" firestore:"score"`
+	// scoreNb number of people scoring the store
+	ScoreNb int   `json:"score_nb" firestore:"scoreNb"`
+	ID      int64 // The integer ID used in the firestore.
 }
 
 // Consumable struct used to parse /consumable/...

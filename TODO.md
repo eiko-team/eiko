@@ -9,13 +9,13 @@
  - [ ] cache datastore api calls
  - [ ] [canonical link](https://developers.google.com/web/tools/lighthouse/audits/canonical)
  - [ ] API
-     - [ ] /delete: delete account
+     - [X] /delete: delete account
      - [X] /updatetoken: update token with token
      - [X] /verify: verify some stuff like email, password or token
      - [ ] Store
          - [X] /store/add
          - [ ] /store/update
-         - [ ] /store/score
+         - [X] /store/score
          - [ ] /store/delete
          - [X] /store/get
      - [ ] Consumable

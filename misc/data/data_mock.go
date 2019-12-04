@@ -28,6 +28,8 @@ var (
 	StoreContent    bool
 	Delete          bool
 	GetUserKey      bool
+	GetStoreKey     bool
+	ScoreStore      bool
 	Error           error
 	Error2          error
 	pass, _         = hash.Hash("pass")
@@ -40,7 +42,7 @@ var (
 		Validated: false,
 	}
 	Store     = structures.Store{}
-	StoreRe   = `{"name":"[a-z ]+","address":"[a-z ]+","country":"[a-z ]+","zip":"[a-z ]+","user_rating":\d+,"geohash":\d+,"ID":\d+}`
+	StoreRe   = `{"name":"[a-z ]+","address":"[a-z ]+","country":"[a-z ]+","zip":"[a-z ]+","user_rating":\d+,"geohash":\d+,"score":\d+,"score_nb":\d+,"ID":\d+}`
 	StoreTest = structures.Store{
 		Name:       "test store",
 		Address:    "test store",
@@ -213,4 +215,14 @@ func (d Data) Delete(key *datastore.Key) error {
 func (d Data) GetUserKey(UserMail string) (*datastore.Key, error) {
 	GetUserKey = true
 	return Key, Error2
+}
+
+func (d Data) GetStoreKey(store structures.Store) (*datastore.Key, error) {
+	GetStoreKey = true
+	return Key, Error
+}
+
+func (d Data) ScoreStore(store structures.Store) error {
+	ScoreStore = true
+	return Error2
 }

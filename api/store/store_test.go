@@ -105,3 +105,46 @@ func TestGetStore(t *testing.T) {
 		})
 	}
 }
+
+func TestScoreStore(t *testing.T) {
+	j, _ := json.Marshal(data.StoreTest)
+	s := string(j)
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+		body    string
+		useData bool
+	}{
+		{"sanity", `{"done":"true"}`, false, "{\"store\":" + s + "}", true},
+		{"wrong json", "4.2.0", true, "}", false},
+		{"wrong data", data.ErrTest.Error(), true, "{\"store\":" + s + "}", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "wrong data" {
+				data.Error2 = data.ErrTest
+			}
+			data.Store = data.StoreTest
+			req, _ := http.NewRequest("POST", "/store/score",
+				strings.NewReader(tt.body))
+			got, err := store.ScoreStore(d, req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetStore() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				got = err.Error()
+			}
+			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
+			if len(matchs) == 0 {
+				t.Errorf("GetStore() = '%v', want %v", got, tt.want)
+			}
+			if data.ScoreStore != tt.useData {
+				t.Errorf("data.ScoreStore was no used")
+			}
+			data.ScoreStore = false
+			data.Error = nil
+		})
+	}
+}

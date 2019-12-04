@@ -74,6 +74,7 @@ var (
 		NewFunc(umanagement.Delete, "/delete"),
 		NewFunc(store.AddStore, "/store/add"),
 		NewFunc(store.GetStore, "/store/get"),
+		NewFunc(store.ScoreStore, "/store/score"),
 		NewFunc(consumables.Store, "/consumable/add"),
 		NewFunc(consumables.Get, "/consumable/get"),
 		NewFunc(list.AddList, "/list/create"),

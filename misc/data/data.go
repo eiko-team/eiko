@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/eiko-team/eiko/misc/log"
+	"github.com/eiko-team/eiko/misc/math"
 	"github.com/eiko-team/eiko/misc/research"
 	"github.com/eiko-team/eiko/misc/structures"
 
@@ -374,4 +375,36 @@ func (d Data) GetUserKey(UserMail string) (*datastore.Key, error) {
 		return nil, errors.New("Could no fetch users")
 	}
 	return keys[0], nil
+}
+
+// GetStoreKey return the key attached to a particuliar store
+func (d Data) GetStoreKey(store structures.Store) (*datastore.Key, error) {
+	q := datastore.NewQuery(d.stores).
+		Filter("Name =", store.Name).
+		Filter("Address =", store.Address).
+		Filter("Country =", store.Country).
+		Filter("Zip =", store.Zip).
+		Limit(1).
+		KeysOnly()
+	keys, err := d.client.GetAll(d.ctx, q, nil)
+	if err != nil || len(keys) == 0 {
+		return nil, errors.New("Could no fetch stores")
+	}
+	return keys[0], nil
+}
+
+// ScoreStore update the score of a store
+func (d Data) ScoreStore(store structures.Store) error {
+	key, err := d.GetStoreKey(store)
+	if err != nil {
+		return err
+	}
+	var s structures.Store
+	if err := d.client.Get(d.ctx, key, &s); err != nil {
+		return err
+	}
+	s.Score = math.ScoreStore(s.Score, store.Score, s.ScoreNb)
+	s.ScoreNb++
+	_, err = d.client.Put(d.ctx, key, &s)
+	return err
 }

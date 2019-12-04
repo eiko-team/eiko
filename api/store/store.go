@@ -27,12 +27,16 @@ func AddStore(d data.Data, r *http.Request) (string, error) {
 		return "", errors.New("4.0.0")
 	}
 
+	// Ignore user input about the score
+	i.Score = 0
+	i.ScoreNb = 0
+
 	err = d.StoreStore(i)
 	if err != nil {
 		return "", errors.New("4.0.1")
 	}
 
-	return "{\"done\":\"true\"}", nil
+	return `{"done":"true"}`, nil
 }
 
 // GetStore get a store
@@ -52,6 +56,15 @@ func GetStore(d data.Data, r *http.Request) (string, error) {
 	if err != nil {
 		return "", errors.New("4.1.2")
 	}
-	Logger.Printf("%v", string(res))
 	return string(res), nil
+}
+
+// ScoreStore add a score to the store
+func ScoreStore(d data.Data, r *http.Request) (string, error) {
+	var i structures.Store
+	err := misc.ParseJSON(r, &i)
+	if err != nil {
+		return "", errors.New("4.2.0")
+	}
+	return `{"done":"true"}`, d.ScoreStore(i)
 }
