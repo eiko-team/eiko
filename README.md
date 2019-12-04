@@ -13,6 +13,7 @@
 eiko web app
 
 # Installation
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/eiko-team/eiko&tutorial=README.md)
 > Prerequirement: have golang>=1.13 .4 install on your machine
 
 You need to have a services account for the google Datastore
