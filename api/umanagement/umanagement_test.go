@@ -130,14 +130,18 @@ func TestDelete(t *testing.T) {
 		wantErr bool
 	}{
 		{"sanity", `{"done":"true"}`, token, false},
+		{"no user found", `1.2.0`, token, true},
+		{"nil key", data.ErrTest.Error(), token, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			body := fmt.Sprintf("{\"token\":\"%s\"}", tt.token)
-			req, _ := http.NewRequest("POST", "/delete",
-				strings.NewReader(body))
-			req.Header.Set("Cookie", fmt.Sprintf("token=%s", tt.token))
-
+			if tt.name == "no user found" {
+				data.Error2 = data.ErrTest
+			}
+			if tt.name == "nil key" {
+				data.Error = data.ErrTest
+			}
+			req, _ := http.NewRequest("POST", "/delete", nil)
 			got, err := umanagement.Delete(d, req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
@@ -150,6 +154,8 @@ func TestDelete(t *testing.T) {
 			if len(matchs) == 0 {
 				t.Errorf("Delete() = '%v', want %v", got, tt.want)
 			}
+			data.Error = nil
+			data.Error2 = nil
 		})
 	}
 }

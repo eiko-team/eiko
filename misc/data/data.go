@@ -357,3 +357,21 @@ func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 	}
 	return 0, err
 }
+
+// Delete remove from the datastore the entity of the given key
+func (d Data) Delete(key *datastore.Key) error {
+	return d.client.DeleteMulti(d.ctx, []*datastore.Key{key})
+}
+
+// GetUserKey return the key associated with the user email
+func (d Data) GetUserKey(UserMail string) (*datastore.Key, error) {
+	q := datastore.NewQuery(d.users).
+		Filter("Email =", UserMail).
+		Limit(1).
+		KeysOnly()
+	keys, err := d.client.GetAll(d.ctx, q, nil)
+	if err != nil || len(keys) == 0 {
+		return nil, errors.New("Could no fetch users")
+	}
+	return keys[0], nil
+}

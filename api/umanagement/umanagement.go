@@ -84,17 +84,18 @@ func Register(d data.Data, r *http.Request) (string, error) {
 
 // Delete delete an account
 func Delete(d data.Data, r *http.Request) (string, error) {
-
-	// TODO: acctually delete user
-
-	return "{\"done\":\"true\"}", nil
+	user, err := d.GetUserKey(d.User.Email)
+	if err != nil {
+		return "", errors.New("1.2.0")
+	}
+	return "{\"done\":\"true\"}", d.Delete(user)
 }
 
 // UpdateToken update a token
 func UpdateToken(d data.Data, r *http.Request) (string, error) {
 	token, err := misc.UserToToken(d.User)
 	if err != nil {
-		return "", errors.New("1.2.O")
+		return "", errors.New("1.3.O")
 	}
 	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
 }

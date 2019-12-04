@@ -8,6 +8,8 @@ import (
 
 	"github.com/eiko-team/eiko/misc/hash"
 	"github.com/eiko-team/eiko/misc/structures"
+
+	"cloud.google.com/go/datastore"
 )
 
 var (
@@ -24,6 +26,8 @@ var (
 	GetAllLists     bool
 	GetListContent  bool
 	StoreContent    bool
+	Delete          bool
+	GetUserKey      bool
 	Error           error
 	Error2          error
 	pass, _         = hash.Hash("pass")
@@ -109,6 +113,7 @@ var (
 	}
 	ID     = int64(0)
 	IDTest = int64(42)
+	Key    *datastore.Key
 )
 
 // Data container for all data relative variables
@@ -198,4 +203,14 @@ func (d Data) GetListContent(id int64) ([]structures.ListContent, error) {
 func (d Data) StoreContent(content structures.ListContent) (int64, error) {
 	StoreContent = true
 	return ID, Error
+}
+
+func (d Data) Delete(key *datastore.Key) error {
+	Delete = true
+	return Error
+}
+
+func (d Data) GetUserKey(UserMail string) (*datastore.Key, error) {
+	GetUserKey = true
+	return Key, Error2
 }
