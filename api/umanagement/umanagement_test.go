@@ -187,3 +187,36 @@ func TestUpdateToken(t *testing.T) {
 		})
 	}
 }
+
+func TestSettings(t *testing.T) {
+	data.User = data.UserTest
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+	}{
+		{"sanity", `{"done":"true"}`, false},
+		{"error", data.ErrTest.Error(), true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "error" {
+				data.Error = data.ErrTest
+			}
+			req, _ := http.NewRequest("POST", "/user/settings", nil)
+			got, err := umanagement.Settings(d, req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Settings() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				got = err.Error()
+			}
+			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
+			if len(matchs) == 0 {
+				t.Errorf("Settings() = %v, want %v", got, tt.want)
+			}
+			data.Error = nil
+		})
+	}
+}

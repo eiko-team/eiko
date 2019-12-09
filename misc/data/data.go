@@ -408,3 +408,18 @@ func (d Data) ScoreStore(store structures.Store) error {
 	_, err = d.client.Put(d.ctx, key, &s)
 	return err
 }
+
+// UpdateUser update user fields
+func (d Data) UpdateUser(user structures.User) error {
+	key, err := d.GetUserKey(user.Email)
+	if err != nil {
+		return err
+	}
+	var u structures.User
+	if err := d.client.Get(d.ctx, key, &u); err != nil {
+		return err
+	}
+	u = structures.MergeUser(user, u)
+	_, err = d.client.Put(d.ctx, key, &u)
+	return err
+}
