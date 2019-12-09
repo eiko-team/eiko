@@ -10,7 +10,8 @@ app
 
 # credentials
 CREDENTIALS.json
-.env
+
+# Tests
 test.html
 coverage.txt
 
