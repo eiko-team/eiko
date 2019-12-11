@@ -30,6 +30,7 @@ var (
 	GetUserKey      bool
 	GetStoreKey     bool
 	ScoreStore      bool
+	UpdateUser      bool
 	Error           error
 	Error2          error
 	pass, _         = hash.Hash("pass")
@@ -225,4 +226,10 @@ func (d Data) GetStoreKey(store structures.Store) (*datastore.Key, error) {
 func (d Data) ScoreStore(store structures.Store) error {
 	ScoreStore = true
 	return Error2
+}
+
+// UpdateUser update user fields
+func (d Data) UpdateUser(user structures.User) error {
+	UpdateUser = true
+	return Error
 }

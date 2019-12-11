@@ -99,3 +99,8 @@ func UpdateToken(d data.Data, r *http.Request) (string, error) {
 	}
 	return fmt.Sprintf("{\"token\":\"%s\"}", token), nil
 }
+
+// Settings set user settings
+func Settings(d data.Data, r *http.Request) (string, error) {
+	return "{\"done\":\"true\"}", d.UpdateUser(d.User)
+}

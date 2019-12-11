@@ -13,6 +13,27 @@ type User struct {
 	ID        int64     // The integer ID used in the firestore.
 }
 
+// MergeUser Merge two user into one:
+// i2 fill empty fields of i1
+func MergeUser(i1, i2 User) User {
+	if i1.Email == "" {
+		i1.Email = i2.Email
+	}
+	if i1.Pass == "" {
+		i1.Pass = i2.Pass
+	}
+	if i1.Created == time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC) {
+		i1.Created = i2.Created
+	}
+	if !i1.Validated {
+		i1.Validated = i2.Validated
+	}
+	if i1.ID == 0 {
+		i1.ID = i2.ID
+	}
+	return i1
+}
+
 // Log struct used to store Logs in the datastore
 type Log struct {
 	Email   string    `firestore:"email"`
