@@ -25,7 +25,7 @@ func MergeUser(i1, i2 User) User {
 	if i1.Created == time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC) {
 		i1.Created = i2.Created
 	}
-	if i1.Validated == false {
+	if !i1.Validated {
 		i1.Validated = i2.Validated
 	}
 	if i1.ID == 0 {
