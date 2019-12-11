@@ -37,6 +37,7 @@ jobs:
 
     - name: Test
       run: go test -tags mock ./...
-    
+
     - name: GolangCI-Lint Action
-        uses: actions-contrib/golangci-lint@v0.1.0
+      uses: actions-contrib/golangci-lint@v0.1.0
+
