@@ -78,3 +78,13 @@ func DeleteStore(d data.Data, r *http.Request) (string, error) {
 	}
 	return `{"done":"true"}`, d.DeleteStore(i.ID)
 }
+
+// UpdateStore update a store
+func UpdateStore(d data.Data, r *http.Request) (string, error) {
+	var i structures.Store
+	err := misc.ParseJSON(r, &i)
+	if err != nil {
+		return "", errors.New("4.4.0")
+	}
+	return `{"done":"true"}`, d.UpdateStore(i)
+}

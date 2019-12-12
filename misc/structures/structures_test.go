@@ -63,3 +63,47 @@ func TestMergeUser(t *testing.T) {
 		})
 	}
 }
+
+func ExampleMergeStore() {
+	StoreWithMissingInformations := Store{
+		Name: "Store Test.",
+		ID:   42,
+	}
+
+	SameStoreWithMoreInformations := Store{
+		Name:    "The Best Test Store",
+		ID:      21,
+		Country: "In",
+	}
+	NewStore := MergeStore(StoreWithMissingInformations,
+		SameStoreWithMoreInformations)
+
+	fmt.Println(NewStore.Name)
+	fmt.Println(NewStore.ID)
+	fmt.Println(NewStore.Country)
+
+	// Output:
+	// The Best Test Store
+	// 42
+	// In
+}
+
+func TestMergeStore(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		i1   Store
+		i2   Store
+		want Store
+	}{
+		{"sanity", Store{}, Store{}, Store{}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeStore(tt.i1, tt.i2); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MergeStore() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

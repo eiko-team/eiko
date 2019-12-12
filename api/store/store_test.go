@@ -191,3 +191,46 @@ func TestDeleteStore(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdateStore(t *testing.T) {
+	j, _ := json.Marshal(data.StoreTest)
+	s := string(j)
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+		body    string
+		del     bool
+	}{
+		{"sanity", `{"done":"true"}`, false, s, true},
+		{"wrong data", data.ErrTest.Error(), true, s, true},
+		{"no body", `4.4.0`, true, "", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.name == "wrong data" {
+				data.Error = data.ErrTest
+			}
+			req, _ := http.NewRequest("POST", "/store/update",
+				strings.NewReader(tt.body))
+			got, err := store.UpdateStore(d, req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UpdateStore() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				got = err.Error()
+			}
+			matchs := regexp.MustCompile(tt.want).FindAllStringSubmatch(got, -1)
+			if len(matchs) == 0 {
+				t.Errorf("UpdateStore() = '%v', want %v", got, tt.want)
+			}
+			if data.UpdateStore != tt.del {
+				t.Errorf("data.UpdateStore = %t, want %t",
+					data.UpdateStore, tt.del)
+			}
+			data.UpdateStore = false
+			data.Error = nil
+		})
+	}
+}
