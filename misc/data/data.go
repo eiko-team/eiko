@@ -437,6 +437,6 @@ func (d Data) UpdateStore(store structures.Store) error {
 		return err
 	}
 	s = structures.MergeStore(store, s)
-	_, err = d.client.Put(d.ctx, key, &s)
+	_, err := d.client.Put(d.ctx, key, &s)
 	return err
 }
