@@ -81,6 +81,19 @@ type Store struct {
 	ID      int64 // The integer ID used in the firestore.
 }
 
+// MergeStore Merge two user into one:
+// i2 fill empty fields of i1
+func MergeStore(i1, i2 Store) Store {
+	if i1.Country == "" {
+		i1.Country = i2.Country
+	}
+	i1.Address = i2.Address
+	i1.Name = i2.Name
+	i1.Zip = i2.Zip
+	i1.GeoHash = i2.GeoHash
+	return i1
+}
+
 // Consumable struct used to parse /consumable/...
 type Consumable struct {
 	// The integer ID used in the firestore.

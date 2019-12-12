@@ -423,3 +423,20 @@ func (d Data) UpdateUser(user structures.User) error {
 	_, err = d.client.Put(d.ctx, key, &u)
 	return err
 }
+
+// DeleteStore remove a store from storage
+func (d Data) DeleteStore(ID int64) error {
+	return d.Delete(datastore.IDKey(d.stores, ID, nil))
+}
+
+// UpdateStore update store fields
+func (d Data) UpdateStore(store structures.Store) error {
+	key := datastore.IDKey(d.stores, store.ID, nil)
+	var s structures.Store
+	if err := d.client.Get(d.ctx, key, &s); err != nil {
+		return err
+	}
+	s = structures.MergeStore(store, s)
+	_, err := d.client.Put(d.ctx, key, &s)
+	return err
+}

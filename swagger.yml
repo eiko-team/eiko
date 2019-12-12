@@ -336,3 +336,120 @@ paths:
           required: true
           schema:
             type: string
+  /store/update:
+    post:
+      summary: Update a store value
+      description: >
+        Update store value, like renaming or adresss changes.
+      responses:
+        '200':
+          description: Informations on the store
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: bool
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+                country:
+                  type: string
+                zip:
+                  type: string
+                user_rating:
+                  type: integer
+                ID:
+                  type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /store/delete:
+    post:
+      summary: Delete store
+      description: >
+        Delete a Store and all related values.
+      responses:
+        '200':
+          description: Informations on the store
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: bool
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ID:
+                  type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+/store/score:
+    post:
+      summary: Add A score to a store
+      description: >
+        Add a new score to the store
+      responses:
+        '200':
+          description: Informations on the store
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: bool
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - store
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_rating:
+                  type: integer
+                ID:
+                  type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
