@@ -12,11 +12,11 @@
      - [X] /delete: delete account
      - [X] /updatetoken: update token with token
      - [X] /verify: verify some stuff like email, password or token
-     - [ ] Store
+     - [X] Store
          - [X] /store/add
-         - [ ] /store/update
+         - [X] /store/update
          - [X] /store/score
-         - [ ] /store/delete
+         - [X] /store/delete
          - [X] /store/get
      - [ ] Consumable
          - [X] /consumable/add
