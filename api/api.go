@@ -75,6 +75,7 @@ var (
 		NewFunc(store.AddStore, "/store/add"),
 		NewFunc(store.GetStore, "/store/get"),
 		NewFunc(store.ScoreStore, "/store/score"),
+		NewFunc(store.DeleteStore, "/store/delete"),
 		NewFunc(consumables.Store, "/consumable/add"),
 		NewFunc(consumables.Get, "/consumable/get"),
 		NewFunc(list.AddList, "/list/create"),

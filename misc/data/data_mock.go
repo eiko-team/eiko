@@ -31,6 +31,7 @@ var (
 	GetStoreKey     bool
 	ScoreStore      bool
 	UpdateUser      bool
+	DeleteStore     bool
 	Error           error
 	Error2          error
 	pass, _         = hash.Hash("pass")
@@ -231,5 +232,11 @@ func (d Data) ScoreStore(store structures.Store) error {
 // UpdateUser update user fields
 func (d Data) UpdateUser(user structures.User) error {
 	UpdateUser = true
+	return Error
+}
+
+// DeleteStore remove a store from storage
+func (d Data) DeleteStore(ID int64) error {
+	DeleteStore = true
 	return Error
 }
