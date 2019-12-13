@@ -62,7 +62,8 @@ Via un shell:
 ./app
 ```
 
+
 ## Profiter
-Voila le serveur lancé, [il n'y a plus qu'à utiliser une navigateur pour accéder à la page d’accueil](http://127.0.0.1).
+Voila le serveur lancé,  il n'y a plus qu'à utiliser le navigateur pour accéder à la <walkthrough-spotlight-pointer spotlightId="devshell-web-preview-button">page d’accueil</walkthrough-spotlight-pointer>.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
