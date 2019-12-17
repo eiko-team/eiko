@@ -72,10 +72,12 @@ func TestParseJSON(t *testing.T) {
 		if err := misc.ParseJSON(r, &consumable); err != nil {
 			t.Errorf("ParseJSON() = %+v", err)
 		}
-		/*		if reflect.DeepEqual(data.ConsumableTest, consumable) {
-					t.Errorf("ParseJSON(%+v) != %+v", consumable, data.ConsumableTest)
-				}
-		*/
+		c, _ := json.Marshal(consumable)
+		d, _ := json.Marshal(data.ConsumableTest)
+		if c != d {
+			t.Errorf("ParseJSON(%s) != %s", string(c), string(d))
+		}
+
 		// TODO assert deepequals data.ConsumableTest and consumable
 	})
 	t.Run("Bad Json", func(t *testing.T) {
