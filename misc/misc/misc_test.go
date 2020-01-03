@@ -74,8 +74,9 @@ func TestParseJSON(t *testing.T) {
 		}
 		c, _ := json.Marshal(consumable)
 		d, _ := json.Marshal(data.ConsumableTest)
-		if c != d {
-			t.Errorf("ParseJSON(%s) != %s", string(c), string(d))
+		cc, dd := string(c), string(d)
+		if cc != dd {
+			t.Errorf("ParseJSON(%s) != %s", cc, dd)
 		}
 
 		// TODO assert deepequals data.ConsumableTest and consumable
