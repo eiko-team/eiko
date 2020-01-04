@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"reflect"
 
 	"github.com/eiko-team/eiko/misc/log"
 	"github.com/eiko-team/eiko/misc/math"
@@ -134,21 +135,43 @@ func (d Data) StoreStore(store structures.Store) error {
 	return err
 }
 
-// StoreConsumable is used to store a consumable in the datastore
-func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
-	// TODO Check if the consumable is not already in the database before
-	// adding it
-	// BODY we can do something like: if the consumable is not in the db, push
-	// it. If the condumable is in the db, check is there are changes and if
-	// there is, create an update of the product
+func (d Data) getSameConsumable(consumable structures.Consumable) (structures.Consumable, error) {
+	var cons []structures.Consumable
+	q := datastore.NewQuery(d.consumables).
+		Filter("Name =", consumable.Name).
+		Limit(1)
+	keys, err := d.client.GetAll(d.ctx, q, &cons)
+	if err != nil || len(cons) == 0 {
+		return structures.Consumable{}, errors.New("Could no fetch stores")
+	}
+	cons[0].ID = keys[0].ID
+	return cons[0], nil
+}
+
+func (d Data) storeConsumable(consumable, prev structures.Consumable) (int64, error) {
 	key := datastore.IncompleteKey(d.consumables, nil)
 	key, err := d.client.Put(d.ctx, key, &consumable)
 	if err != nil {
 		return key.ID, err
 	}
 	consumable.ID = key.ID
+	if !reflect.DeepEqual(prev, structures.Consumable{}) {
+		prev.NewVersion = consumable.ID
+		key := datastore.IDKey(d.consumables, prev.ID, nil)
+		d.client.Put(d.ctx, key, &prev)
+	}
 	err = d.rs.StoreConsumable(consumable)
 	return key.ID, err
+}
+
+// StoreConsumable is used to store a consumable in the datastore
+func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
+	cons, err := d.getSameConsumable(consumable)
+	if err != nil {
+		return d.storeConsumable(consumable, structures.Consumable{})
+	}
+	consumable = structures.MergeConsumable(cons, consumable)
+	return d.storeConsumable(consumable, cons)
 }
 
 func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structures.Stock, error) {

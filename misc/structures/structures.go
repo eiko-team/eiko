@@ -94,6 +94,38 @@ func MergeStore(i1, i2 Store) Store {
 	return i1
 }
 
+// MergeStrings put the content of s2 in s1 if s1 is empty
+func MergeStrings(s1, s2 []string) []string {
+	if len(s1) == 0 {
+		return append(s1, s2...)
+	}
+	return s1
+}
+
+// MergeInt put the content of i2 in i1 if i1 is empty
+func MergeInt(i1, i2 int) int {
+	if i1 == 0 {
+		return i2
+	}
+	return i1
+}
+
+// MergeFloat put the content of f2 in f1 if f1 is empty
+func MergeFloat(f1, f2 float64) float64 {
+	if f1 == 0 {
+		return f2
+	}
+	return f1
+}
+
+// MergeString put the content of i2 in i1 if i1 is empty
+func MergeString(s1, s2 string) string {
+	if s1 == "" {
+		return s2
+	}
+	return s1
+}
+
 // Consumable struct used to parse /consumable/...
 type Consumable struct {
 	// The integer ID used in the firestore.
@@ -134,6 +166,37 @@ type Consumable struct {
 	MLitre  int `json:"mililitre"`
 	// Quality of the product
 	Label []string `json:"label"`
+}
+
+// MergeConsumable Merge two consumable into one:
+// C2 fill empty fields of C1
+func MergeConsumable(c1, c2 Consumable) Consumable {
+	c1.Additive = MergeStrings(c1.Additive, c2.Additive)
+	c1.Alcool = MergeFloat(c1.Alcool, c2.Alcool)
+	c1.Allergen = MergeStrings(c1.Allergen, c2.Allergen)
+	c1.Back = MergeString(c1.Back, c2.Back)
+	c1.Categories = MergeStrings(c1.Categories, c2.Categories)
+	c1.Code = MergeStrings(c1.Code, c2.Code)
+	c1.Company = MergeString(c1.Company, c2.Company)
+	c1.Composition = MergeString(c1.Composition, c2.Composition)
+	c1.Energy = MergeFloat(c1.Energy, c2.Energy)
+	c1.Fat = MergeFloat(c1.Fat, c2.Fat)
+	c1.Fiber = MergeFloat(c1.Fiber, c2.Fiber)
+	c1.Front = MergeString(c1.Front, c2.Front)
+	c1.Glucides = MergeFloat(c1.Glucides, c2.Glucides)
+	c1.Ingredient = MergeStrings(c1.Ingredient, c2.Ingredient)
+	c1.Label = MergeStrings(c1.Label, c2.Label)
+	c1.Manufacturing = MergeString(c1.Manufacturing, c2.Manufacturing)
+	c1.NutriScore = MergeString(c1.NutriScore, c2.NutriScore)
+	c1.Packaging = MergeStrings(c1.Packaging, c2.Packaging)
+	c1.Proteins = MergeFloat(c1.Proteins, c2.Proteins)
+	c1.SaturatedFat = MergeFloat(c1.SaturatedFat, c2.SaturatedFat)
+	c1.Sodium = MergeFloat(c1.Sodium, c2.Sodium)
+	c1.Source = MergeString(c1.Source, c2.Source)
+	c1.SugarGlucides = MergeFloat(c1.SugarGlucides, c2.SugarGlucides)
+	c1.Tags = MergeStrings(c1.Tags, c2.Tags)
+	c1.Vitamins = MergeStrings(c1.Vitamins, c2.Vitamins)
+	return c1
 }
 
 // Stock Stock of a product in a store

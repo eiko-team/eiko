@@ -107,3 +107,91 @@ func TestMergeStore(t *testing.T) {
 		})
 	}
 }
+
+func TestMergeStrings(t *testing.T) {
+	tests := []struct {
+		name string
+		s1   []string
+		s2   []string
+		want []string
+	}{
+		{"sanity", []string{}, []string{}, []string{}},
+		{"no S2", []string{"test"}, []string{}, []string{"test"}},
+		{"no S1", []string{}, []string{"test"}, []string{"test"}},
+		{"both filled", []string{"test s1"}, []string{"test s2"}, []string{"test s1"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeStrings(tt.s1, tt.s2); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MergeStrings() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMergeInt(t *testing.T) {
+	tests := []struct {
+		name string
+		i1   int
+		i2   int
+		want int
+	}{
+		{"sanity", 0, 0, 0},
+		{"no i1", 0, 42, 42},
+		{"no i2", 42, 0, 42},
+		{"both filled", 42, 21, 42},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeInt(tt.i1, tt.i2); got != tt.want {
+				t.Errorf("MergeInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMergeFloat(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		f1   float64
+		f2   float64
+		want float64
+	}{
+		{"sanity", 0, 0, 0},
+		{"no f1", 0, 0.42, 0.42},
+		{"no f2", 0.42, 0, 0.42},
+		{"both filled", 0.42, 0.21, 0.42},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeFloat(tt.f1, tt.f2); got != tt.want {
+				t.Errorf("MergeFloat() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMergeString(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name string
+		s1   string
+		s2   string
+		want string
+	}{
+		{"sanity", "", "", ""},
+		{"no S2", "test", "", "test"},
+		{"no S1", "", "test", "test"},
+		{"both filled", "test s1", "test s2", "test s1"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := MergeString(tt.s1, tt.s2); got != tt.want {
+				t.Errorf("MergeString() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
