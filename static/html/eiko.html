@@ -2,7 +2,7 @@
 {{ template "beautiful" . }}
 {{ template "css" . }}
 {{ template "headEnd" . }}
-
+jeb
 <body>
     {{ template "sidenav" . }}
     <main>
@@ -11,8 +11,66 @@
             {{ template "loading" . }}
             <div id="liste" class="col s12">
                 {{ template "list" . }}
+
+      <ul class="collection">
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+    </ul>
+
             </div>
-            <div id="produit" class="col s12 red">TODO</div>
+
+            <div id="produit" class="col s12">
+                <div class="row">
+                    <div class="col s12 orange center"> <br> </div>
+
+                    <div class="col s12 white "><br> <br> <br> <br></div> 
+
+                    <div class="col s12 orange center" link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                       
+                        <a class="waves-effect waves-light"><i class="material-icons left">favorite_border</i></a>
+                        <a class="waves-effect waves-light"><i class="material-icons left">add</i></a>
+                        <a class="waves-effect waves-light"><i class="material-icons left">map</i></a>
+                    </div>
+
+                    <div class="col s12 center"> Titre </div>
+                    <div class="col s12 grey"></div>
+
+                    <div class="col s12 center"> Quantité </div>
+                    <div class="col s12 grey"></div>
+
+                    <div class="col s12 center"> Qu'en pensez-vous ? </div>
+                    <div class="col s12 grey"></div>
+
+                    <div class="col s12 silver center">
+                    Composition : 
+                    <br> Origine du produit : </div>
+                    <div class="col s12 grey"></div>
+
+                    <div class="col s3 center" link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <i class="medium material-icons blue">favorite</i> </div>
+                    <div class="col s9"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Santé 
+                    <ul>
+                        <li>Additif</li>
+                        <li>Nutrition</li>
+                        <li>Régime particulier</li>
+                    </ul>
+                    </div>
+
+                    <div class="col s12 grey"></div>
+
+                    <div class="col s3 center" link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <i class="medium material-icons red">eco</i> </div>
+                    <div class="col s9"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Environnement 
+                    <ul>
+                        <li>Label ecologique</li>
+                        <li>Environnement social</li>
+                        <li>Boycottants</li>
+                    </ul>
+                    </div>
+
+
+                    </div>
+
             <div id="alternatives" class="col s12 green">TODO</div>
             {{ template "action" . }}
         </div>
@@ -22,22 +80,16 @@
     {{ template "templateSeparator" . }}
     <div id="modal_create_list" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <h4>Créer une nouvelle liste</h4>
+            <h4><font color="orange">Créer une nouvelle liste</font></h4>
             <hr />
             <div class="row">
-                <div class="input-field col s9">
+                <div class="input-field col s9" text-align="center">
                     <input id="list_name" type="text" class="validate" required>
-                    <label for="list_name">Nommez votre liste:</label>
+                    <label for="list_name"><center>Intitulé</center></label>
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s9">
-                    <input id="collab" type="text" class="validate">
-                    <label for="collab">Ajoutez un ou des collaborateurs:</label>
-                </div>
-            </div>
-            <div class="row">
-                <p>Copier le lien de partage&nbsp;<a class="btn-floating btn-large waves-effect waves-light btn-blue"><i class="material-icons">filter_none</i></a></p>
+                <p><font color="black">&nbsp;Copier le lien de partage</font><a class="btn-floating btn-large waves-effect waves-light btn-blue"><i class="material-icons">filter_none</i></a></p>
             </div>
         </div>
         <div class="modal-footer">
@@ -45,6 +97,9 @@
             <a id="list_create" class="modal-close waves-effect waves-light btn-flat">Créer la liste</a>
         </div>
     </div>
+
+
+
 </body>
 {{ template "js" . }}
 <script type="text/javascript" src="/js/eiko/eiko.js"></script>

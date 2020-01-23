@@ -1,0 +1,14 @@
+{{ template "head" . }
+{{ template "beautiful" }}
+{{ template "css" }}
+{{ template "headEnd" . }}
+
+<body>
+    {{ template "sidenav" . }}
+    <main>
+        {{ template "nav" . }}
+        <div class="content" id="content">
+        	
+{{ template "js" . }}
+<script type="text/javascript" src="/js/eiko/eiko.js"></script>
+{{ template "end" . }}

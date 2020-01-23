@@ -578,3 +578,7 @@ restricted to 400px */
 #consumables .row {
     margin-bottom: 5px !important;
 }
+
+.medium material-icons {
+  box-shadow: 1px 1px 12px #555;
+}
