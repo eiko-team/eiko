@@ -6,11 +6,22 @@ import (
 
 // User struct used to store information in the datastore
 type User struct {
-	Email     string    `firestore:"email"`
-	Pass      string    `firestore:"Hashed_password"`
-	Created   time.Time `firestore:"created"`
-	Validated bool      `firestore:"valid_user"`
-	ID        int64     // The integer ID used in the firestore.
+	Email       string    `firestore:"email"`
+	Pass        string    `firestore:"Hashed_password"`
+	Created     time.Time `firestore:"created"`
+	Validated   bool      `firestore:"valid_user"`
+	SBio        bool      `firestore:"setting_bio"`
+	SVegan      bool      `firestore:"setting_vegan"`
+	SHalal      bool      `firestore:"setting_halal"`
+	SCasher     bool      `firestore:"setting_casher"`
+	SSel        bool      `firestore:"setting_sel"`
+	SOeuf       bool      `firestore:"setting_oeuf"`
+	SArachide   bool      `firestore:"setting_arachide"`
+	SCrustace   bool      `firestore:"setting_crustace"`
+	SGluten     bool      `firestore:"setting_gluten"`
+	SDiabetique bool      `firestore:"setting_diabetique"`
+	SBoycott    []string  `firestore:"setting_boycott"`
+	ID          int64     // The integer ID used in the firestore.
 }
 
 // MergeUser Merge two user into one:
@@ -30,6 +41,39 @@ func MergeUser(i1, i2 User) User {
 	}
 	if i1.ID == 0 {
 		i1.ID = i2.ID
+	}
+	if !i1.SBio {
+		i1.SBio = i2.SBio
+	}
+	if !i1.SVegan {
+		i1.SVegan = i2.SVegan
+	}
+	if !i1.SHalal {
+		i1.SHalal = i2.SHalal
+	}
+	if !i1.SCasher {
+		i1.SCasher = i2.SCasher
+	}
+	if !i1.SSel {
+		i1.SSel = i2.SSel
+	}
+	if !i1.SOeuf {
+		i1.SOeuf = i2.SOeuf
+	}
+	if !i1.SArachide {
+		i1.SArachide = i2.SArachide
+	}
+	if !i1.SCrustace {
+		i1.SCrustace = i2.SCrustace
+	}
+	if !i1.SGluten {
+		i1.SGluten = i2.SGluten
+	}
+	if !i1.SDiabetique {
+		i1.SDiabetique = i2.SDiabetique
+	}
+	if len(i1.SBoycott) != len(i2.SBoycott) {
+		// TODO: Implement an array merging system
 	}
 	return i1
 }

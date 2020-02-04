@@ -12,6 +12,7 @@ import (
 	"github.com/eiko-team/eiko/misc/math"
 	"github.com/eiko-team/eiko/misc/research"
 	"github.com/eiko-team/eiko/misc/structures"
+	"github.com/eiko-team/eiko/misc/user"
 
 	"cloud.google.com/go/datastore"
 	// https://blog.nobugware.com/post/2015/leveldb_geohash_golang/
@@ -214,14 +215,18 @@ func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumable
 	}
 
 	res := make([]structures.Consumables, len(IDs))
-	for i, id := range IDs {
+	pos := 0
+	for _, id := range IDs {
 		c, err := d.getOneConsumable(id)
 		if err != nil {
 			return nil, err
 		}
-		res[i] = structures.Consumables{Consumable: c}
+		if user.IsGood(d.User, c) {
+			res[pos] = structures.Consumables{Consumable: c}
+			pos++
+		}
 	}
-	return res, nil
+	return res[:pos], nil
 }
 
 // GetConsumables is used to find some consumables in the datastore
