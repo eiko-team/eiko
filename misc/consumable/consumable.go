@@ -4,6 +4,16 @@ import (
 	"github.com/eiko-team/eiko/misc/structures"
 )
 
+// IsBoycotted check if the consumable is boycotted by the user
+func IsBoycotted(c structures.Consumable, user structures.User) bool {
+	for _, boycotted := range user.SBoycott {
+		if boycotted == c.Company {
+			return true
+		}
+	}
+	return false
+}
+
 // IsBio return true is the consumable is Bio
 func IsBio(structures.Consumable) bool {
 	// TODO: Create a function `IsBio` to filter consumables
@@ -28,21 +38,20 @@ func IsCasher(structures.Consumable) bool {
 	return true
 }
 
-// ContainSel return true is the consumable contain salt
-func ContainSel(structures.Consumable) bool {
-	// TODO: Create a function `ContainSel` to filter consumables
+// ContainSodium return true is the consumable contain salt
+func ContainSodium(c structures.Consumable) bool {
+	return c.Sodium >= 0
+}
+
+// ContainEgg return true is the consumable contain eggs
+func ContainEgg(structures.Consumable) bool {
+	// TODO: Create a function `ContainEgg` to filter consumables
 	return true
 }
 
-// ContainOeuf return true is the consumable contain eggs
-func ContainOeuf(structures.Consumable) bool {
-	// TODO: Create a function `ContainOeuf` to filter consumables
-	return true
-}
-
-// ContainArachide return true is the consumable contain arachide
-func ContainArachide(structures.Consumable) bool {
-	// TODO: Create a function `ContainArachide` to filter consumables
+// ContainPenut return true is the consumable contain penut
+func ContainPenut(structures.Consumable) bool {
+	// TODO: Create a function `ContainPenut` to filter consumables
 	return true
 }
 
@@ -59,7 +68,6 @@ func IsGlutenFree(structures.Consumable) bool {
 }
 
 // ForDiabetique return true is the consumable is suited for diabetique
-func ForDiabetique(structures.Consumable) bool {
-	// TODO: Create a function `ForDiabetique` to filter consumables
-	return true
+func ForDiabetic(c structures.Consumable) bool {
+	return c.Glucides <= 0
 }

@@ -7,14 +7,15 @@ import (
 
 // IsGood checks if the consumable is sutable for the user
 func IsGood(user structures.User, c structures.Consumable) bool {
-	return (user.SBio && !consumable.IsBio(c)) ||
+	return !consumable.IsBoycotted(c, user) ||
+		(user.SBio && !consumable.IsBio(c)) ||
 		(user.SVegan && !consumable.IsVegan(c)) ||
 		(user.SHalal && !consumable.IsHalal(c)) ||
 		(user.SCasher && !consumable.IsCasher(c)) ||
-		(user.SSel && !consumable.ContainSel(c)) ||
-		(user.SOeuf && !consumable.ContainOeuf(c)) ||
-		(user.SArachide && !consumable.ContainArachide(c)) ||
+		(user.SSodium && !consumable.ContainSodium(c)) ||
+		(user.SEgg && !consumable.ContainEgg(c)) ||
+		(user.SPenut && !consumable.ContainPenut(c)) ||
 		(user.SCrustace && !consumable.ContainCrustace(c)) ||
 		(user.SGluten && !consumable.IsGlutenFree(c)) ||
-		(user.SDiabetique && !consumable.ForDiabetique(c))
+		(user.SDiabetic && !consumable.ForDiabetic(c))
 }

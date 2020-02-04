@@ -6,22 +6,22 @@ import (
 
 // User struct used to store information in the datastore
 type User struct {
-	Email       string    `firestore:"email"`
-	Pass        string    `firestore:"Hashed_password"`
-	Created     time.Time `firestore:"created"`
-	Validated   bool      `firestore:"valid_user"`
-	SBio        bool      `firestore:"setting_bio"`
-	SVegan      bool      `firestore:"setting_vegan"`
-	SHalal      bool      `firestore:"setting_halal"`
-	SCasher     bool      `firestore:"setting_casher"`
-	SSel        bool      `firestore:"setting_sel"`
-	SOeuf       bool      `firestore:"setting_oeuf"`
-	SArachide   bool      `firestore:"setting_arachide"`
-	SCrustace   bool      `firestore:"setting_crustace"`
-	SGluten     bool      `firestore:"setting_gluten"`
-	SDiabetique bool      `firestore:"setting_diabetique"`
-	SBoycott    []string  `firestore:"setting_boycott"`
-	ID          int64     // The integer ID used in the firestore.
+	Email     string    `firestore:"email"`
+	Pass      string    `firestore:"Hashed_password"`
+	Created   time.Time `firestore:"created"`
+	Validated bool      `firestore:"valid_user"`
+	SBio      bool      `firestore:"setting_bio"`
+	SVegan    bool      `firestore:"setting_vegan"`
+	SHalal    bool      `firestore:"setting_halal"`
+	SCasher   bool      `firestore:"setting_casher"`
+	SSodium   bool      `firestore:"setting_sodium"`
+	SEgg      bool      `firestore:"setting_egg"`
+	SPenut    bool      `firestore:"setting_arachide"`
+	SCrustace bool      `firestore:"setting_crustace"`
+	SGluten   bool      `firestore:"setting_gluten"`
+	SDiabetic bool      `firestore:"setting_diabetique"`
+	SBoycott  []string  `firestore:"setting_boycott"`
+	ID        int64     // The integer ID used in the firestore.
 }
 
 // MergeUser Merge two user into one:
@@ -54,14 +54,14 @@ func MergeUser(i1, i2 User) User {
 	if !i1.SCasher {
 		i1.SCasher = i2.SCasher
 	}
-	if !i1.SSel {
-		i1.SSel = i2.SSel
+	if !i1.SSodium {
+		i1.SSodium = i2.SSodium
 	}
-	if !i1.SOeuf {
-		i1.SOeuf = i2.SOeuf
+	if !i1.SEgg {
+		i1.SEgg = i2.SEgg
 	}
-	if !i1.SArachide {
-		i1.SArachide = i2.SArachide
+	if !i1.SPenut {
+		i1.SPenut = i2.SPenut
 	}
 	if !i1.SCrustace {
 		i1.SCrustace = i2.SCrustace
@@ -69,8 +69,8 @@ func MergeUser(i1, i2 User) User {
 	if !i1.SGluten {
 		i1.SGluten = i2.SGluten
 	}
-	if !i1.SDiabetique {
-		i1.SDiabetique = i2.SDiabetique
+	if !i1.SDiabetic {
+		i1.SDiabetic = i2.SDiabetic
 	}
 	if len(i1.SBoycott) != len(i2.SBoycott) {
 		// TODO: Implement an array merging system
