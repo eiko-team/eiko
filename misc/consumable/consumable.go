@@ -67,7 +67,7 @@ func IsGlutenFree(structures.Consumable) bool {
 	return true
 }
 
-// ForDiabetique return true is the consumable is suited for diabetique
+// ForDiabetic return true is the consumable is suited for diabetique
 func ForDiabetic(c structures.Consumable) bool {
 	return c.Glucides <= 0
 }
