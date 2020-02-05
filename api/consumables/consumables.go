@@ -57,3 +57,21 @@ func Get(d data.Data, r *http.Request) (string, error) {
 	j, err := json.Marshal(consu)
 	return string(j), err
 }
+
+func GetByID(d data.Data, r *http.Request) (string, error) {
+	var i structures.List
+	err := misc.ParseJSON(r, &i)
+	if err != nil {
+		Logger.Println(err)
+		return "", errors.New("3.2.0")
+	}
+
+	c, err := d.GetOneConsumable(i.ID)
+	if err != nil {
+		Logger.Println(err)
+		return "", errors.New("3.2.1")
+	}
+
+	j, err := json.Marshal(c)
+	return string(j), err
+}

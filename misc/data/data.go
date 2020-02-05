@@ -167,8 +167,8 @@ func (d Data) fetchStock(geo uint64, filter, order string, limit int) ([]structu
 	return res, nil
 }
 
-// getOneConsumable return the last version of this consumable
-func (d Data) getOneConsumable(id int64) (structures.Consumable, error) {
+// GetOneConsumable return the last version of this consumable
+func (d Data) GetOneConsumable(id int64) (structures.Consumable, error) {
 	var consumable []structures.Consumable
 	q := datastore.NewQuery(d.consumables).
 		Filter("__key__ =", datastore.IDKey(d.consumables, id, nil)).
@@ -192,7 +192,7 @@ func (d Data) GetConsumablesTmp(query structures.Query) ([]structures.Consumable
 
 	res := make([]structures.Consumables, len(IDs))
 	for i, id := range IDs {
-		c, err := d.getOneConsumable(id)
+		c, err := d.GetOneConsumable(id)
 		if err != nil {
 			return nil, err
 		}

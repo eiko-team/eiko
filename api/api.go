@@ -77,6 +77,7 @@ var (
 		NewFunc(store.ScoreStore, "/store/score"),
 		NewFunc(consumables.Store, "/consumable/add"),
 		NewFunc(consumables.Get, "/consumable/get"),
+		NewFunc(consumables.GetByID, "/consumable/getbyid"),
 		NewFunc(list.AddList, "/list/create"),
 		NewFunc(list.GetLists, "/list/getall"),
 		NewFunc(list.GetListContent, "/list/getcontent"),
@@ -104,6 +105,7 @@ var (
 		NewFile("html/eiko.html", "text/html", "Acceuil", []string{"/eiko.html", "/", "/index.html", "/l/:id"}),
 		NewFile("html/login.html", "text/html", "Connexion", []string{"/login.html"}),
 		NewFile("html/search.html", "text/html", "Recherche", []string{"/search/", "/search.html"}),
+		NewFile("html/critere.html", "text/html", "Critère", []string{"/critere.html"}),
 	}
 )
 
