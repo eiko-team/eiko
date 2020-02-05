@@ -8,7 +8,7 @@ security:
       - read
       - write
 servers:
-  - url: 'https://virtserver.swaggerhub.com/tomMoulard/Eiko/1.0.0'
+  - url: 'https://eiko-app.com/api'
 components:
   responses:
     Error: # $ref: '#/components/responses/Error'
@@ -416,7 +416,7 @@ paths:
           required: true
           schema:
             type: string
-/store/score:
+  /store/score:
     post:
       summary: Add A score to a store
       description: >

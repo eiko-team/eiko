@@ -10,6 +10,17 @@ type User struct {
 	Pass      string    `firestore:"Hashed_password"`
 	Created   time.Time `firestore:"created"`
 	Validated bool      `firestore:"valid_user"`
+	SBio      bool      `firestore:"setting_bio"`
+	SVegan    bool      `firestore:"setting_vegan"`
+	SHalal    bool      `firestore:"setting_halal"`
+	SCasher   bool      `firestore:"setting_casher"`
+	SSodium   bool      `firestore:"setting_sodium"`
+	SEgg      bool      `firestore:"setting_egg"`
+	SPenut    bool      `firestore:"setting_arachide"`
+	SCrustace bool      `firestore:"setting_crustace"`
+	SGluten   bool      `firestore:"setting_gluten"`
+	SDiabetic bool      `firestore:"setting_diabetique"`
+	SBoycott  []string  `firestore:"setting_boycott"`
 	ID        int64     // The integer ID used in the firestore.
 }
 
@@ -30,6 +41,39 @@ func MergeUser(i1, i2 User) User {
 	}
 	if i1.ID == 0 {
 		i1.ID = i2.ID
+	}
+	if !i1.SBio {
+		i1.SBio = i2.SBio
+	}
+	if !i1.SVegan {
+		i1.SVegan = i2.SVegan
+	}
+	if !i1.SHalal {
+		i1.SHalal = i2.SHalal
+	}
+	if !i1.SCasher {
+		i1.SCasher = i2.SCasher
+	}
+	if !i1.SSodium {
+		i1.SSodium = i2.SSodium
+	}
+	if !i1.SEgg {
+		i1.SEgg = i2.SEgg
+	}
+	if !i1.SPenut {
+		i1.SPenut = i2.SPenut
+	}
+	if !i1.SCrustace {
+		i1.SCrustace = i2.SCrustace
+	}
+	if !i1.SGluten {
+		i1.SGluten = i2.SGluten
+	}
+	if !i1.SDiabetic {
+		i1.SDiabetic = i2.SDiabetic
+	}
+	if len(i1.SBoycott) != len(i2.SBoycott) {
+		// TODO: Implement an array merging system
 	}
 	return i1
 }
