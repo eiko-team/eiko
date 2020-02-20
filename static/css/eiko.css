@@ -350,6 +350,10 @@ hr {
     text-overflow: ellipsis;
 }
 
+.col-name {
+    cursor: pointer;
+}
+
 .col-price,
 .col-check {
     cursor: pointer;
