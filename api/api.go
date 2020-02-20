@@ -83,6 +83,7 @@ var (
 		NewFunc(list.GetLists, "/list/getall"),
 		NewFunc(list.GetListContent, "/list/getcontent"),
 		NewFunc(list.AddPersonnal, "/list/add/personnal"),
+		NewFunc(list.AddConsumable, "/list/add/consumable"),
 	}
 	// Functions List all api functions that does not require a token
 	Functions = []Func{
