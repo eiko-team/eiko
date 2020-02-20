@@ -14,6 +14,34 @@ function createImage(consumable) {
     return img
 }
 
+function addSearched(elt) {
+    if (consumable === undefined) { return; }
+    console.log("addSearched", consumable)
+    // for easier later use (showConsumable)
+    var consumable = {
+        ID: consumable.consumable.ID,
+        consumable: elt,
+        list_id: Number(getCookie("ListID")),
+        name: consumable,
+        done: false,
+        erased: false,
+        mode: "searched",
+    }
+
+    insertLocalStorage(consumable, "consumables");
+    POST("/list/add/consumable", consumable, function(event) {
+        var json = JSON.parse(localStorage.getItem("consumables"));
+        if (json === null) { return; };
+        json.forEach(function(element) {
+            if (element.ID === consumable.consumable.ID) {
+                element.ID = event.ID
+            }
+        });
+        localStorage.setItem("consumables", JSON.stringify(json));
+    })
+    window.history.back();
+}
+
 function displaySearchResult(consumable) {
     if (!"content" in document.createElement("template") ||
         consumable === undefined || consumable.consumable.mode === "sample" ||
@@ -26,6 +54,7 @@ function displaySearchResult(consumable) {
     td[0].style.display = "none";
     td[1].appendChild(createImage(consumable.consumable))
     td[2].textContent = consumable.consumable.name;
+    td[2].addEventListener("click", function(event) { addSearched(consumable) })
     if (document.querySelector("#consumables").childElementCount !== 0) {
         var template1 = document.querySelector("#separator");
         var clone1 = document.importNode(template1.content, true);
