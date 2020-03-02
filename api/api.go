@@ -107,6 +107,7 @@ var (
 		NewFile("html/eiko.html", "text/html", "Acceuil", []string{"/eiko.html", "/", "/index.html", "/l/:id"}),
 		NewFile("html/login.html", "text/html", "Connexion", []string{"/login.html"}),
 		NewFile("html/search.html", "text/html", "Recherche", []string{"/search/", "/search.html"}),
+		NewFile("html/angelo.html", "text/html", "test", []string{"/angelo/", "/angelo.html"}),
 	}
 )
 
