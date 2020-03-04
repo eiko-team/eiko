@@ -10,22 +10,22 @@
         </header>
         <main>
             <form>
-                <div class="blocIdForm">
-                    <input type="text" name="prenom" class="id" placeholder="Prénom" />
-                    <input type="text" name="nom" class="id" placeholder="Nom" />
-                </div>
                 <input type="text" name="tel-mail" placeholder="Téléphone ou Email" />
                 <input type="text" name="mdp"  placeholder="Mot de passe" />
-                <button class="btn-signIn">S'inscrire</button>
+                <button class="btn-signIn">Se connecter</button>
             </form>
                 <p class="ou">OU</p>
             <div class="blocSocialNetwork">
                 <a class="waves-effect waves-light btn social facebook lienReseaux" href="#"><i class="fab fa-facebook-f"></i> Se connecter avec facebook</a>
                 <a class="waves-effect waves-light btn social google lienReseaux" href="#"><i class="fab fa-google"></i>Se connecter avec Google</a>
             </div>
+            <div class="blocResetMdp">
+                <a href="#" class="resetMdp">Mot de passe oublié</a>
+            </div>
+            
         </main>
         <footer>
-            <p>Vous avez déjà un compte ? <span><a href="#">Connectez-vous.</a></span></p>
+            <p>Vous n'avez pas de compte ? <span><a href="#">Inscrivez-vous.</a></span></p>
         </footer>
     </body>
 {{ template "end" . }} 
