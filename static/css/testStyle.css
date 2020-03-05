@@ -9,8 +9,7 @@ main{
     height: 175px;
     width: 100%;
     background-image:url("../img/background.png");
-    background-size: initial;
-    background-position:center;
+    background-size: cover;
     display: flex;
 }
 .headerLogo {
@@ -21,7 +20,7 @@ main{
 form {
     width:70%;
     margin: auto;
-    padding:15px;
+    padding:10px;
 }
 form input{
     background: #eceff0!important;
@@ -36,7 +35,7 @@ form input{
     display: inline-block!important;
     width: 49%!important;
     text-align: center!important;
-    margin-bottom: 15px!important;
+    margin-bottom: 8px!important;
 }
 .blocIdForm{
     text-align: center;
@@ -48,7 +47,9 @@ form input{
     font-size: 16px;
     height: 3rem;
     line-height: 1rem;
-    margin: none!important;
+    width: 80%;
+    display: block;
+    margin: 16px auto;
 }
 .ou {
     text-align:center
@@ -65,6 +66,7 @@ form input{
     width: 100%;
     text-transform: initial;
     margin: 5px 0;
+    letter-spacing: 0;
 } 
 .btn.social i{
     width: 10%;
@@ -74,18 +76,18 @@ form input{
 footer {
     height: 60px;
     line-height:60px;
-    -webkit-box-shadow: 0px -3px 10px 3px rgba(221,221,221,1);
-    -moz-box-shadow: 0px -3px 10px 3px rgba(221,221,221,1);
-    box-shadow: 0px -3px 10px 3px rgba(221,221,221,1);
+    border-top: 3px solid #eceff0;
     display: flex;
 }
 footer p {
     margin: auto;
+    font-size: 12px;
 }
 footer p a{
     text-decoration: underline;
     font-weight: bold;
     color: inherit;
+    font-size: 12px;
 }
 /******PAGE CONNEXION*****/
 .blocResetMdp{
@@ -97,5 +99,6 @@ footer p a{
     text-decoration: underline;
     font-weight: bold;
     color: inherit;
+    font-size: 12px;
 }
 
