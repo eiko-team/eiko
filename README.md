@@ -112,11 +112,11 @@ make mini
 
 ## Requirements
 ### Build the local developement server
-git ([en](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), [fr](https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git))
-[go](https://golang.org/doc/install)
-[docker](https://blog.moulard.org/installer-docker/)
-[docker-compose](https://blog.moulard.org/installer-docker/)
+ - git ([en](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), [fr](https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git))
+ - [go](https://golang.org/doc/install)
+ - [docker](https://blog.moulard.org/installer-docker/)
+ - [docker-compose](https://blog.moulard.org/installer-docker/)
 
 ### Build minimified version
-[html-minifier](https://www.npmjs.com/package/html-minifier)
-[css-minifier](https://www.npmjs.com/package/uglifycss)
+ - [html-minifier](https://www.npmjs.com/package/html-minifier)
+ - [css-minifier](https://www.npmjs.com/package/uglifycss)
