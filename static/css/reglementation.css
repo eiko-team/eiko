@@ -1,0 +1,135 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+header {
+    display: flex!important;
+}
+.blocHeader {
+    height: 175px;
+    margin: auto;
+    text-align: center;
+    padding-top: 15px;
+}
+.headerLogo {
+    height: 100px;
+    width: 100px;
+}
+.headerTitre{
+    font-size: 18px;
+}
+.bloc{
+    padding: 15px 25px;
+    display: flex;
+    border-top: 2px solid #e8eef0;
+}
+/****** SECTION JURIDIQUE *********/
+.itemJuridique{
+    background: #eceff0;
+    text-align: center;
+    margin: auto;
+    border-radius: 10px;
+    display: flex;
+    padding: 5px;
+}
+/* CLASSE QUAND BTN ACTIF */
+.itemJuridiqueActived{
+    background: #FF9E40;
+    text-align: center;
+    margin: auto;
+    border-radius: 10px;
+    display: flex;
+    color: white;
+}
+.textJuridique{
+    padding: 10px 20px;
+    margin: auto;
+}
+.lienJuridique{
+    text-decoration: underline;
+    color: #FF9E40;
+}
+/* CLASSE QUAND LIEN ACTIF */
+.lienJuridiqueActived{
+    text-decoration: underline;
+    color: #B53D00;
+}
+/****** SECTION FACULTATIF *********/
+.titreFacultatif{
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: 14px;
+}
+.facultatif {
+    padding: 15px 25px;
+    border-top: 2px solid #eceff0;
+}
+.listeItems{
+    display: flex;
+    flex-wrap: wrap;
+}
+.itemsFacultatif{
+    background-color: #eceff0;
+    border-radius: 10px;
+    padding: 10px 25px 0px 25px;
+    margin: 10px auto;
+}
+/* CLASSE QUAND BTN ACTIF */
+.itemsFacultatifActived{
+    background-color: #FF9E40;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 25px 0px 25px;
+    margin: 10px auto;
+}
+.iconeItem, .texteItem {
+    width: 100%;
+    text-align: center;
+}
+.iconeItem svg {
+    width: 45px;
+}
+.texteItem p{
+    font-size: 13px;
+}
+/****** SECTION CONTACT *********/
+.contact{
+    padding: 10px 25px 0px 25px;
+}
+.texteContact{
+    text-align: center;
+    font-size: 13px;
+}
+.footer {
+    padding: 0 25%;
+}
+.btn-callToAction {
+    background-color: #FF9E40;
+    color: white;
+    border-radius: 24px;
+    font-size: 14px;
+    height: 3rem;
+    line-height: 1rem;
+    width: 80%;
+    margin: 16px auto;
+    border: none;
+}
+
+/* CLASSE POUR SVG A REMPLIR*/
+.fill{
+    fill: #0039CB;
+}
+/* CLASSE POUR CHANGER COULEUR QUAND ACTIF */
+.fillActived{
+    fill: white;
+}
+/* CLASSE POUR SVG A TRACER*/
+.stroke{
+    stroke: #0039CB;
+    stroke-width: 2px;
+}
+/* CLASSE POUR CHANGER COULEUR QUAND ACTIF */
+.strokeActived{
+    stroke: white;
+    stroke-width: 2px;
+}
