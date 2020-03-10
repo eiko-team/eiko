@@ -14,9 +14,8 @@ eiko web app
 
 # Installation
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/eiko-team/eiko&tutorial=doc/launch-tutorial.md)
-> Prerequirement: have golang>=1.13 .4 install on your machine
 
-You need to have a services account for the google Datastore
+You need to have a services account to access the google Datastore
 
 ## Services account
 ```bash
@@ -29,7 +28,6 @@ export CREDENTIALS=CREDENTIALS.json
 gcloud iam service-accounts create $ACCOUNT_NAME
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" --role "roles/owner"
 gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
-
 ```
 
 ## Compilation and local building
