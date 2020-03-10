@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
+  version: 1.0.1
   title: Eiko's API
   description: Aiko's API
 security:
@@ -28,6 +28,159 @@ components:
       properties:
         error:
           type: string
+    Query: # $ref: '#/components/schemas/Query'
+      type: object
+      properties:
+        Query:
+          type: string
+        Limit:
+          type: integer
+        Size:
+          type: integer
+          format: uint64
+        Latitude:
+          type: number
+          format: double
+        Longitude:
+          type: number
+          format: double
+    List: # $ref: '#/components/schemas/List'
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: uint64
+        Name:
+          type: string
+    ConsumableID: # $ref: '#/components/schemas/ConsumableID'
+      type: object
+      properties:
+        ConsumableID:
+          type: integer
+          format: uint64
+        StoreID:
+          type: integer
+          format: uint64
+        StockID:
+          type: integer
+          format: uint64
+    ListContent: # $ref: '#/components/schemas/ListContent'
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: uint64
+        ListID:
+          type: integer
+          format: uint64
+        Consumable:
+          $ref: '#/components/schemas/ConsumableID'
+        Name:
+          type: string
+        Done:
+          type: boolean
+        Erased:
+          type: boolean
+        Mode:
+          type: string
+          pattern: '^(sample|consumable|personnal)$'
+    Consumable: # $ref: '#/components/schemas/Consumable'
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        Name:
+          type: string
+        Compagny:
+          type: string
+        Manufacturing:
+          type: string
+        Created:
+          type: date-time
+        Creator:
+          type: integer
+          format: int64
+        NewVersion:
+          type: integer
+          format: int64
+        Source:
+          type: string
+        Code:
+          type: array
+          items:
+            type: string
+        Categories:
+          type: array
+          items:
+            type: string
+        Tags:
+          type: array
+          items:
+            type: string
+        Packaging:
+          type: array
+          items:
+            type: string
+        Fat:
+          type: number
+          format: double
+        Fiber:
+          type: number
+          format: double
+        Glucides:
+          type: number
+          format: double
+        Proteins:
+          type: number
+          format: double
+        Sodium:
+          type: number
+          format: double
+        SaturatedFat:
+          type: number
+          format: double
+        SugarGlucides:
+          type: number
+          format: double
+        Energy:
+          type: number
+          format: double
+        Alcool:
+          type: number
+          format: double
+        Additive:
+          type: array
+          items:
+            type: string
+        Ingredient:
+          type: array
+          items:
+            type: string
+        Vitamins:
+          type: array
+          items:
+            type: string
+        Allergen:
+          type: array
+          items:
+            type: string
+        Nutriscore:
+          type: string
+        Back:
+          type: string
+        Composition:
+          type: string
+        Front:
+          type: string
+        Grammes:
+          type: integer
+        MLitre:
+          type: integer
+        Label:
+          type: array
+          items:
+            type: string
 
 paths:
   /register:
@@ -182,32 +335,6 @@ paths:
               properties:
                 password:
                   type: string
-  /verify/token:
-    post:
-      summary: Checks if the token is valid
-      description: >
-        Checks if the token is valid and usable.
-      responses:
-        '200':
-          description: Is the token valid ?
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  valid:
-                    type: string
-        '500':
-          $ref: '#/components/responses/Error'
-      tags:
-        - verify
-      parameters:
-        - in: cookie
-          name: token
-          description: The user's token
-          required: true
-          schema:
-            type: string
   /log:
     post:
       summary: Do some logs
@@ -350,7 +477,7 @@ paths:
                 type: object
                 properties:
                   done:
-                    type: bool
+                    type: boolean
         '500':
           $ref: '#/components/responses/Error'
       tags:
@@ -395,7 +522,7 @@ paths:
                 type: object
                 properties:
                   done:
-                    type: bool
+                    type: boolean
         '500':
           $ref: '#/components/responses/Error'
       tags:
@@ -430,7 +557,7 @@ paths:
                 type: object
                 properties:
                   done:
-                    type: bool
+                    type: boolean
         '500':
           $ref: '#/components/responses/Error'
       tags:
@@ -446,6 +573,231 @@ paths:
                   type: integer
                 ID:
                   type: integer
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /consumable/add:
+    post:
+      summary: Create a new consumable
+      description: >
+        Create and store a new consumable and return the id of this consumable
+      responses:
+        '200':
+          description: The ID of the consumable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: boolean
+                  id:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - consumable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consumable'
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /consumable/get:
+    post:
+      summary: Fetch some consumable
+      description: >
+        Fetch information about some consumable
+      responses:
+        '200':
+          description: Consumables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Consumable'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - consumable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /list/create:
+    post:
+      summary: Create a new list
+      description: >
+        Create a new list and return it's ID
+      responses:
+        '200':
+          description: The ID of the list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /list/getall:
+    post:
+      summary: Fetch all user's list
+      description: >
+        Fetch the user's list
+      responses:
+        '200':
+          description: Consumables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/List'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - list
+      requestBody:
+        required: false
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /list/getcontent:
+    post:
+      summary: Fetch the content of a list
+      description: >
+        Fetch the content of a list
+      responses:
+        '200':
+          description: Consumables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ListContent'
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /list/add/personnal:
+    post:
+      summary: Add a personnal content to a list
+      description: >
+        Add a personnal content to a list
+      responses:
+        '200':
+          description: Consumables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: boolean
+                  id:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListContent'
+      parameters:
+        - in: cookie
+          name: token
+          description: The user's token
+          required: true
+          schema:
+            type: string
+  /list/add/consumable:
+      summary: Add a personnal content to a list
+      description: >
+        Add a personnal content to a list
+      responses:
+        '200':
+          description: Consumables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  done:
+                    type: boolean
+                  id:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/Error'
+      tags:
+        - list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListContent'
       parameters:
         - in: cookie
           name: token

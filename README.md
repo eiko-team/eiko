@@ -47,9 +47,19 @@ $BROWSER test.html
 ```
 
 ### Self hosted doc in html
+#### For the Golang Documentation
 ```bash
 godoc -http ":8080"
 $BROWSER http://127.0.0.1:8080/pkg/github.com/eiko-team/eiko/
+```
+#### For the API Documentation
+```bash
+docker run \
+  -p 8080:8080 \
+  -e SWAGGER_JSON=/foo/swagger.yml \
+  -v $HOME/go/src/github.com/eiko-team/eiko:/foo \
+  swaggerapi/swagger-ui
+$BROWSER http://127.0.0.1:8080
 ```
 
 ## Docker compose
