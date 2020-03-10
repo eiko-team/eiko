@@ -14,9 +14,8 @@ eiko web app
 
 # Installation
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/eiko-team/eiko&tutorial=doc/launch-tutorial.md)
-> Prerequirement: have golang>=1.13 .4 install on your machine
 
-You need to have a services account for the google Datastore
+You need to have a services account to access the google Datastore
 
 ## Services account
 ```bash
@@ -29,7 +28,6 @@ export CREDENTIALS=CREDENTIALS.json
 gcloud iam service-accounts create $ACCOUNT_NAME
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" --role "roles/owner"
 gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
-
 ```
 
 ## Compilation and local building
@@ -37,6 +35,7 @@ gcloud iam service-accounts keys create $CREDENTIALS --iam-account $ACCOUNT_NAME
 git clone https://github.com/eiko-team/eiko.git  $GOPATH/src/github.com/eiko-team/eiko
 cd $GOPATH/src/github.com/eiko-team/eiko
 go get ./...
+$EDITOR .env
 make up
 ```
 
@@ -47,9 +46,19 @@ $BROWSER test.html
 ```
 
 ### Self hosted doc in html
+#### For the Golang Documentation
 ```bash
 godoc -http ":8080"
 $BROWSER http://127.0.0.1:8080/pkg/github.com/eiko-team/eiko/
+```
+#### For the API Documentation
+```bash
+docker run \
+  -p 8080:8080 \
+  -e SWAGGER_JSON=/foo/swagger.yml \
+  -v $HOME/go/src/github.com/eiko-team/eiko:/foo \
+  swaggerapi/swagger-ui
+$BROWSER http://127.0.0.1:8080
 ```
 
 ## Docker compose
@@ -102,6 +111,12 @@ make mini
 ```
 
 ## Requirements
+### Build the local developement server
+ - git ([en](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), [fr](https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git))
+ - [go](https://golang.org/doc/install)
+ - [docker](https://blog.moulard.org/installer-docker/)
+ - [docker-compose](https://blog.moulard.org/installer-docker/)
+
 ### Build minimified version
-[html-minifier](https://www.npmjs.com/package/html-minifier)
-[css-minifier](https://www.npmjs.com/package/uglifycss)
+ - [html-minifier](https://www.npmjs.com/package/html-minifier)
+ - [css-minifier](https://www.npmjs.com/package/uglifycss)
