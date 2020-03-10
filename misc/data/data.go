@@ -171,7 +171,7 @@ func (d Data) StoreConsumable(consumable structures.Consumable) (int64, error) {
 	if err != nil {
 		return d.storeConsumable(consumable, structures.Consumable{})
 	}
-	consumable = misc.MergeConsumable(cons, consumable)
+	consumable = structures.MergeConsumable(cons, consumable)
 	return d.storeConsumable(consumable, cons)
 }
 
@@ -447,7 +447,7 @@ func (d Data) UpdateUser(user structures.User) error {
 	if err := d.client.Get(d.ctx, key, &u); err != nil {
 		return err
 	}
-	u = misc.MergeUser(user, u)
+	u = structures.MergeUser(user, u)
 	_, err = d.client.Put(d.ctx, key, &u)
 	return err
 }
@@ -464,7 +464,7 @@ func (d Data) UpdateStore(store structures.Store) error {
 	if err := d.client.Get(d.ctx, key, &s); err != nil {
 		return err
 	}
-	s = misc.MergeStore(store, s)
+	s = structures.MergeStore(store, s)
 	_, err := d.client.Put(d.ctx, key, &s)
 	return err
 }
