@@ -110,6 +110,7 @@ var (
 		NewFile("html/angelo.html", "text/html", "test", []string{"/angelo/", "/angelo.html"}),
 		NewFile("html/angelo2.html", "text/html", "test2", []string{"/angelo2/", "/angelo2.html"}),
 		NewFile("html/reglementation.html", "text/html", "Politique de confidentialité | CGU", []string{"/reglementation/"}),
+		NewFile("html/criteres.html", "text/html", "Mes Critères", []string{"/criteres/"}),
 	}
 )
 
