@@ -111,7 +111,6 @@ var (
 		NewFile("html/angelo2.html", "text/html", "test2", []string{"/angelo2/", "/angelo2.html"}),
 		NewFile("html/reglementation.html", "text/html", "Politique de confidentialité | CGU", []string{"/reglementation/"}),
 		NewFile("html/criteres.html", "text/html", "Mes Critères", []string{"/criteres/"}),
-		NewFile("html/courses.html", "text/html", "Mes Courses", []string{"/courses/"}),
 	}
 )
 
