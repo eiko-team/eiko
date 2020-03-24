@@ -1,0 +1,124 @@
+{{ template "head" . }} 
+<link rel="stylesheet" href="/css/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="/css/fontawesome/css/all.css" />
+<link rel="stylesheet" href="/css/courses.css" />
+{{ template "headEnd" . }}
+
+    <body>
+        <header>
+            <div class="d-flex justify-content-between headerNav">
+                <div class="p-2 bd-highlight blocHearderNav">
+                    <a href="#"><i class="fas fa-bars menuHeader"></i></a>
+                </div>
+                <div class="p-2 bd-highlight blocHearderNav text-center">
+                    <span class="titrePage">Mes courses</span>
+                </div>
+                <div class="p-2 bd-highlight blocHearderNav text-right">
+                    <a href="#"><i class="fas fa-comments mr-4"></i></a>
+                    <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center headerNav2">
+                <p class="dropdown-header2"></p>
+            </div>
+        </header>
+
+        <aside class="aside">
+            <div class="d-flex justify-content-between headerNav">
+                <div class="p-2 bd-highlight asideId">
+                    <img src="/static/img/bob.png">
+                    <p>John Doe</p>
+                </div>
+                <div class="p-2 bd-highlight closeBtn">
+                    <a><i class="fas fa-times"></i></a>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center headerNav2">
+                <p class="dropdown-header2"><a><i class="fas fa-fire-alt"></i>  Premium </a></p>
+            </div>
+        </aside>
+
+        <section class="listeArticles">
+            <div class="article">
+                <div class="d-flex justify-content-between produit">
+                    <div class="p-2 bd-highlight">
+                        <input type="checkbox" name="inputProduit" class="checkboxProduit">
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <p class="nomProduit">Nom du produit</p>
+                    </div>
+                    <div class="p-2 bd-highlight text-center">
+                        <p class="prixProduit">0,00 €</p>
+                    </div>
+                    <div class="p-2 bd-highlight text-center">
+                        <i class="fas fa-chevron-down dropdownProduit" data-toggle="collapse" data-target=".produitInfo"></i>
+                    </div>  
+                </div>
+                <div class="container collapse produitInfo">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <img src="/img/background.png" class="photoProduit">
+                        </div>
+                        <div class="col-4">
+                            <p class="distanceProduit">0,0 km</p>
+                        </div>
+                        <div class="col-4">
+                            <p class="quantiteProduit">0 Botte de 000g</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="d-flex justify-content-between panierNav">
+                <div class="p-2 bd-highlight blocVide">
+                </div>
+                <div class="p-2 bd-highlight blocPanier">
+                    <button class="btnPanier"><a href="#"><i class="fas fa-shopping-cart itemIcone"></i></a></button>
+                </div>
+                <div class="p-2 bd-highlight blocOption">
+                    <div class="dropup">
+                        <button class="dropdown-toggle btnOption" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item btnOption btnOption2" href="#"><i class="fas fa-user-plus"></i></a>
+                          <a class="dropdown-item btnOption btnOption2" href="#"><i class="far fa-map"></i></a>
+                          <a class="dropdown-item btnOption btnOption2" href="#"><i class="fas fa-barcode"></i></a>
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-around footerNav">
+                <div class="p-2 bd-highlight itemFooter">
+                    <a class="footerParam" href="#">
+                        <i class="fas fa-clipboard-list itemIcone"></i>
+                        <p class="itemTexte">Liste</p>
+                    </a>
+                </div>
+                <div class="p-2 bd-highlight itemFooter">
+                    <a class="footerParam" href="#">
+                        <i class="fas fa-tag itemIcone"></i>
+                        <p class="itemTexte">Produit</p>
+                    </a>
+                </div>
+                <div class="p-2 bd-highlight itemFooter">
+                    <a class="footerParam" href="#">
+                        <i class="fas fa-exchange-alt itemIcone"></i>
+                        <p class="itemTexte">Alternatives</p>
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+
+
+
+
+        <script src="/js/jquery/jquery-3.4.1.min.js"></script>
+        <script src="/css/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/courses.js"></script>
+    </body>
+{{ template "end" . }} 
