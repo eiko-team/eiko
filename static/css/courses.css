@@ -13,8 +13,8 @@ body{
 a{
     color: inherit;
 }
-a:hover{
-    color: inherit;
+a:hover, a:active, a:link{
+    color: white!important;
     text-decoration: none;
 }
 
@@ -40,9 +40,10 @@ a:hover{
 }
 
 /*********LISTE DES COURSES**********/
+
 .article{
     background: white;
-    padding: 10px 25px;
+    padding: 10px 10px;
     border-bottom: 2px solid #E4E6E6;
 }
 .article p{
@@ -53,6 +54,10 @@ a:hover{
 }
 .chevronReserve{
     transform: rotate(180deg);
+}
+.produit .material-icons{
+    font-size: 1em;
+    color: #768FFF;
 }
 .produitInfo{
     width: 100%;
@@ -71,16 +76,15 @@ a:hover{
     width: 5em;
     border-radius: 18px;
 }
-input[type="checkbox"]{
-    outline:2px solid #768FFf;
-    outline-offset: -2px;
+.col-item{
+    width: inherit;
 }
 /*******FOOTER*********/
 .panierNav {
     padding: 10px 20px;
 }
 .blocPanier{
-    width: 33%;
+    width: 40%;
     text-align: center;
 }
 .btnPanier{
@@ -91,8 +95,11 @@ input[type="checkbox"]{
     padding: 5px 10px;
     border-radius: 24px;
 }
+.btnPanier a:visited{
+    color: white;
+}
 .blocOption{
-    width: 33%;
+    width: 20%;
 }
 .btnOption{
     border-radius: 50%;
@@ -126,13 +133,12 @@ input[type="checkbox"]{
 }
 
 .blocVide{
-    width: 33%;
+    width: 20%;
 }
 footer{
+    width: 100%;
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
 }
 .footerNav{
     background: white;
@@ -153,6 +159,9 @@ footer{
     margin: 0 !important;
 }
 /**********************ASIDE***************************/
+#slide-out{
+    display: none;
+}
 .aside{
     background: white;
     width: 80%;

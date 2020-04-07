@@ -17,5 +17,16 @@ $( document ).ready(function() {
 	$('.dropdownProduit').click(function(){
 		$(this).toggleClass("chevronReserve");
 	})
-
 });
+	// AFFICHER L'ICONE DE LA PAGE EN COURS EN ROUGE
+	function activeFooter() {
+		var title = $('.titrePage').html();
+
+		if (title === "Mes courses") {
+			$('.footerListe').css("color","#B53D00");
+		}
+		else {
+			return false;
+		}
+	};
+	activeFooter();
