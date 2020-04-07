@@ -423,7 +423,7 @@ function showConsumable(consumable) {
     var row = clone.querySelector(".row");
     row.id = consumable.ID
     td[0].addEventListener("click", validateConsumable(consumable.ID));
-    td[1].style.display = "none";
+    td[1].style.display = "block";
     if (consumable.done) {
         row.classList.add("done");
         td[0].innerHTML = icon("radio_button_checked");
@@ -431,9 +431,9 @@ function showConsumable(consumable) {
         td[0].innerHTML = icon("radio_button_unchecked");
     }
     if (consumable.mode === "personnal") {
-        td[2].textContent = consumable.name;
+        td[1].textContent = consumable.name;
     } else {
-        td[2].textContent = consumable.consumable.name;
+        td[1].textContent = consumable.consumable.name;
         var indicators = clone.querySelector(".col-indicator")
             .querySelectorAll(".dot");
         indicators[0].classList.add("dot-green")
