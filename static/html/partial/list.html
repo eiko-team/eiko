@@ -2,17 +2,36 @@
 <div id="consumables"></div>
 {{ end }}
 {{ define "templateConsumable" }}
-<template id="consumable" class="hoverable">
-    <div class="row">
-        <div class="col s12">
-            <div class="col s2 m1 l1 offset-m2 offset-l2 col-item col-check"><i class="material-icons">radio_button_unchecked</i></div>
-            <div class="col s3 m3 l3 col-item col-img"></div>
-            <div class="col s5 m4 l5 col-item col-name"></div>
-            <div class="col s2 m1 l1 col-item col-indicator">
-                <span class="dot indic1"></span>
-                <span class="dot indic2"></span>
-                <span class="dot indic3"></span></div>
-            <div class="col s3 m2 l1 col-item col-price"></div>
+<template class="listeArticles" id="consumable">
+    <div class="article row">
+        <div class="d-flex justify-content-between produit col">
+            <div class="p-2 bd-highlight text-center col-item">
+            </div>
+            <div class="p-2 bd-highlight text-center col-item">
+                <p class="nomProduit"></p>
+            </div>
+            <div class="p-2 bd-highlight text-right col-item">
+                <p class="prixProduit">1 €</p>
+            </div>
+            <div class="p-2 bd-highlight text-center col-item">
+                <i class="fas fa-chevron-down dropdownProduit" data-toggle="collapse" data-target=".produitInfo"></i>
+            </div>  
+        </div>
+        <div class="container collapse produitInfo">
+            <div class="align-items-center row">
+                <div class="col-3 col-item">
+                    <img src="/img/background.png" class="photoProduit">
+                </div>
+                <div class="col-3 col-item">
+                    <p class="distanceProduit">0,0 km</p>
+                </div>
+                <div class="col-3 col-item">
+                    <p class="criteresProduit">0 Botte de 000g</p>
+                </div>
+                <div class="col-3 col-item">
+                    <p class="quantiteProduit">0 Botte de 000g</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
