@@ -112,6 +112,7 @@ var (
 		NewFile("html/reglementation.html", "text/html", "Politique de confidentialité | CGU", []string{"/reglementation/"}),
 		NewFile("html/criteres.html", "text/html", "Mes Critères", []string{"/criteres/"}),
 		NewFile("html/courses.html", "text/html", "Mes Courses", []string{"/courses/"}),
+		NewFile("html/alternatives.html", "text/html", "Mes Alternatives", []string{"/alternatives/"}),
 	}
 )
 
