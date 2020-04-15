@@ -50,11 +50,11 @@ function displaySearchResult(consumable) {
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll(".col-item");
     var row = clone.querySelector(".row");
+    var addToList = document.getElementById("add-item");
     row.id = consumable.consumable.ID
-    td[0].style.display = "none";
-    td[1].appendChild(createImage(consumable.consumable))
-    td[2].textContent = consumable.consumable.name;
-    td[2].addEventListener("click", function(event) { addSearched(consumable) })
+    td[0].appendChild(createImage(consumable.consumable));
+    td[1].innerText = consumable.consumable.name;
+    addToList.addEventListener("click", function(event) { addSearched(consumable) })
     if (document.querySelector("#consumables").childElementCount !== 0) {
         var template1 = document.querySelector("#separator");
         var clone1 = document.importNode(template1.content, true);
