@@ -13,11 +13,6 @@ body{
 a{
     color: inherit;
 }
-a:hover, a:active, a:link{
-    color: white!important;
-    text-decoration: none;
-}
-
 /**********HEADER********/
 .headerNav {
     background: #E57A22;
@@ -157,6 +152,9 @@ footer{
     font-size: 13px;
     margin-bottom: none!important;
     margin: 0 !important;
+}
+.itemTexte :last-child{
+    color: #768FFF!important;
 }
 /**********************ASIDE***************************/
 #slide-out{
