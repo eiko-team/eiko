@@ -8,7 +8,7 @@ main{
 .header {
     height: 175px;
     width: 100%;
-    background-image:url("../img/background.png");
+    background-image:url("../img/carrots.jpg");
     background-size: cover;
     display: flex;
 }
