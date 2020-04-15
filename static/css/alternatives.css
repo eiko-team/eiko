@@ -1,0 +1,245 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #E4E6E6;
+    color: #4A546D;
+}
+a{
+    color: inherit;
+}
+a:hover, a:active, a:link{
+    color: white!important;
+    text-decoration: none;
+}
+
+/**********HEADER********/
+.headerNav {
+    background: #E57A22;
+    padding: 20px;
+    color: white;
+}
+.blocHearderNav{
+    width: 20%;
+}
+.blocSearchBarNav{
+    width: 60%;
+}
+.blocHearderNav i{
+    font-size: 1.3em;
+}
+.form-control{
+    border-radius: 1em!important;
+}
+.form-control::placeholder {
+    font-size: 1rem;
+    color: #aaa;
+    font-style: italic;
+    text-align: center;
+}
+.form-control:focus {
+    box-shadow: none;
+}
+.form-control-underlined {
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-radius: 0;
+    padding-left: 0;
+}
+.iconeSearchBar{
+    color: #0039CB;
+    font-size: 1.2em;
+}
+/****************HEADER 2 COLLASPE********************/
+.headerNav2 {
+    background: #FF9E40;
+    color: white;
+    height: 3rem;
+}
+.titreHeader2{
+    margin: auto;
+}
+.dropdownHeader2{
+    color: white;
+    margin: 0 10px;
+    text-align: center;
+}
+.chevronReserve{
+    transform: rotate(180deg);
+}
+.list-group{
+    color:white;
+    text-align: center;
+    font-size: 10px;
+}
+.list-group-item{
+    background: #FF9E40;
+    font-size: 10px;
+}
+/*********LISTE DES COURSES**********/
+.col .row {
+    margin-left: -0.75rem;
+    margin-right: 0;
+}
+.content{
+    padding: 0 0!important;
+}
+#liste{
+    padding: 0 0!important;
+}
+.produit{
+    padding-right: 1em;
+}
+.col-item-img{
+    height: 8em;
+    width: 25%;
+}
+.col-item-img img{
+    width: -moz-available;
+    height: inherit;
+}
+.col-item-info{
+    width: 75%;
+}
+.ee{
+    display: flex;
+    height: 50%;
+}
+.produitListe{
+    background: yellow;
+    width: 100%;
+    margin: 0 0!important;
+    border-bottom: 1px solid #E4E6E6;
+}
+.blocImgProduit{
+    padding: 0 0!important;
+    background: red;
+}
+
+.imgProduit{
+    height: 7em;
+    width: inherit;
+}
+.blocInfoProduit{
+    background: white;
+}
+.blocInfoProduit p{
+    font-size: 12px;
+    margin: 0!important;
+}
+.blocInfoProduitBis{
+    padding: 1% 0;
+}
+.prixProduit{
+    font-size: 13.5px !important;
+    font-weight: bold;
+    margin: auto;
+}
+/*******FOOTER*********/
+.panierNav {
+    padding: 10px 20px;
+}
+.blocPanier{
+    width: 40%;
+    text-align: center;
+}
+.btnPanier{
+    background-color: #FF9E40;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 24px;
+}
+.btnPanier a:visited{
+    color: white;
+}
+.blocOption{
+    width: 20%;
+}
+.btnOption{
+    border-radius: 50%;
+    background: #0039CB;
+    color: white;
+    border: none;
+    padding: 8px;
+    float: right;
+    width: 2.5em;
+    height: 2.5em;
+    display: flex;
+    margin: auto;
+}
+.btnOption2{
+    background: #768FFF;
+    margin: 5px 0;
+}
+.btnOption i, .btnOption a {
+    margin: auto;
+}
+.btnOption i {
+    font-size: 1.2em;
+}
+.dropdown-menu{
+    background: none!important;
+    border: none!important;
+    box-shadow: none!important;
+}
+/* RETIRER ICONE PAR DEFAUT DU BTN*/
+.dropdown-toggle::after {
+    content: none!important;
+}
+
+.blocVide{
+    width: 20%;
+}
+
+.footerNav{
+    background: white;
+    padding: 15px;
+    color: #768FFF;
+    border-top: 2px solid #E4E6E6;
+    position: absolute;
+    width: 100%;
+    bottom:0;
+}
+.itemFooter{
+    text-align: center;
+    width: 33%;
+}
+.itemIcone{
+    font-size: 1.4em;
+}
+.itemTexte{
+    font-size: 13px;
+    margin-bottom: none!important;
+    margin: 0 !important;
+}
+.footerParam .itemIcone{
+    fill: #768fff;
+}
+/**********************ASIDE***************************/
+#slide-out{
+    display: none;
+}
+.aside{
+    background: white;
+    width: 80%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 12;
+    display: none;
+}
+.flou{
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);
+}

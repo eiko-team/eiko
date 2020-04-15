@@ -1,0 +1,170 @@
+{{ template "head" . }}
+<link rel="stylesheet" href="/css/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="/css/fontawesome/css/all.css" />
+<link rel="stylesheet" href="/css/alternatives.css" />
+{{ template "headEnd" . }}
+
+<body>
+  <header>
+    <div class="d-flex justify-content-between headerNav">
+      <div class="p-2 bd-highlight blocHearderNav">
+        <a href="#"><i class="fas fa-chevron-left nav-back"></i></a>
+      </div>
+      <div class="p-1 bd-highlight blocSearchBarNav text-center">
+        <form class="searchBarNav">
+          <div class="bg-light rounded rounded-pill shadow-sm">
+            <div class="input-group">
+              <input
+                type="search"
+                id="search-input"
+                placeholder="Rechercher..."
+                aria-describedby="button-addon1"
+                class="form-control border-0 bg-light autocomplete"
+              />
+              <label for="search-input" id="search-input-label"></label>
+              <div class="input-group-append">
+                <button id="button-addon1" class="btn btn-link text-primary">
+                  <i class="fas fa-microphone iconeSearchBar"></i>
+                </button>
+                <button
+                  id="button-addon2"
+                  type="submit"
+                  class="btn btn-link text-primary"
+                  id="add-item"
+                >
+                  <i class="fa fa-search iconeSearchBar"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="p-2 bd-highlight blocHearderNav text-right">
+        <a href="#"><i class="fas fa-barcode mr-3"></i></a>
+        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center headerNav2">
+      <p class="titreHeader2">
+        Pair-a-pair
+        <i
+          class="fas fa-chevron-down dropdownHeader2"
+          data-toggle="collapse"
+          data-target=".listeVendeurs"
+        ></i>
+      </p>
+    </div>
+    <div class="collapse listeVendeurs">
+      <ul class="list-group">
+        <li class="list-group-item"><a href="#">Auchan</a></li>
+        <li class="list-group-item"><a href="#">BioCoOp</a></li>
+        <li class="list-group-item"><a href="#">Lidl</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!--         <aside class="aside">
+            <div class="d-flex justify-content-between headerNav">
+                <div class="p-2 bd-highlight asideId">
+                    <img src="/static/img/bob.png">
+                    <p>John Doe</p>
+                </div>
+                <div class="p-2 bd-highlight closeBtn">
+                    <a><i class="fas fa-times"></i></a>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center headerNav2">
+                <p class="dropdown-header2"><a><i class="fas fa-fire-alt"></i>  Premium </a></p>
+            </div>
+        </aside> -->
+
+  {{ template "sidenav" . }}
+  <main>
+    <div class="content" id="content">
+        <div class="row d-none">
+            <div class="col s0 m3 l4"></div>
+
+            <div class="col s1 m1 l1">
+                <a id="add-item" class="btn-blue btn btn-floating waves-effect waves-light">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+            <div class="col s0 m3 l4"></div>
+        </div>
+        <div class="row preloader">
+            {{ template "loading" . }}
+        </div>
+        <div id="liste" class="col s12">
+            {{ template "list" . }}
+        </div>
+    </div>
+  </main>
+  {{ template "templateConsumable2" . }}
+  {{ template "templateSeparator" . }}
+  <footer>
+    <div class="d-flex justify-content-around footerNav">
+      <div class="p-2 bd-highlight itemFooter">
+        <a class="footerParam footerListe" href="/courses">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19.972"
+            height="22.648"
+            viewBox="0 0 19.972 22.648"
+            class="itemIcone"
+          >
+            <path
+              id="ic_assignment_24px"
+              d="M20.753,3.265H16.115a3.294,3.294,0,0,0-6.258,0H5.219A2.249,2.249,0,0,0,3,5.53V21.383a2.249,2.249,0,0,0,2.219,2.265H20.753a2.249,2.249,0,0,0,2.219-2.265V5.53A2.249,2.249,0,0,0,20.753,3.265Zm-7.767,0A1.133,1.133,0,1,1,11.876,4.4,1.124,1.124,0,0,1,12.986,3.265ZM15.2,19.118H7.438V16.853H15.2Zm3.329-4.53H7.438V12.324h11.1Zm0-4.53H7.438V7.794h11.1Z"
+              transform="translate(-3 -1)"
+            />
+          </svg>
+
+          <p class="itemTexte listeLien">Liste</p>
+        </a>
+      </div>
+      <div class="p-2 bd-highlight itemFooter">
+        <a class="footerParam" href="#">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="23"
+            height="23"
+            viewBox="0 0 23 23"
+            class="itemIcone footerProduit"
+          >
+            <path
+              id="ic_loyalty_24px"
+              d="M24.321,13.017,13.971,2.667A2.286,2.286,0,0,0,12.35,2H4.3A2.307,2.307,0,0,0,2,4.3v8.05a2.3,2.3,0,0,0,.679,1.633l10.35,10.35A2.286,2.286,0,0,0,14.65,25a2.249,2.249,0,0,0,1.621-.678l8.05-8.05A2.249,2.249,0,0,0,25,14.65,2.323,2.323,0,0,0,24.321,13.017ZM6.025,7.75A1.725,1.725,0,1,1,7.75,6.025,1.723,1.723,0,0,1,6.025,7.75ZM19.56,17.26,14.65,22.171,9.739,17.26a2.879,2.879,0,0,1,2.036-4.91,2.84,2.84,0,0,1,2.036.851l.839.828.839-.84A2.879,2.879,0,0,1,19.56,17.26Z"
+              transform="translate(-2 -2)"
+            />
+          </svg>
+          <p class="itemTexte produitLien">Produit</p>
+        </a>
+      </div>
+      <div class="p-2 bd-highlight itemFooter">
+        <a class="footerParam" href="/alternatives">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="38.83"
+            height="23.522"
+            viewBox="0 0 38.83 23.522"
+            class="itemIcone footerAlternative"
+          >
+            <path
+              id="ic_compare_arrows_24px"
+              d="M15.61,20.121H2v3.36H15.61v5.04L23.356,21.8,15.61,15.081Zm11.61-1.68V13.4H40.83V10.04H27.22V5l-7.747,6.721Z"
+              transform="translate(-2 -5)"
+            />
+          </svg>
+          <p class="itemTexte alternativeLien">Alternatives</p>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+<script src="/js/jquery/jquery-3.4.1.min.js"></script>
+<script src="/css/bootstrap/js/bootstrap.bundle.min.js"></script>
+{{ template "js" . }}
+<script type="text/javascript" src="/js/search.js"></script>
+<script src="/js/alternatives.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{{ template "end" . }}
