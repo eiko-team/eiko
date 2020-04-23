@@ -79,28 +79,26 @@
         </aside> -->
 
   {{ template "sidenav" . }}
-  <main>
-    <div class="content" id="content">
-        <div class="row d-none">
-            <div class="col s0 m3 l4"></div>
-
-            <div class="col s1 m1 l1">
-                <a id="add-item" class="btn-blue btn btn-floating waves-effect waves-light">
-                    <i class="material-icons">add</i>
-                </a>
-            </div>
-            <div class="col s0 m3 l4"></div>
+  <section>
+    <div class="content">
+      <div class="row d-none">
+        <div class="col s0 m3 l4"></div>
+        <div class="col s1 m1 l1">
+          <a id="add-item" class="btn-blue btn btn-floating waves-effect waves-light">
+            <i class="material-icons">add</i>
+          </a>
         </div>
-        <div class="row preloader">
-            {{ template "loading" . }}
-        </div>
-        <div id="liste" class="col s12">
-            {{ template "list" . }}
-        </div>
+        <div class="col s0 m3 l4"></div>
+      </div>
+      <div class="row preloader d-none">
+        {{ template "loading" . }}
+      </div>
+      <div id="liste" class="col s12">
+        {{ template "list" . }}
+      </div>
+      {{ template "templateConsumable2" . }}
     </div>
-  </main>
-  {{ template "templateConsumable2" . }}
-  {{ template "templateSeparator" . }}
+  </section>
   <footer>
     <div class="d-flex justify-content-around footerNav">
       <div class="p-2 bd-highlight itemFooter">
@@ -118,7 +116,6 @@
               transform="translate(-3 -1)"
             />
           </svg>
-
           <p class="itemTexte listeLien">Liste</p>
         </a>
       </div>

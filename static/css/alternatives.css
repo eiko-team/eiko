@@ -31,7 +31,7 @@ a:hover, a:active, a:link{
     width: 60%;
 }
 .blocHearderNav i{
-    font-size: 1.3em;
+    font-size: 1.4em;
 }
 .form-control{
     border-radius: 1em!important;
@@ -82,6 +82,11 @@ a:hover, a:active, a:link{
     font-size: 10px;
 }
 /*********LISTE DES COURSES**********/
+#consumables{
+    overflow-y: scroll;
+    min-width: 100%;
+    height: calc(100vh - 188px);
+}
 .col .row {
     margin-left: -0.75rem;
     margin-right: 0;
@@ -93,7 +98,9 @@ a:hover, a:active, a:link{
     padding: 0 0!important;
 }
 .produit{
-    padding-right: 1em;
+    padding: 0 0!important;
+    background: white;
+    border-bottom: 1px solid #E4E6E6;
 }
 .col-item-img{
     height: 8em;
@@ -103,109 +110,62 @@ a:hover, a:active, a:link{
     width: -moz-available;
     height: inherit;
 }
+.col-item-info .item-info{
+    font-size: 12px;
+}
 .col-item-info{
     width: 75%;
+    padding: 0px 15px;
 }
-.ee{
+.col-item-info tr{
+    display: table;
+    width: 100%;
+}
+.col-item-info ul {
+    list-style: none;
+    display: ruby-base;
+}
+.col-item-info li {
+    background: #768fff;
     display: flex;
-    height: 50%;
+    border-radius: 3px;
+    width: 1.3em;
+    height: 1.3em;
 }
-.produitListe{
-    background: yellow;
-    width: 100%;
-    margin: 0 0!important;
-    border-bottom: 1px solid #E4E6E6;
-}
-.blocImgProduit{
-    padding: 0 0!important;
-    background: red;
-}
-
-.imgProduit{
-    height: 7em;
-    width: inherit;
-}
-.blocInfoProduit{
-    background: white;
-}
-.blocInfoProduit p{
-    font-size: 12px;
-    margin: 0!important;
-}
-.blocInfoProduitBis{
-    padding: 1% 0;
-}
-.prixProduit{
-    font-size: 13.5px !important;
-    font-weight: bold;
+.col-item-info li i{
+    color: white;
     margin: auto;
+    font-size: 0.8em;
 }
-/*******FOOTER*********/
-.panierNav {
-    padding: 10px 20px;
+.itemPrice{
+    font-weight: bold;
+    font-size: 14px!important;
 }
-.blocPanier{
-    width: 40%;
-    text-align: center;
-}
-.btnPanier{
-    background-color: #FF9E40;
-    color: white;
-    border: none;
-    width: 100%;
-    padding: 5px 10px;
-    border-radius: 24px;
-}
-.btnPanier a:visited{
-    color: white;
-}
-.blocOption{
-    width: 20%;
-}
-.btnOption{
+.addBtn{
     border-radius: 50%;
     background: #0039CB;
-    color: white;
     border: none;
-    padding: 8px;
     float: right;
-    width: 2.5em;
-    height: 2.5em;
+    width: 2.3em;
+    height: 2.3em;
     display: flex;
+}
+.addBtn i{
     margin: auto;
-}
-.btnOption2{
-    background: #768FFF;
-    margin: 5px 0;
-}
-.btnOption i, .btnOption a {
-    margin: auto;
-}
-.btnOption i {
-    font-size: 1.2em;
-}
-.dropdown-menu{
-    background: none!important;
-    border: none!important;
-    box-shadow: none!important;
-}
-/* RETIRER ICONE PAR DEFAUT DU BTN*/
-.dropdown-toggle::after {
-    content: none!important;
+    color: white;
 }
 
-.blocVide{
-    width: 20%;
+/*******FOOTER*********/
+footer{
+    position: fixed;
+    width: 100%;
+    bottom:0;
 }
-
 .footerNav{
     background: white;
     padding: 15px;
     color: #768FFF;
     border-top: 2px solid #E4E6E6;
-    position: absolute;
-    width: 100%;
-    bottom:0;
 }
 .itemFooter{
     text-align: center;
