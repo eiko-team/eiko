@@ -19,14 +19,18 @@
         </div>
         <div class="container collapse produitInfo">
             <div class="align-items-center row">
-                <div class="col-3 col-item">
+                <div class="col-3 col-item col-item-img">
                     <img src="/img/background.png" class="photoProduit">
                 </div>
                 <div class="col-3 col-item">
                     <p class="distanceProduit">0,0 km</p>
                 </div>
-                <div class="col-3 col-item">
-                    <p class="criteresProduit">0 Botte de 000g</p>
+                <div class="col-3 col-item col-item-vignettes">
+                    <ul class="listeVignettes justify-content-around">
+                        <li><i class="fas fa-heart text-light"></i></li>
+                        <li><i class="fas fa-leaf text-light"></i></li>
+                        <li><i class="fas fa-user-friends text-light"></i></li>
+                    </ul>
                 </div>
                 <div class="col-3 col-item">
                     <p class="quantiteProduit">0 Botte de 000g</p>
@@ -43,7 +47,33 @@
         <div class="d-flex justify-content-between produit col">
             <div class="bd-highlight text-center col-item col-item-img">
             </div>
-            <div class="bd-highlight text-center col-item col-item-info">
+            <div class="bd-highlight col-item col-item-info">
+                <table class="w-100">
+                    <tr>
+                        <td class='item-info itemName'></td>
+                    </tr>
+                    <tr>
+                        <td class='item-info itemPricePerKilo'></td>
+                    </tr>         
+                    <tr>
+                        <td class='item-info itemSeller'></td>
+                    </tr>
+                    <tr>
+                        <td class='item-info itemIcons'>
+                            <ul>
+                                <li><i class="fas fa-heart"></i></li>
+                                <li><i class="fas fa-leaf"></i></li>
+                                <li><i class="fas fa-user-friends"></i></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='item-info itemPrice'></td>
+                        <td class='item-info itemBtn'>
+                            <button class='addBtn add-item'><i class="fas fa-cart-arrow-down text-light"></i></button>
+                        </td>
+                    </tr>
+                </table>
             </div>
             
             <!-- <button class="btnOption" id="add-item"><i class="fas fa-cart-arrow-down"></i></button>  -->
@@ -56,6 +86,5 @@
 {{ define "templateSeparator" }}
 <template id="separator">
     <hr class="separator">
-    </div>
 </template>
 {{ end }}
