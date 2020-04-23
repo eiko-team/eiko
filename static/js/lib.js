@@ -442,11 +442,6 @@ function showConsumable(consumable) {
         td[4].innerHTML = icon("keyboard_arrow_down",
             consumable.stock.pack_price / 100 + "€");
     }
-    if (document.querySelector("#consumables").childElementCount !== 0) {
-        var template1 = document.querySelector("#separator");
-        var clone1 = document.importNode(template1.content, true);
-        document.querySelector("#consumables").appendChild(clone1);
-    }
     document.querySelector("#consumables").appendChild(clone);
 }
 

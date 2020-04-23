@@ -16,7 +16,7 @@ function createImage(consumable) {
 
 function addSearched(elt) {
     if (consumable === undefined) { return; }
-    console.log("addSearched", consumable)
+    console.log("addSearched", consumable);
     // for easier later use (showConsumable)
     var consumable = {
         ID: consumable.consumable.ID,
@@ -50,17 +50,25 @@ function displaySearchResult(consumable) {
     var clone = document.importNode(template.content, true);
     var td = clone.querySelectorAll(".col-item");
     var row = clone.querySelector(".row");
-    var addToList = document.getElementById("add-item");
+    var addToList = clone.querySelector(".addBtn");
+    var tableTD = clone.querySelectorAll(".item-info");
     row.id = consumable.consumable.ID
     td[0].appendChild(createImage(consumable.consumable));
-    td[1].innerText = consumable.consumable.name;
-    addToList.addEventListener("click", function(event) { addSearched(consumable) })
-    if (document.querySelector("#consumables").childElementCount !== 0) {
-        var template1 = document.querySelector("#separator");
-        var clone1 = document.importNode(template1.content, true);
-        document.querySelector("#consumables").appendChild(clone1);
-    }
-    document.querySelector("#consumables").appendChild(clone);
+    tableTD[0].innerHTML = consumable.consumable.name;
+    tableTD[1].innerHTML = consumable.stock.pack_price / 100 + " €/Kg";
+    tableTD[2].innerHTML = consumable.seller // UTILISER QUAND LES PRODUITS AURONTS UN VRAI VENDEUR -> consumable.store.name;
+    // tableTD[3].innerHTML =  A REMPLIR EN FONCTION DES VIGNETTES CRITERES DU PRODUITS;
+    tableTD[4].innerHTML = consumable.stock.pack_price + " €";
+    addToList.addEventListener("click", function(event) {
+        addSearched(consumable);
+         if( typeof( addSearched(consumable) ) == undefined ){
+            console.log("La fonction existe");
+        } else {
+            console.log("La fonction n'existe pas");
+        }
+    });
+    document.querySelector("#consumables").appendChild(clone);   
+
 }
 
 function clearSearchResult() {
